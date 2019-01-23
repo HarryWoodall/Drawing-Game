@@ -4,6 +4,7 @@ let io;
 module.exports = class Sockets {
   constructor(server) {
     io = socketIO(server);
+    console.log("started socket", io);
   }
 
   startSocket() {
@@ -11,9 +12,5 @@ module.exports = class Sockets {
       console.log("user Connected");
       socket.emit("start", { Hello: "World" });
     });
-
-    // const socketPort = process.env.PORT || 8000;
-    // io.listen(socketPort);
-    // console.log("listening on port ", 8000);
   }
 };

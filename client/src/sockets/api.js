@@ -1,5 +1,5 @@
-import openSocket from "socket.io-client";
-const socket = openSocket();
+import io from "socket.io-client";
+const socket = io();
 
 function socketAPI() {
   socket.on("start", function(data) {

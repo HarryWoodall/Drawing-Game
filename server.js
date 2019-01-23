@@ -4,7 +4,7 @@ const path = require("path");
 const server = require("http").createServer(app);
 const bodyParser = require("body-parser");
 const sockets = require("./sockets");
-const io = new sockets(server);
+const io = require("socket.io")(server);
 
 app.use(bodyParser());
 app.use(express.static(path.join(__dirname, "client/build")));
@@ -23,7 +23,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
 });
 
-io.startSocket();
+//io.startSocket();
+io.on("connection", socket => {
+  log("user connected");
+  socket.emit("start", { Hello: "World" });
+});
 
 const port = process.env.PORT || 5000;
 
