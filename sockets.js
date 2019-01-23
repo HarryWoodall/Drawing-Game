@@ -12,8 +12,8 @@ module.exports = class Sockets {
       socket.emit("start", { Hello: "World" });
     });
 
-    // const socketPort = 8000;
-    // io.listen(socketPort);
-    // console.log("listening on port ", 8000);
+    const socketPort = process.env.PORT || 8000;
+    io.listen(socketPort);
+    console.log("listening on port ", 8000);
   }
 };
