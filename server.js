@@ -30,6 +30,6 @@ app.get("/", (req, res) => {
 
 //io.startSocket();
 io.on("connection", socket => {
-  log("user connected");
+  console.log("user connected");
   socket.emit("start", { Hello: "World" });
 });
