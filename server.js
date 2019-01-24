@@ -1,13 +1,17 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const server = require("http").createServer(app);
 const bodyParser = require("body-parser");
 const sockets = require("./sockets");
-const io = require("socket.io")(server);
+const socket = require("socket.io");
 
 app.use(bodyParser());
 app.use(express.static(path.join(__dirname, "client/build")));
+
+const server = app.listen(port, () =>
+  console.log("Server started on port " + port)
+);
+const io = socket(server);
 
 app.get("/api/test", (req, res) => {
   const test = [{ id: 0, item: 1 }, { id: 1, item: 2 }, { id: 3, item: 3 }];
@@ -30,5 +34,3 @@ io.on("connection", socket => {
 });
 
 const port = process.env.PORT || 5000;
-
-app.listen(port, () => console.log("Server started on port " + port));
