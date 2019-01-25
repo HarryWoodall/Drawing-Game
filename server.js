@@ -33,7 +33,8 @@ app.use(express.static(path.join(__dirname, "client/build")));
 
 app.get("/", (req, res) => {
   res.sendFile(
-    path.join(__dirname + "/resources/client/landingPage/index.html")
+    res.sendFile(path.join(__dirname + "/client/build/public/index.html"))
+    //path.join(__dirname + "/resources/client/landingPage/index.html")
   );
 });
 
@@ -89,7 +90,7 @@ app.post("/", (req, res) => {
 
 app.get("/game", (req, res) => {
   res.send("Hello World");
-  //res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
+  res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
 });
 
 app.get("/api/users", (req, res) => {
