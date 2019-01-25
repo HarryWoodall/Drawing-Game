@@ -68,6 +68,12 @@ module.exports = class Sockets {
 
           socket.emit("INIT_LOBBY_DATA", lobbyData);
         });
+
+        socket.on("START_GAME_REQ", data => {
+          console.log("start game request recieved");
+
+          io.in(roomName).emit("GAME_START");
+        });
       }
     });
   }

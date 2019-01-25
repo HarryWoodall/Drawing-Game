@@ -11,9 +11,28 @@ class DrawingGame01A extends Component {
     this.state = {
       isComplete: false,
       socket: this.props.socket,
-      phase: 0
+      phase: 0,
+      suggestion: "none"
     };
+    this.timer = 0;
+
     this.handleClick = this.handleClick.bind(this);
+    this.startTimer = this.startTimer.bind(this);
+  }
+
+  componentDidMount() {
+    fetch("/api/drawing/categories/random/1")
+      .then(res => res.json())
+      .then(data =>
+        this.setState(
+          {
+            suggestion: data[0]
+          },
+          () => {
+            this.startTimer();
+          }
+        )
+      );
   }
 
   render() {
@@ -21,9 +40,11 @@ class DrawingGame01A extends Component {
       <div id="drawing-game-01" className="drinking-game">
         <P5Wrapper
           sketch={sketch}
+          suggestion={this.state.suggestion}
           isComplete={this.state.isComplete}
           socket={this.state.socket}
         />
+        <h1>{this.state.suggestion}</h1>
         {this.state.phase === 0 ? (
           <PrimaryButton text="Submit" handleClick={this.handleClick} />
         ) : (
@@ -35,6 +56,16 @@ class DrawingGame01A extends Component {
 
   handleClick() {
     this.setState({ isComplete: true, phase: 1 });
+  }
+
+  startTimer() {
+    if (this.timer === 0) {
+      console.log("timer started");
+
+      this.timer = setTimeout(() => {
+        this.setState({ isComplete: true, phase: 1 });
+      }, 5000);
+    }
   }
 }
 

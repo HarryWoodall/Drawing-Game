@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const fs = require("fs");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -87,4 +88,29 @@ app.post("/", (req, res) => {
 
 app.get("/api/users", (req, res) => {
   res.send(userList.users);
+});
+
+app.get("/api/drawing/categories", (req, res) => {
+  res.sendFile(__dirname + "/resources/drawingCategories.json");
+});
+
+app.get("/api/drawing/categories/random/:ammount", (req, res) => {
+  let drawingData;
+  let resCategories = [];
+
+  fs.readFile("./resources/drawingCategories.json", (err, data) => {
+    if (err) {
+      throw err;
+    }
+
+    drawingData = JSON.parse(data).categories;
+
+    for (let i = 0; i < parseInt(req.params.ammount); i++) {
+      let index = Math.floor(Math.random() * drawingData.length);
+      resCategories.push(drawingData[index]);
+      drawingData.splice(index, 1);
+    }
+
+    res.send(resCategories);
+  });
 });

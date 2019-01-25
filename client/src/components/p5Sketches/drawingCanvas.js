@@ -6,6 +6,7 @@ export default function sketch(sketch) {
   let previousX = -1;
   let previousY = -1;
   let socket;
+  let suggestion;
 
   let line = [];
   let drawing = [];
@@ -34,7 +35,7 @@ export default function sketch(sketch) {
 
       drawSketch(drawing);
       console.log("drawing Sketch");
-      emitDrawing();
+      emitDrawing(props.suggestion);
     }
   };
 
@@ -101,8 +102,9 @@ export default function sketch(sketch) {
     line = [];
   }
 
-  function emitDrawing() {
+  function emitDrawing(suggestion) {
     let data = {
+      suggestion: suggestion,
       dimentions: {
         width: x,
         height: y
