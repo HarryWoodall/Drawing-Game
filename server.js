@@ -29,12 +29,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(sess);
 app.use(express.static(path.join(__dirname, "resources/client/landingPage")));
-app.use(express.static(path.join(__dirname, "client/build")));
+app.use("/app", express.static(path.join(__dirname, "client/build")));
 
 app.get("/", (req, res) => {
   res.sendFile(
-    res.sendFile(path.join(__dirname + "/client/build/public/index.html"))
-    //path.join(__dirname + "/resources/client/landingPage/index.html")
+    path.join(__dirname + "/resources/client/landingPage/index.html")
   );
 });
 
@@ -85,11 +84,10 @@ app.post("/", (req, res) => {
 
   userList.addUser(user);
 
-  res.redirect("/game");
+  res.redirect("/app");
 });
 
-app.get("/game", (req, res) => {
-  res.send("Hello World");
+app.get("/app", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
 });
 
