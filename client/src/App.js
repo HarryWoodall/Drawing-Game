@@ -11,7 +11,7 @@ class App extends Component {
       location: "LOBBY"
     };
 
-    Tests();
+    //Tests();
     this.lobbySubmitHandleClick = this.lobbySubmitHandleClick.bind(this);
   }
 
