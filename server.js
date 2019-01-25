@@ -82,14 +82,14 @@ app.post("/", (req, res) => {
     room.addUser(user);
   }
 
-  //TODO
   userList.addUser(user);
 
   res.redirect("/game");
 });
 
 app.get("/game", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
+  res.send("Hello World");
+  //res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
 });
 
 app.get("/api/users", (req, res) => {
