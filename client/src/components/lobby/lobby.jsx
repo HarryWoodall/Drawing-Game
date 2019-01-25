@@ -11,6 +11,8 @@ class Lobby extends Component {
       socket: props.socket
     };
 
+    this.props.socket.connect();
+
     this.props.socket.on("INIT_LOBBY_DATA", data => {
       this.setState({
         userName: data.userName,
@@ -46,9 +48,11 @@ class Lobby extends Component {
   }
 
   componentDidMount() {
+    this.props.socket.connect();
     console.log("component Mounted");
+    console.log(this.props.socket);
 
-    this.state.socket.emit("INIT_LOBBY_REQ");
+    this.props.socket.emit("INIT_LOBBY_REQ");
   }
 
   render() {

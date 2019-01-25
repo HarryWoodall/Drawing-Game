@@ -28,13 +28,10 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(sess);
-app.use(express.static(path.join(__dirname, "resources/client/landingPage")));
-app.use("/app", express.static(path.join(__dirname, "client/build")));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 app.get("/", (req, res) => {
-  res.sendFile(
-    path.join(__dirname + "/resources/client/landingPage/index.html")
-  );
+  res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
 });
 
 app.post("/", (req, res) => {
@@ -44,7 +41,7 @@ app.post("/", (req, res) => {
 
   // Error Checking
   if (userList.checkUserExists(req.session.id)) {
-    data.successful = false;
+    data.success = false;
     data.error = "USER_ALREADY_EXISTS";
     res.send(data);
     return;
@@ -52,18 +49,18 @@ app.post("/", (req, res) => {
 
   if (!req.body.newRoom) {
     if (!roomList.checkRoomExists(roomName)) {
-      data.successful = false;
+      data.success = false;
       data.error = "ROOM_NOT_FOUND";
       res.send(data);
       return;
     } else if (roomList.getRoom(roomName).nameTaken(userName)) {
-      data.successful = false;
+      data.success = false;
       data.error = "USERNAME_TAKEN";
       res.send(data);
       return;
     }
   } else if (roomList.checkRoomExists(roomName)) {
-    data.successful = false;
+    data.success = false;
     data.error = "ROOM_ALREADY_EXISTS";
     res.send(data);
     return;
@@ -84,11 +81,8 @@ app.post("/", (req, res) => {
 
   userList.addUser(user);
 
-  res.redirect("/app");
-});
-
-app.get("/app", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
+  data.success = true;
+  res.send(data);
 });
 
 app.get("/api/users", (req, res) => {

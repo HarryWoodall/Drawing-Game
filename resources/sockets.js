@@ -19,6 +19,8 @@ module.exports = class Sockets {
       let userId = socket.request.session.id;
 
       if (!userList.checkUserExists(userId)) {
+        console.log("no room found, dissconnecting");
+
         socket.disconnect();
       } else {
         let roomName = userList.getUser(userId).room;
@@ -47,6 +49,8 @@ module.exports = class Sockets {
         });
 
         socket.on("INIT_LOBBY_REQ", data => {
+          console.log("Init lobby request");
+
           let user = userList.getUser(userId);
           let room = roomList.getRoom(user.room);
           let users = [];

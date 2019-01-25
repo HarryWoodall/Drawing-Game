@@ -2,16 +2,18 @@ import React, { Component } from "react";
 import "./App.css";
 import DrawingGame01 from "./components/games/drawingGame01/drawingGame01-A.jsx";
 import Lobby from "./components/lobby/lobby";
+import LandingPage from "./components/landing/landingPage";
 import { Tests } from "./tests/test";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: "LOBBY"
+      location: "LANDING"
     };
 
     //Tests();
+    this.landingSubmitHandleClick = this.landingSubmitHandleClick.bind(this);
     this.lobbySubmitHandleClick = this.lobbySubmitHandleClick.bind(this);
   }
 
@@ -21,6 +23,8 @@ class App extends Component {
 
   setLocation() {
     switch (this.state.location) {
+      case "LANDING":
+        return <LandingPage handleSubmit={this.landingSubmitHandleClick} />;
       case "LOBBY":
         return (
           <Lobby
@@ -33,6 +37,13 @@ class App extends Component {
       default:
         return null;
     }
+  }
+
+  landingSubmitHandleClick() {
+    console.log("click");
+    this.setState({
+      location: "LOBBY"
+    });
   }
 
   lobbySubmitHandleClick() {
