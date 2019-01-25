@@ -3,15 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import io from "socket.io-client";
+import Io from "./sockets/api";
 
-const socket = io();
+const io = new Io(null);
+const socket = io.getSocket();
 
-socket.on("start", data => {
-  console.log("data");
-});
-
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App socket={socket} />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

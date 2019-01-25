@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+  </head>
+
+  <body>
+    <h1 class="setup-item">Happy Hour</h1>
+    <form id="setup-form" class="setup-item">
+      <div>
+        <input
+          type="text"
+          id="user-name-input"
+          class="setup-text-input"
+          placeholder="User Name"
+        />
+      </div>
+
+      <div>
+        <input
+          type="text"
+          id="room-name-input"
+          class="setup-text-input"
+          placeholder="Room Name"
+        />
+      </div>
+
+      <input
+        type="button"
+        id="new-room-button"
+        value="New Room"
+        onclick="toggleButton()"
+      />
+      <input
+        type="button"
+        id="enter-room-button"
+        value="Enter Room"
+        onclick="toggleButton()"
+      />
+      <div>
+        <input
+          type="button"
+          id="submit-button"
+          value="submit"
+          onclick="postData()"
+        />
+      </div>
+    </form>
+
+    <script src="index.js"></script>
+  </body>
+</html>

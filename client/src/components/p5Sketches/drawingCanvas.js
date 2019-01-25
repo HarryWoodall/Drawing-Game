@@ -1,14 +1,18 @@
 export default function sketch(sketch) {
-  let x = 500;
-  let y = 500;
+  let x;
+  let y;
   let isDrawing = false;
+  let isEnabled = true;
   let previousX = -1;
   let previousY = -1;
+  let socket;
 
   let line = [];
   let drawing = [];
 
   sketch.setup = function() {
+    x = window.innerWidth * 0.8;
+    y = window.innerHeight * 0.7;
     sketch.background(255);
     sketch.createCanvas(x, y);
     drawBorder();
@@ -17,6 +21,8 @@ export default function sketch(sketch) {
   //sketch.draw = function() {};
 
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
+    socket = props.socket;
+
     console.log("props Changed");
     if (props.isComplete) {
       sketch.clear();
@@ -28,7 +34,7 @@ export default function sketch(sketch) {
 
       drawSketch(drawing);
       console.log("drawing Sketch");
-      postDrawing();
+      emitDrawing();
     }
   };
 
@@ -66,7 +72,7 @@ export default function sketch(sketch) {
   }
 
   function draw() {
-    if (isDrawing) {
+    if (isDrawing && isEnabled) {
       addPoint(sketch.mouseX, sketch.mouseY);
       sketch.line(previousX, previousY, sketch.mouseX, sketch.mouseY);
       previousX = sketch.mouseX;
@@ -95,17 +101,15 @@ export default function sketch(sketch) {
     line = [];
   }
 
-  function postDrawing() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/", true);
-    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-
-    // send the collected data as JSON
-    xhr.send(JSON.stringify(drawing));
-
-    xhr.onloadend = function(res) {
-      console.log("success");
+  function emitDrawing() {
+    let data = {
+      dimentions: {
+        width: x,
+        height: y
+      },
+      content: drawing
     };
+    socket.emit("SEND_DRAWING", data);
   }
 
   function drawSketch(data) {

@@ -30,3 +30,21 @@
     transform: rotate(360deg);
   }
 }
+
+h1 {
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin-top: 10px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.users-container {
+  margin-top: 30px;
+}

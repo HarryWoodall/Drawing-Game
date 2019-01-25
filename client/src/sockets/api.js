@@ -1,9 +1,21 @@
 import io from "socket.io-client";
-const socket = io();
+let socket;
 
-function socketAPI() {
-  socket.on("start", function(data) {
-    console.log(data);
-  });
+class socketAPI {
+  constructor(s) {
+    if (s === null) {
+      socket = io();
+    } else {
+      socket = s;
+    }
+  }
+
+  getSocket() {
+    socket.on("start", function(data) {
+      console.log(data);
+    });
+
+    return socket;
+  }
 }
-export { socketAPI };
+export default socketAPI;
