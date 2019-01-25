@@ -85,10 +85,10 @@ app.post("/", (req, res) => {
   //TODO
   userList.addUser(user);
 
-  res.redirect("/app");
+  res.redirect("/game");
 });
 
-app.get("/app", (req, res) => {
+app.get("/game", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
 });
 
