@@ -4,6 +4,7 @@ module.exports = class User {
     this.name = name;
     this.room = room;
     this.isLeader = isLeader;
-    this.drawing;
+    this.myDrawing;
+    this.otherDrawing;
   }
 };

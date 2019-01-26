@@ -24,17 +24,12 @@ export default function sketch(sketch) {
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
     socket = props.socket;
 
-    console.log("props Changed");
     if (props.isComplete) {
       sketch.clear();
-      console.log("clearing Sketch");
 
       //Debug Stuff
       drawBorder();
-      console.log("re-drawing Border");
-
       drawSketch(drawing);
-      console.log("drawing Sketch");
       emitDrawing(props.suggestion);
     }
   };

@@ -1,14 +1,10 @@
-import socketAPI from "../../sockets/api";
-
 export default function displayCanvas(sketch) {
   let x;
   let y;
   let xScale;
   let yScale;
   let socket;
-
-  let line = [];
-  let drawing = [];
+  let drawing;
 
   sketch.setup = function() {
     x = window.innerWidth * 0.8;
@@ -16,19 +12,19 @@ export default function displayCanvas(sketch) {
     sketch.background(255);
     sketch.createCanvas(x, y);
     drawBorder();
-    drawSketch();
-    socket.on("DRAWING_GAME_01_EMMIT_NEW_DRAWING", data => {
-      drawing = data.content;
-      xScale = x / data.width;
-      yScale = y / data.height;
-    });
   };
 
   //sketch.draw = function() {};
 
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
     socket = props.socket;
-    console.log("props Changed");
+    socket.on("OTHER_DRAWING", data => {
+      drawing = data.content;
+      xScale = x / data.dimentions.width;
+      yScale = y / data.dimentions.height;
+      console.log("drawing other sketch");
+      drawSketch(drawing);
+    });
   };
 
   //Helper Functions
@@ -48,8 +44,8 @@ export default function displayCanvas(sketch) {
         if (prevX !== -1 && prevY !== -1) {
           sketch.line(prevX, prevY, point.x * xScale, point.y * yScale);
         }
-        prevX = point.x;
-        prevY = point.y;
+        prevX = point.x * xScale;
+        prevY = point.y * yScale;
       }
       prevX = -1;
       prevY = -1;
