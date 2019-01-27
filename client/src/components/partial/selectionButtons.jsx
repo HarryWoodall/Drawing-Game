@@ -5,7 +5,7 @@ class SelectionButtons extends Component {
     super(props);
     this.state = {
       values: props.values,
-      shuffled: props.isShuffled
+      areShuffled: false
     };
 
     this.shuffleValues = this.shuffleValues.bind(this);
@@ -15,11 +15,18 @@ class SelectionButtons extends Component {
     let buttons = [];
     console.log("values", this.props.values);
     if (values) {
-      if (this.props.shuffled) {
+      if (this.props.shuffled && !this.state.areShuffled) {
         this.shuffleValues();
       }
       for (let i = 0; i < this.props.amount; i++) {
-        buttons.push(<input type="button" value={values[i]} key={"key" + i} />);
+        buttons.push(
+          <input
+            type="button"
+            value={values[i]}
+            key={"key" + i}
+            onClick={this.props.handleClick}
+          />
+        );
       }
     }
 
@@ -32,6 +39,10 @@ class SelectionButtons extends Component {
         {this.createButtons(this.props.amount, this.props.values)}
       </div>
     );
+  }
+
+  clickTest() {
+    console.log("click");
   }
 
   shuffleValues() {
@@ -47,6 +58,8 @@ class SelectionButtons extends Component {
       this.props.values[currentIndex] = this.props.values[randomIndex];
       this.props.values[randomIndex] = temporalValue;
     }
+
+    this.state.areShuffled = true;
   }
 }
 

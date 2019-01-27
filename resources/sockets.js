@@ -23,6 +23,9 @@ module.exports = class Sockets {
 
         socket.disconnect();
       } else {
+        userList.getUser(userId).socketId = socket.id;
+        console.log(socket.id, userId);
+
         let roomName = userList.getUser(userId).room;
 
         socket.join(roomName);
@@ -43,23 +46,6 @@ module.exports = class Sockets {
 
           userList.removeUser(userId);
           roomList.getRoom(roomName).removeUser(userId);
-        });
-
-        socket.on("SEND_DRAWING", data => {
-          let user = roomList.getRoom(roomName).getUser(userId);
-          userList.getUser(userId).myDrawing = data;
-          if (this.checkForDrawings(roomName)) {
-            this.distributeDrawings(roomName);
-            io.in(roomName).emit("DRAWINGS_READY");
-          }
-        });
-
-        socket.on("REQUEST_OTHER_DRAWING", data => {
-          console.log("sending other drawings");
-
-          let room = roomList.getRoom(roomName);
-          let user = room.getUser(userId);
-          socket.emit("OTHER_DRAWING", user.otherDrawing);
         });
 
         socket.on("INIT_LOBBY_REQ", data => {
@@ -87,6 +73,44 @@ module.exports = class Sockets {
           console.log("start game request recieved");
 
           io.in(roomName).emit("GAME_START");
+        });
+
+        socket.on("SEND_DRAWING", data => {
+          let user = roomList.getRoom(roomName).getUser(userId);
+          data.owner = userId;
+          userList.getUser(userId).myDrawing = data;
+          if (this.checkForDrawings(roomName)) {
+            this.distributeDrawings(roomName);
+            io.in(roomName).emit("DRAWINGS_READY");
+          }
+        });
+
+        socket.on("REQUEST_OTHER_DRAWING", data => {
+          console.log("sending other drawings");
+
+          let room = roomList.getRoom(roomName);
+          let user = room.getUser(userId);
+          socket.emit("OTHER_DRAWING", user.otherDrawing);
+        });
+
+        socket.on("GUESS_SUBMISSION", data => {
+          let user = userList.getUser(userId);
+          let returnData = {
+            owner: user.name,
+            guess: data.guess,
+            answer: data.answer
+          };
+
+          user.givenFeedback = true;
+
+          io.to(userList.getUser(data.owner).socketId).emit(
+            "RETURN_ANSWER",
+            returnData
+          );
+
+          if (roomList.getRoom(roomName).hasGivenFeedback()) {
+            io.in(roomName).emit("GAME_COMPLETE");
+          }
         });
       }
     });
@@ -165,27 +189,6 @@ module.exports = class Sockets {
 
     function selectIndex(max) {
       return Math.floor(Math.random() * max);
-    }
-
-    function findUser(id) {
-      for (let user of users) {
-        if (user.id === id) {
-          return user;
-        }
-      }
-    }
-
-    function generateTestUsers() {
-      let users = [];
-      for (let i = 0; i < 10; i++) {
-        let user = {
-          id: "id" + i,
-          myDrawing: "user" + i + " myDrawing",
-          otherDrawing: ""
-        };
-        users.push(user);
-      }
-      return users;
     }
   }
 };

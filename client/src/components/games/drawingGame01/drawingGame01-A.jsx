@@ -13,12 +13,16 @@ class DrawingGame01A extends Component {
       isComplete: false,
       phase: 0,
       isDrawingReady: false,
-      suggestion: "none",
-      answer: ""
+      suggestion: null
     };
     this.timer = 0;
 
-    this.handleClick = this.handleClick.bind(this);
+    this.getMainText = this.getMainText.bind(this);
+    this.getButtons = this.getButtons.bind(this);
+    this.getSuggestion = this.getSuggestion.bind(this);
+    this.resetGame = this.resetGame.bind(this);
+    this.handleSubmitClick = this.handleSubmitClick.bind(this);
+    this.handleSelectionClick = this.handleSelectionClick.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.getValues = this.getValues.bind(this);
 
@@ -34,28 +38,31 @@ class DrawingGame01A extends Component {
 
       this.setState({
         otherDrawing: data,
-        answer: data.suggestion
+        otherDrawingAnswer: data.suggestion
       });
-
       this.getValues(data.suggestion);
+    });
 
-      console.log("state", this.state);
+    this.props.socket.on("RETURN_ANSWER", data => {
+      console.log("Is correct?", data);
+      this.setState({
+        peer: data.owner,
+        peerGuess: data.guess,
+        phase: this.state.phase === 1 ? 1 : 3
+      });
+    });
+
+    this.props.socket.on("GAME_COMPLETE", data => {
+      console.log("game end timer stated");
+
+      setTimeout(() => {
+        this.resetGame();
+      }, 1000);
     });
   }
 
   componentDidMount() {
-    fetch("/api/drawing/categories/random/1")
-      .then(res => res.json())
-      .then(data =>
-        this.setState(
-          {
-            suggestion: data[0]
-          },
-          () => {
-            this.startTimer();
-          }
-        )
-      );
+    this.getSuggestion();
   }
 
   render() {
@@ -68,55 +75,159 @@ class DrawingGame01A extends Component {
           socket={this.props.socket}
           otherDrawing={this.state.otherDrawing}
         />
-        <h1>
-          {this.state.phase === 0 ? this.state.suggestion : "What is it?"}
-        </h1>
-        {this.state.phase === 0 && !this.state.options ? (
-          <PrimaryButton text="Submit" handleClick={this.handleClick} />
-        ) : (
-          <SelectionButtons
-            values={this.state.options}
-            amount={3}
-            shuffled={true}
-          />
-        )}
+        <h1>{this.getMainText()}</h1>
+        {this.getButtons()}
       </div>
     );
   }
 
-  handleClick() {
+  getMainText() {
+    console.log("getting text");
+
+    switch (this.state.phase) {
+      case 0:
+        return this.state.suggestion;
+      case 1:
+        return "What is it?";
+      case 2:
+        if (this.state.peerGuess) {
+          this.setState({
+            phase: 3
+          });
+          break;
+        } else {
+          return "Awaiting feedback...";
+        }
+      case 3:
+        if (this.state.peerGuess === this.state.suggestion) {
+          return (
+            this.state.peer +
+            " guessed correctly that your drawing was a " +
+            this.state.peerGuess
+          );
+        } else {
+          return (
+            this.state.peer +
+            " unfortunatly thought your drawing was a  " +
+            this.state.peerGuess
+          );
+        }
+      default:
+        return null;
+    }
+  }
+
+  getButtons() {
+    if (this.state.phase === 0) {
+      return (
+        <PrimaryButton text="Submit" handleClick={this.handleSubmitClick} />
+      );
+    } else if (this.state.phase === 1 && this.state.options) {
+      return (
+        <SelectionButtons
+          values={this.state.options}
+          amount={3}
+          shuffled={true}
+          handleClick={this.handleSelectionClick}
+        />
+      );
+    }
+  }
+
+  getSuggestion() {
+    if (this.state.suggestion == null) {
+      fetch("/api/drawing/categories/random/1")
+        .then(res => res.json())
+        .then(data =>
+          this.setState(
+            {
+              suggestion: data[0]
+            },
+            () => {
+              setTimeout(() => {
+                if (!this.state.isComplete) {
+                  this.setState({ isComplete: true, phase: 1 });
+                }
+              }, 5000);
+            }
+          )
+        );
+    }
+  }
+
+  resetGame() {
+    this.setState(
+      {
+        isComplete: false,
+        phase: 0,
+        isDrawingReady: false,
+        suggestion: null,
+
+        options: null,
+        otherDrawing: null,
+        peer: null,
+        peerGuess: null,
+        otherDrawingAnswer: null
+      },
+      () => {
+        this.getSuggestion();
+      }
+    );
+  }
+
+  handleSubmitClick() {
     this.setState({ isComplete: true, phase: 1 });
   }
 
+  handleSelectionClick(e) {
+    console.log(
+      e.target.value === this.state.otherDrawingAnswer,
+      this.state.otherDrawingAnswer
+    );
+    let data = {
+      owner: this.state.otherDrawing.owner,
+      guess: e.target.value,
+      answer: this.state.otherDrawingAnswer
+    };
+    this.setState(
+      {
+        phase: 2
+      },
+      () => {
+        this.props.socket.emit("GUESS_SUBMISSION", data);
+      }
+    );
+  }
+
+  //TODO debug this
   startTimer() {
     if (this.timer === 0) {
       console.log("timer started");
 
       this.timer = setTimeout(() => {
-        this.setState({ isComplete: true, phase: 1 });
+        if (!this.state.isComplete) {
+          this.setState({ isComplete: true, phase: 1 });
+        }
       }, 5000);
     }
   }
 
   getValues(answer) {
-    let values = [];
-    values.push(answer);
+    if (this.state.options == null) {
+      let values = [];
+      values.push(answer);
 
-    fetch("/api/drawing/categories/random/2")
-      .then(res => res.json())
-      .then(data => {
-        for (let i = 0; i < 2; i++) {
-          values.push(data[i]);
-        }
-        this.setState(
-          {
-            options: values
-          },
-          () => {
-            console.log("state", this.state);
+      fetch("/api/drawing/categories/random/2")
+        .then(res => res.json())
+        .then(data => {
+          for (let i = 0; i < 2; i++) {
+            values.push(data[i]);
           }
-        );
-      });
+          this.setState({
+            options: values
+          });
+        });
+    }
   }
 }
 

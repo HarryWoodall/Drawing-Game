@@ -59,4 +59,17 @@ module.exports = class Sockets {
       this.users[0].isLeader = true;
     }
   }
+
+  hasGivenFeedback() {
+    for (let user of this.users) {
+      if (!user.givenFeedback) {
+        return false;
+      }
+    }
+
+    for (let user of this.users) {
+      user.givenFeedback = false;
+    }
+    return true;
+  }
 };
