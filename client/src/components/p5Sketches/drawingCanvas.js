@@ -6,7 +6,7 @@ export default function sketch(sketch) {
   let previousX = -1;
   let previousY = -1;
   let socket;
-  let suggestion;
+  let owner;
 
   let line = [];
   let drawing = [];
@@ -23,6 +23,9 @@ export default function sketch(sketch) {
 
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
     socket = props.socket;
+    console.log("owner", props.owner);
+
+    owner = props.owner;
 
     if (props.isComplete) {
       sketch.clear();
@@ -104,7 +107,8 @@ export default function sketch(sketch) {
         width: x,
         height: y
       },
-      content: drawing
+      content: drawing,
+      ownerName: owner
     };
     socket.emit("SEND_DRAWING", data);
   }

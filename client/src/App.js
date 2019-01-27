@@ -19,6 +19,12 @@ class App extends Component {
         location: "DRAWING_GAME_01"
       });
     });
+
+    this.props.socket.on("SEND_USER", data => {
+      this.setState({
+        userName: data.name
+      });
+    });
   }
 
   render() {
@@ -37,7 +43,12 @@ class App extends Component {
           />
         );
       case "DRAWING_GAME_01":
-        return <DrawingGame01 socket={this.props.socket} />;
+        return (
+          <DrawingGame01
+            socket={this.props.socket}
+            userName={this.state.userName}
+          />
+        );
       default:
         return null;
     }
@@ -45,9 +56,14 @@ class App extends Component {
 
   landingSubmitHandleClick() {
     console.log("click");
-    this.setState({
-      location: "LOBBY"
-    });
+    this.setState(
+      {
+        location: "LOBBY"
+      },
+      () => {
+        this.props.socket.emit("GET_USER");
+      }
+    );
   }
 
   lobbySubmitHandleClick() {

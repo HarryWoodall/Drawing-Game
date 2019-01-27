@@ -15,9 +15,9 @@ class DrawingGame01A extends Component {
       isDrawingReady: false,
       suggestion: null
     };
-    this.timer = 0;
 
     this.getMainText = this.getMainText.bind(this);
+    this.getFeedbackText = this.getFeedbackText.bind(this);
     this.getButtons = this.getButtons.bind(this);
     this.getSuggestion = this.getSuggestion.bind(this);
     this.resetGame = this.resetGame.bind(this);
@@ -48,7 +48,7 @@ class DrawingGame01A extends Component {
       this.setState({
         peer: data.owner,
         peerGuess: data.guess,
-        phase: this.state.phase === 1 ? 1 : 3
+        phase: this.state.phase === 1 ? 1 : 2
       });
     });
 
@@ -57,7 +57,7 @@ class DrawingGame01A extends Component {
 
       setTimeout(() => {
         this.resetGame();
-      }, 1000);
+      }, 10000);
     });
   }
 
@@ -74,46 +74,65 @@ class DrawingGame01A extends Component {
           isComplete={this.state.isComplete}
           socket={this.props.socket}
           otherDrawing={this.state.otherDrawing}
+          owner={this.props.userName}
         />
         <h1>{this.getMainText()}</h1>
+        <h2
+          style={{ visibility: +this.state.phase === 0 ? "hidden" : "visible" }}
+        >
+          {this.getFeedbackText()}
+        </h2>
         {this.getButtons()}
       </div>
     );
   }
 
   getMainText() {
-    console.log("getting text");
-
     switch (this.state.phase) {
       case 0:
         return this.state.suggestion;
       case 1:
         return "What is it?";
       case 2:
-        if (this.state.peerGuess) {
-          this.setState({
-            phase: 3
-          });
-          break;
-        } else {
-          return "Awaiting feedback...";
-        }
-      case 3:
-        if (this.state.peerGuess === this.state.suggestion) {
+        if (this.state.otherDrawingAnswer === this.state.guess) {
           return (
-            this.state.peer +
-            " guessed correctly that your drawing was a " +
-            this.state.peerGuess
+            "Correct!, " +
+            this.state.otherDrawing.ownerName +
+            " did in fact draw a " +
+            this.state.otherDrawingAnswer
           );
         } else {
           return (
-            this.state.peer +
-            " unfortunatly thought your drawing was a  " +
-            this.state.peerGuess
+            "Incorrect! " +
+            this.state.otherDrawing.ownerName +
+            " drew a " +
+            this.state.otherDrawingAnswer +
+            " and not a " +
+            this.state.guess
           );
         }
       default:
         return null;
+    }
+  }
+
+  getFeedbackText() {
+    if (this.state.peerGuess) {
+      if (this.state.peerGuess === this.state.suggestion) {
+        return (
+          this.state.peer +
+          " guessed correctly that your drawing was a " +
+          this.state.peerGuess
+        );
+      } else {
+        return (
+          this.state.peer +
+          " unfortunatly thought your drawing was a  " +
+          this.state.peerGuess
+        );
+      }
+    } else {
+      return "Awaiting feedback...";
     }
   }
 
@@ -164,6 +183,7 @@ class DrawingGame01A extends Component {
         suggestion: null,
 
         options: null,
+        guess: null,
         otherDrawing: null,
         peer: null,
         peerGuess: null,
@@ -191,7 +211,8 @@ class DrawingGame01A extends Component {
     };
     this.setState(
       {
-        phase: 2
+        phase: 2,
+        guess: e.target.value
       },
       () => {
         this.props.socket.emit("GUESS_SUBMISSION", data);

@@ -69,6 +69,10 @@ module.exports = class Sockets {
           socket.emit("INIT_LOBBY_DATA", lobbyData);
         });
 
+        socket.on("GET_USER", data => {
+          socket.emit("SEND_USER", userList.getUser(userId));
+        });
+
         socket.on("START_GAME_REQ", data => {
           console.log("start game request recieved");
 
