@@ -7,8 +7,8 @@ export default function displayCanvas(sketch) {
   let drawing;
 
   sketch.setup = function() {
-    x = window.innerWidth * 0.8;
-    y = window.innerHeight * 0.7;
+    x = window.innerWidth * 0.6;
+    y = window.innerHeight * 0.525;
     sketch.background(255);
     sketch.createCanvas(x, y);
     drawBorder();

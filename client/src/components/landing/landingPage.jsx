@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PrimaryButton from "../partial/primaryButton";
+import "./landingPage.css";
 
 class LandingPage extends Component {
   constructor(props) {
@@ -14,50 +16,58 @@ class LandingPage extends Component {
 
   render() {
     return (
-      <main>
-        <h1>Happy Hour</h1>
-        <form id="setup-form" className="setup-item">
-          <div>
-            <input
-              type="text"
-              id="user-name-input"
-              className="setup-text-input"
-              placeholder="User Name"
-              onChange={this.textChangeHandle}
-            />
+      <main id="landing-page">
+        <h1 id="landing-page-main-header">Happy Hour</h1>
+        <form id="setup-form" className="setup-item" autoComplete="off">
+          <div id="setup-text-input">
+            <div>
+              <input
+                type="text"
+                id="user-name-input"
+                className="setup-text-input text-input"
+                placeholder="USER NAME"
+                onChange={this.textChangeHandle}
+              />
+            </div>
+
+            <div>
+              <input
+                type="text"
+                id="room-name-input"
+                className="setup-text-input text-input"
+                style={{
+                  visibility: +this.state.newRoom ? "hidden" : "visible"
+                }}
+                placeholder="ROOM NAME"
+                onChange={this.textChangeHandle}
+              />
+            </div>
           </div>
 
-          <div>
-            <input
-              type="text"
-              id="room-name-input"
-              className="setup-text-input"
-              style={{ visibility: +this.state.newRoom ? "hidden" : "visible" }}
-              placeholder="Room Name"
-              onChange={this.textChangeHandle}
-            />
-          </div>
-
-          <input
-            type="button"
-            id="new-room-button"
-            value="New Room"
-            disabled={this.state.newRoom}
-            onClick={this.toggleHandle}
-          />
-          <input
-            type="button"
-            id="enter-room-button"
-            value="Enter Room"
-            disabled={!this.state.newRoom}
-            onClick={this.toggleHandle}
-          />
-          <div>
+          <div id="toggle-buttons">
             <input
               type="button"
-              id="submit-button"
-              value="submit"
-              onClick={this.submitHandle}
+              id="new-room-button"
+              className="toggle-button toggle-left"
+              value="New Room"
+              disabled={this.state.newRoom}
+              onClick={this.toggleHandle}
+            />
+            <input
+              type="button"
+              id="enter-room-button"
+              className="toggle-button toggle-right"
+              value="Enter Room"
+              disabled={!this.state.newRoom}
+              onClick={this.toggleHandle}
+            />
+          </div>
+
+          <div id="landing-page-submit-button">
+            <PrimaryButton
+              id="sumbit-button"
+              text="Enter"
+              handleClick={this.submitHandle}
             />
           </div>
         </form>
@@ -72,7 +82,7 @@ class LandingPage extends Component {
       });
     } else if (event.target.id === "room-name-input") {
       this.setState({
-        roomName: event.target.value
+        roomName: event.target.value.toUpperCase()
       });
     }
   }

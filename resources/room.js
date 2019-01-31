@@ -54,6 +54,14 @@ module.exports = class Sockets {
     return false;
   }
 
+  getLeader() {
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].isLeader) {
+        return this.users[i].name;
+      }
+    }
+  }
+
   setNewLeader() {
     if (this.users[0]) {
       this.users[0].isLeader = true;
@@ -69,6 +77,20 @@ module.exports = class Sockets {
 
     for (let user of this.users) {
       user.givenFeedback = false;
+      user.myDrawing = null;
+    }
+    return true;
+  }
+
+  isReady() {
+    for (let user of this.users) {
+      if (!user.isReady) {
+        return false;
+      }
+    }
+
+    for (let user of this.users) {
+      user.isReady = false;
     }
     return true;
   }

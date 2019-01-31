@@ -1,24 +1,30 @@
 import React, { Component } from "react";
 import SingleList from "../partial/singleList";
 import StartButton from "../partial/primaryButton";
+import "./lobby.css";
 
 class Lobby extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.submitHandle);
-
     this.state = {
-      socket: props.socket
+      socket: props.socket,
+      identifiers: ["room-leader", "current-user"]
     };
+
+    this.applyClassName = this.applyClassName.bind(this);
+    this.getExtra = this.getExtra.bind(this);
+    this.setLeaderVisibility = this.setLeaderVisibility.bind(this);
 
     this.props.socket.connect();
 
     this.props.socket.on("INIT_LOBBY_DATA", data => {
+      console.log("data", data);
+
       this.setState({
         userName: data.userName,
         roomName: data.roomName,
         users: data.users,
-        isLeader: data.isLeader
+        leader: data.leader
       });
     });
 
@@ -58,11 +64,20 @@ class Lobby extends Component {
   render() {
     return (
       <main>
-        <h1>{this.state.roomName}</h1>
-        <h3>lobby</h3>
-        <div className="users-container">
-          <h2>Users</h2>
-          <SingleList items={this.state.users} />
+        <h1 id="lobby-main-header">{this.state.roomName}</h1>
+        <h3 id="lobby-sub-header">lobby</h3>
+        <div
+          className="users-container"
+          style={{ height: window.innerHeight * 0.6 }}
+        >
+          <h2 id="lobby-users-header">Users</h2>
+          <SingleList
+            items={this.state.users}
+            itemClass="user-item"
+            applyAltClasses={this.applyClassName}
+            extras={this.getExtra}
+            applyExtraStyle={this.setLeaderVisibility}
+          />
         </div>
         {this.renderButton()}
       </main>
@@ -70,9 +85,38 @@ class Lobby extends Component {
   }
 
   renderButton() {
-    if (this.state.isLeader) {
+    if (this.state.leader === this.state.userName) {
       return <StartButton text="Start" handleClick={this.props.submitHandle} />;
     }
+  }
+
+  applyClassName(item) {
+    let className = "";
+    if (item === this.state.leader) {
+      className += " room-leader";
+    }
+
+    if (item === this.state.userName) {
+      className += " current-user";
+    }
+
+    return className;
+  }
+
+  setLeaderVisibility(item) {
+    if (item === this.state.leader) {
+      return { visibility: "visible" };
+    } else {
+      return { visibility: "hidden" };
+    }
+  }
+
+  getExtra(item) {
+    return (
+      <span className="leader-icon" style={this.setLeaderVisibility(item)}>
+        ★
+      </span>
+    );
   }
 }
 

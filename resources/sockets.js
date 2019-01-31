@@ -63,7 +63,7 @@ module.exports = class Sockets {
             userName: user.name,
             roomName: room.name,
             users: users,
-            isLeader: user.isLeader
+            leader: room.getLeader()
           };
 
           socket.emit("INIT_LOBBY_DATA", lobbyData);
@@ -114,6 +114,13 @@ module.exports = class Sockets {
 
           if (roomList.getRoom(roomName).hasGivenFeedback()) {
             io.in(roomName).emit("GAME_COMPLETE");
+          }
+        });
+
+        socket.on("USER_READY", data => {
+          userList.getUser(userId).isReady = true;
+          if (roomList.getRoom(roomName).isReady()) {
+            io.in(roomName).emit("ROOM_READY_FOR_RESET");
           }
         });
       }

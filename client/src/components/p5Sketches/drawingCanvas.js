@@ -27,7 +27,7 @@ export default function sketch(sketch) {
 
     owner = props.owner;
 
-    if (props.isComplete) {
+    if (props.isDrawn) {
       sketch.clear();
 
       //Debug Stuff
@@ -101,6 +101,10 @@ export default function sketch(sketch) {
   }
 
   function emitDrawing(suggestion) {
+    if (isDrawing) {
+      endLine();
+    }
+
     let data = {
       suggestion: suggestion,
       dimentions: {

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "../../../App.css";
+import "./drawingGame01.css";
 import drawingCanvas from "../../p5Sketches/drawingCanvas";
 import displayCanvas from "../../p5Sketches/displayCanvas";
 import P5Wrapper from "react-p5-wrapper";
@@ -10,7 +11,7 @@ class DrawingGame01A extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isComplete: false,
+      isDrawn: false,
       phase: 0,
       isDrawingReady: false,
       suggestion: null
@@ -21,9 +22,8 @@ class DrawingGame01A extends Component {
     this.getButtons = this.getButtons.bind(this);
     this.getSuggestion = this.getSuggestion.bind(this);
     this.resetGame = this.resetGame.bind(this);
-    this.handleSubmitClick = this.handleSubmitClick.bind(this);
     this.handleSelectionClick = this.handleSelectionClick.bind(this);
-    this.startTimer = this.startTimer.bind(this);
+    this.handleReadyClick = this.handleReadyClick.bind(this);
     this.getValues = this.getValues.bind(this);
 
     this.props.socket.on("DRAWINGS_READY", data => {
@@ -55,9 +55,13 @@ class DrawingGame01A extends Component {
     this.props.socket.on("GAME_COMPLETE", data => {
       console.log("game end timer stated");
 
-      setTimeout(() => {
-        this.resetGame();
-      }, 10000);
+      this.setState({
+        gameComplete: true
+      });
+    });
+
+    this.props.socket.on("ROOM_READY_FOR_RESET", data => {
+      this.resetGame();
     });
   }
 
@@ -68,16 +72,22 @@ class DrawingGame01A extends Component {
   render() {
     return (
       <div id="drawing-game-01" className="drinking-game">
-        <P5Wrapper
-          sketch={this.state.isDrawingReady ? displayCanvas : drawingCanvas}
-          suggestion={this.state.suggestion}
-          isComplete={this.state.isComplete}
-          socket={this.props.socket}
-          otherDrawing={this.state.otherDrawing}
-          owner={this.props.userName}
-        />
-        <h1>{this.getMainText()}</h1>
+        <div
+          id="canvas-wrapper"
+          style={{ marginTop: this.state.isDrawingReady ? "10px" : "20px" }}
+        >
+          <P5Wrapper
+            sketch={this.state.isDrawingReady ? displayCanvas : drawingCanvas}
+            suggestion={this.state.suggestion}
+            isDrawn={this.state.isDrawn}
+            socket={this.props.socket}
+            otherDrawing={this.state.otherDrawing}
+            owner={this.props.userName}
+          />
+        </div>
+        <h1 id="drawing-game-01-main-header">{this.getMainText()}</h1>
         <h2
+          id="feedback-text"
           style={{ visibility: +this.state.phase === 0 ? "hidden" : "visible" }}
         >
           {this.getFeedbackText()}
@@ -137,11 +147,7 @@ class DrawingGame01A extends Component {
   }
 
   getButtons() {
-    if (this.state.phase === 0) {
-      return (
-        <PrimaryButton text="Submit" handleClick={this.handleSubmitClick} />
-      );
-    } else if (this.state.phase === 1 && this.state.options) {
+    if (this.state.phase === 1 && this.state.options) {
       return (
         <SelectionButtons
           values={this.state.options}
@@ -150,6 +156,8 @@ class DrawingGame01A extends Component {
           handleClick={this.handleSelectionClick}
         />
       );
+    } else if (this.state.gameComplete) {
+      return <PrimaryButton text="Ready" handleClick={this.handleReadyClick} />;
     }
   }
 
@@ -164,8 +172,8 @@ class DrawingGame01A extends Component {
             },
             () => {
               setTimeout(() => {
-                if (!this.state.isComplete) {
-                  this.setState({ isComplete: true, phase: 1 });
+                if (!this.state.isDrawn) {
+                  this.setState({ isDrawn: true, phase: 1 });
                 }
               }, 5000);
             }
@@ -177,7 +185,7 @@ class DrawingGame01A extends Component {
   resetGame() {
     this.setState(
       {
-        isComplete: false,
+        isDrawn: false,
         phase: 0,
         isDrawingReady: false,
         suggestion: null,
@@ -187,16 +195,13 @@ class DrawingGame01A extends Component {
         otherDrawing: null,
         peer: null,
         peerGuess: null,
-        otherDrawingAnswer: null
+        otherDrawingAnswer: null,
+        gameComplete: false
       },
       () => {
         this.getSuggestion();
       }
     );
-  }
-
-  handleSubmitClick() {
-    this.setState({ isComplete: true, phase: 1 });
   }
 
   handleSelectionClick(e) {
@@ -220,17 +225,8 @@ class DrawingGame01A extends Component {
     );
   }
 
-  //TODO debug this
-  startTimer() {
-    if (this.timer === 0) {
-      console.log("timer started");
-
-      this.timer = setTimeout(() => {
-        if (!this.state.isComplete) {
-          this.setState({ isComplete: true, phase: 1 });
-        }
-      }, 5000);
-    }
+  handleReadyClick() {
+    this.props.socket.emit("USER_READY");
   }
 
   getValues(answer) {

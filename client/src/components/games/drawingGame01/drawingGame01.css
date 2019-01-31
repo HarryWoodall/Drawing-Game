@@ -1,0 +1,9 @@
+#drawing-game-01-main-header {
+  margin: 10px;
+}
+
+#feedback-text {
+  color: grey;
+  margin: 10px;
+  font-size: 125%;
+}

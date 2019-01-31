@@ -32,11 +32,12 @@
 }
 
 h1 {
-  margin-bottom: 10px;
+  color: #dd490f;
+  font-size: 450%;
 }
 
-h3 {
-  margin-top: 10px;
+h2 {
+  font-size: 200%;
 }
 
 ul {
@@ -45,6 +46,105 @@ ul {
   padding-right: 10px;
 }
 
-.users-container {
-  margin-top: 30px;
+.button {
+  width: 200px;
+  height: 50px;
+  margin: 10px;
+  font-size: 150%;
+  background: #dd490f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.single-list {
+  overflow-y: auto;
+}
+
+.toggle-button {
+  background: darkgray;
+  color: gray;
+  border: none;
+  width: 100px;
+  height: 40px;
+}
+
+.toggle-right {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.toggle-left {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.toggle-button:disabled {
+  background: #dd490f;
+  color: white;
+  box-shadow: 0 0 10px #dd490fc7;
+}
+
+.selection-button {
+}
+
+.text-input {
+  border: none;
+  border-bottom: 1px solid gray;
+  font-size: 150%;
+  color: #dd490f;
+  border-color: #dd490f;
+}
+
+.text-input:hover {
+  outline: none;
+}
+
+::placeholder {
+  color: #dd490f59;
+}
+
+@media (max-width: 1000px) {
+  h1 {
+    font-size: 400%;
+  }
+
+  .button {
+    font-size: 200%;
+    width: 275px;
+    height: 75px;
+  }
+
+  .toggle-button {
+    font-size: 125%;
+    width: 150px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 200%;
+  }
+
+  .button {
+    font-size: 100%;
+    width: 150px;
+    height: 50px;
+  }
+
+  .toggle-button {
+    font-size: 100%;
+    width: 100px;
+    height: 40px;
+  }
+
+  .selection-button {
+    font-size: 125%;
+    display: block;
+    width: 80%;
+    height: 40px;
+    margin: auto;
+    margin-bottom: 5px;
+  }
 }

@@ -8,5 +8,6 @@ module.exports = class User {
     this.myDrawing;
     this.otherDrawing;
     this.givenFeedback = false;
+    this.isReady = false;
   }
 };

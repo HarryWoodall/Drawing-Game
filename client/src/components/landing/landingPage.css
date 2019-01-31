@@ -1,0 +1,54 @@
+#landing-page {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#landing-page-main-header {
+  margin-bottom: 75px;
+}
+
+#setup-text-input {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+#toggle-buttons {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#room-name-input {
+  text-transform: uppercase;
+}
+
+#landing-page-submit-button {
+  margin-top: 50px;
+}
+
+.setup-text-input {
+  margin-bottom: 10px;
+  width: 400px;
+  margin: 20px;
+  font-size: 250%;
+}
+
+@media (max-width: 1000px) {
+  .setup-text-input {
+    font-size: 200%;
+    width: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  #landing-page-main-header {
+    margin-bottom: 25px;
+  }
+
+  .setup-text-input {
+    font-size: 100%;
+    margin-bottom: 10px;
+    width: 200px;
+  }
+}

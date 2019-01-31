@@ -22,6 +22,7 @@ class SelectionButtons extends Component {
         buttons.push(
           <input
             type="button"
+            className="button selection-button"
             value={values[i]}
             key={"key" + i}
             onClick={this.props.handleClick}
