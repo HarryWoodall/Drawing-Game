@@ -32,9 +32,9 @@ module.exports = class RoomList {
     return name;
   }
 
-  removeRoom(room) {
+  removeRoom(roomName) {
     for (let i = 0; i < this.rooms.length; i++) {
-      if (this.rooms[i].name == room.name) {
+      if (this.rooms[i].name == roomName) {
         this.rooms.splice(i, 1);
       }
     }

@@ -6,11 +6,13 @@ import displayCanvas from "../../p5Sketches/displayCanvas";
 import P5Wrapper from "react-p5-wrapper";
 import PrimaryButton from "../../partial/primaryButton";
 import SelectionButtons from "../../partial/selectionButtons";
+import TimerBar from "../../partial/timerBar";
 
 class DrawingGame01A extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      newDrawing: false,
       isDrawn: false,
       phase: 0,
       isDrawingReady: false,
@@ -34,8 +36,6 @@ class DrawingGame01A extends Component {
     });
 
     this.props.socket.on("OTHER_DRAWING", data => {
-      console.log("other drawing recieved", data);
-
       this.setState({
         otherDrawing: data,
         otherDrawingAnswer: data.suggestion
@@ -54,7 +54,6 @@ class DrawingGame01A extends Component {
 
     this.props.socket.on("GAME_COMPLETE", data => {
       console.log("game end timer stated");
-
       this.setState({
         gameComplete: true
       });
@@ -83,6 +82,13 @@ class DrawingGame01A extends Component {
             socket={this.props.socket}
             otherDrawing={this.state.otherDrawing}
             owner={this.props.userName}
+          />
+        </div>
+        <div id="timer-wrapper">
+          <TimerBar
+            enable={this.state.newDrawing}
+            duration={5}
+            reset={this.state.phase === 0}
           />
         </div>
         <h1 id="drawing-game-01-main-header">{this.getMainText()}</h1>
@@ -171,9 +177,12 @@ class DrawingGame01A extends Component {
               suggestion: data[0]
             },
             () => {
+              this.setState({ newDrawing: true }, () => {
+                this.setState({ newDrawing: false });
+              });
               setTimeout(() => {
                 if (!this.state.isDrawn) {
-                  this.setState({ isDrawn: true, phase: 1 });
+                  this.setState({ isDrawing: false, isDrawn: true, phase: 1 });
                 }
               }, 5000);
             }
@@ -185,6 +194,7 @@ class DrawingGame01A extends Component {
   resetGame() {
     this.setState(
       {
+        isDrawing: false,
         isDrawn: false,
         phase: 0,
         isDrawingReady: false,
@@ -205,10 +215,6 @@ class DrawingGame01A extends Component {
   }
 
   handleSelectionClick(e) {
-    console.log(
-      e.target.value === this.state.otherDrawingAnswer,
-      this.state.otherDrawingAnswer
-    );
     let data = {
       owner: this.state.otherDrawing.owner,
       guess: e.target.value,

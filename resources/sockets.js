@@ -39,13 +39,25 @@ module.exports = class Sockets {
 
         socket.on("disconnect", data => {
           console.log("user Disconnected");
-
-          io.to(roomName).emit("REMOVED_USER_FROM_ROOM", {
-            user: userList.getUser(userId).name
-          });
+          let user = userList.getUser(userId);
+          let room = roomList.getRoom(roomName);
+          let returnData = { user: user.name };
 
           userList.removeUser(userId);
-          roomList.getRoom(roomName).removeUser(userId);
+          if (room) {
+            room.removeUser(userId);
+          }
+
+          if (user.isLeader) {
+            if (room.isEmpty()) {
+              roomList.removeRoom(roomName);
+            } else {
+              room.setNewLeader();
+              returnData.newLeader = room.getLeader();
+            }
+          }
+
+          io.to(roomName).emit("REMOVED_USER_FROM_ROOM", returnData);
         });
 
         socket.on("INIT_LOBBY_REQ", data => {

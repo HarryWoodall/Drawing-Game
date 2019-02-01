@@ -39,6 +39,8 @@ class Lobby extends Component {
     });
 
     this.props.socket.on("REMOVED_USER_FROM_ROOM", data => {
+      console.log("return data", data);
+
       if (this.state.users) {
         let userList = this.state.users;
         for (let i = 0; i < userList.length; i++) {
@@ -49,6 +51,12 @@ class Lobby extends Component {
         this.setState({
           users: userList
         });
+
+        if (data.newLeader) {
+          this.setState({
+            leader: data.newLeader
+          });
+        }
       }
     });
   }

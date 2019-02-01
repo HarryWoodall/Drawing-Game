@@ -7,3 +7,13 @@
   margin: 10px;
   font-size: 125%;
 }
+
+.timer-bar {
+  height: 5px;
+  background-color: #dd490f;
+}
+
+#timer-wrapper {
+  margin: auto;
+  width: 80%;
+}

@@ -23,16 +23,9 @@ export default function sketch(sketch) {
 
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
     socket = props.socket;
-    console.log("owner", props.owner);
-
     owner = props.owner;
 
     if (props.isDrawn) {
-      sketch.clear();
-
-      //Debug Stuff
-      drawBorder();
-      drawSketch(drawing);
       emitDrawing(props.suggestion);
     }
   };
@@ -64,8 +57,9 @@ export default function sketch(sketch) {
   //Helper Functions
 
   function drawBorder() {
-    sketch.strokeWeight(1);
-    sketch.rect(0, 0, x - 1, y - 1);
+    sketch.stroke(155);
+    sketch.strokeWeight(4);
+    sketch.rect(0, 0, x, y);
     sketch.stroke(0);
     sketch.strokeWeight(4);
   }

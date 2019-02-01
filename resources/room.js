@@ -82,6 +82,10 @@ module.exports = class Sockets {
     return true;
   }
 
+  isEmpty() {
+    return this.users.length < 1;
+  }
+
   isReady() {
     for (let user of this.users) {
       if (!user.isReady) {
