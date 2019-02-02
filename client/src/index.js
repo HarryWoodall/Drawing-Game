@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import Io from "./sockets/api";
+import "./fonts.css";
 
 const io = new Io(null);
 const socket = io.getSocket();

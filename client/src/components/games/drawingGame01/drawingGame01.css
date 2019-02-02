@@ -8,6 +8,25 @@
   font-size: 125%;
 }
 
+.main-feedback-correct-answer {
+  color: rgb(42, 179, 42);
+  font-weight: bold;
+}
+
+.main-feedback-incorrect-answer {
+  color: darkred;
+  font-weight: bold;
+}
+
+.main-feedback-answer {
+  color: rgb(42, 179, 42);
+  font-weight: bold;
+}
+
+.main-feedback-guess {
+  font-weight: bold;
+}
+
 .timer-bar {
   height: 5px;
   background-color: #dd490f;
@@ -28,4 +47,14 @@
   background-color: white;
   color: #dd490f;
   border: 2px solid #dd490f;
+}
+
+@media (max-width: 600px) {
+  #main-feedback {
+    font-size: 80%;
+  }
+
+  #feedback-text {
+    font-size: 100%;
+  }
 }

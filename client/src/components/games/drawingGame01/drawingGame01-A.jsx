@@ -7,6 +7,7 @@ import P5Wrapper from "react-p5-wrapper";
 import PrimaryButton from "../../partial/primaryButton";
 import SelectionButtons from "../../partial/selectionButtons";
 import TimerBar from "../../partial/timerBar";
+import Countdown from "../../partial/countdown/countdown";
 
 class DrawingGame01A extends Component {
   constructor(props) {
@@ -14,16 +15,30 @@ class DrawingGame01A extends Component {
     this.state = {
       newDrawing: false,
       isDrawn: false,
-      phase: 0,
+      phase: "COUNTDOWN",
       isDrawingReady: false,
       suggestion: null,
       isReadyForNextGame: false
     };
 
+    this.countdownDuration = 4;
+    this.drawingDuration = 5;
+    this.countdownTimer = null;
+    this.drawingTimer = null;
+
+    /* 
+      Phase 0 -- COUNTDOWN
+      Phase 1 -- DRAWING
+      Phase 2 -- GUESSING
+      Phase 3 -- FEEDBACK
+    */
+
     this.getMainText = this.getMainText.bind(this);
     this.getFeedbackText = this.getFeedbackText.bind(this);
     this.getButtons = this.getButtons.bind(this);
     this.getSuggestion = this.getSuggestion.bind(this);
+    this.startCountdown = this.startCountdown.bind(this);
+    this.startDrawing = this.startDrawing.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.handleSelectionClick = this.handleSelectionClick.bind(this);
     this.handleReadyClick = this.handleReadyClick.bind(this);
@@ -49,7 +64,7 @@ class DrawingGame01A extends Component {
       this.setState({
         peer: data.owner,
         peerGuess: data.guess,
-        phase: this.state.phase === 1 ? 1 : 2
+        phase: this.state.phase === "DRAWING" ? "DRAWING" : "FEEDBACK"
       });
     });
 
@@ -72,30 +87,48 @@ class DrawingGame01A extends Component {
   render() {
     return (
       <div id="drawing-game-01" className="drinking-game">
-        <div
-          id="canvas-wrapper"
-          style={{ marginTop: this.state.isDrawingReady ? "10px" : "20px" }}
-        >
-          <P5Wrapper
-            sketch={this.state.isDrawingReady ? displayCanvas : drawingCanvas}
-            suggestion={this.state.suggestion}
-            isDrawn={this.state.isDrawn}
-            socket={this.props.socket}
-            otherDrawing={this.state.otherDrawing}
-            owner={this.props.userName}
+        {this.state.phase === "COUNTDOWN" ? (
+          <Countdown
+            content={["3", "2", "1", "DRAW"]}
+            duration={this.countdownDuration}
+            enable={true}
           />
-        </div>
-        <div id="timer-wrapper">
+        ) : (
+          <div
+            id="canvas-wrapper"
+            style={{ marginTop: this.state.isDrawingReady ? "10px" : "20px" }}
+          >
+            <P5Wrapper
+              sketch={this.state.isDrawingReady ? displayCanvas : drawingCanvas}
+              suggestion={this.state.suggestion}
+              isDrawn={this.state.isDrawn}
+              socket={this.props.socket}
+              otherDrawing={this.state.otherDrawing}
+              owner={this.props.userName}
+            />
+          </div>
+        )}
+        <div
+          id="timer-wrapper"
+          style={{
+            visibility: this.state.phase === "DRAWING" ? "visible" : "hidden"
+          }}
+        >
           <TimerBar
             enable={this.state.newDrawing}
             duration={5}
-            reset={this.state.phase === 0}
+            reset={this.state.phase === "DRAWING"}
           />
         </div>
         <h1 id="drawing-game-01-main-header">{this.getMainText()}</h1>
         <h2
           id="feedback-text"
-          style={{ visibility: +this.state.phase === 0 ? "hidden" : "visible" }}
+          style={{
+            visibility:
+              this.state.phase === "GUESSING" || this.state.phase === "FEEDBACK"
+                ? "visible"
+                : "hidden"
+          }}
         >
           {this.getFeedbackText()}
         </h2>
@@ -106,26 +139,39 @@ class DrawingGame01A extends Component {
 
   getMainText() {
     switch (this.state.phase) {
-      case 0:
+      case "COUNTDOWN":
+      case "DRAWING":
         return this.state.suggestion;
-      case 1:
+      case "GUESSING":
         return "What is it?";
-      case 2:
+      case "FEEDBACK":
         if (this.state.otherDrawingAnswer === this.state.guess) {
           return (
-            "Correct!, " +
-            this.state.otherDrawing.ownerName +
-            " did in fact draw a " +
-            this.state.otherDrawingAnswer
+            <div id="main-feedback">
+              <span class="main-feedback-correct-answer">Correct!, </span>
+              <span class="main-feedback-owner">
+                {this.state.otherDrawing.ownerName}
+              </span>{" "}
+              drew a{" "}
+              <span class="main-feedback-answer">
+                {this.state.otherDrawingAnswer}
+              </span>
+            </div>
           );
         } else {
           return (
-            "Incorrect! " +
-            this.state.otherDrawing.ownerName +
-            " drew a " +
-            this.state.otherDrawingAnswer +
-            " and not a " +
-            this.state.guess
+            <div id="main-feedback">
+              <span class="main-feedback-incorrect-answer">Incorrect!, </span>
+              <span class="main-feedback-owner">
+                {this.state.otherDrawing.ownerName}
+              </span>{" "}
+              drew a{" "}
+              <span class="main-feedback-answer">
+                {this.state.otherDrawingAnswer}
+              </span>{" "}
+              and not a{" "}
+              <span class="main-feedback-guess">{this.state.guess}</span>
+            </div>
           );
         }
       default:
@@ -154,7 +200,7 @@ class DrawingGame01A extends Component {
   }
 
   getButtons() {
-    if (this.state.phase === 1 && this.state.options) {
+    if (this.state.phase === "GUESSING" && this.state.options) {
       return (
         <SelectionButtons
           values={this.state.options}
@@ -184,17 +230,42 @@ class DrawingGame01A extends Component {
               suggestion: data[0]
             },
             () => {
-              this.setState({ newDrawing: true }, () => {
-                this.setState({ newDrawing: false });
-              });
-              setTimeout(() => {
-                if (!this.state.isDrawn) {
-                  this.setState({ isDrawing: false, isDrawn: true, phase: 1 });
-                }
-              }, 5000);
+              this.startCountdown();
             }
           )
         );
+    }
+  }
+
+  startCountdown() {
+    if (this.state.phase === "COUNTDOWN") {
+      this.countdownTimer = setTimeout(() => {
+        this.setState(
+          {
+            phase: "DRAWING"
+          },
+          () => {
+            this.setState({ newDrawing: true }, () => {
+              this.setState({ newDrawing: false });
+            });
+            this.startDrawing();
+          }
+        );
+      }, this.countdownDuration * 1000);
+    }
+  }
+
+  startDrawing() {
+    if (this.state.phase === "DRAWING") {
+      this.drawingTimer = setTimeout(() => {
+        if (!this.state.isDrawn) {
+          this.setState({
+            isDrawing: false,
+            isDrawn: true,
+            phase: "GUESSING"
+          });
+        }
+      }, this.drawingDuration * 1000);
     }
   }
 
@@ -203,9 +274,10 @@ class DrawingGame01A extends Component {
       {
         isDrawing: false,
         isDrawn: false,
-        phase: 0,
+        phase: "COUNTDOWN",
         isDrawingReady: false,
         suggestion: null,
+        isReadyForNextGame: false,
 
         options: null,
         guess: null,
@@ -213,8 +285,7 @@ class DrawingGame01A extends Component {
         peer: null,
         peerGuess: null,
         otherDrawingAnswer: null,
-        gameComplete: false,
-        isReadyForNextGame: false
+        gameComplete: false
       },
       () => {
         this.getSuggestion();
@@ -230,7 +301,7 @@ class DrawingGame01A extends Component {
     };
     this.setState(
       {
-        phase: 2,
+        phase: "FEEDBACK",
         guess: e.target.value
       },
       () => {

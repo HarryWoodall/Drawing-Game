@@ -1,11 +1,17 @@
 #lobby-main-header {
-  font-size: 600%;
+  font-size: 800%;
   margin: 0;
+  font-weight: 400;
 }
 
 #lobby-sub-header {
   margin: 0px;
   font-size: 150%;
+}
+
+#lobby-users-header {
+  padding-top: 15px;
+  font-weight: 300;
 }
 
 .users-container {

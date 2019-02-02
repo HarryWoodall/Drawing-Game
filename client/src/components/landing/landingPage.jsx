@@ -50,7 +50,7 @@ class LandingPage extends Component {
               visibility: this.state.errorMessage ? "visible" : "hidden"
             }}
           >
-            <h4>
+            <h4 id="landing-page-errors">
               {this.state.errorMessage
                 ? this.state.errorMessage
                 : "errorMessage"}

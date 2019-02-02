@@ -34,10 +34,12 @@
 h1 {
   color: #dd490f;
   font-size: 450%;
+  font-weight: 100;
 }
 
 h2 {
   font-size: 200%;
+  font-weight: 400;
 }
 
 ul {
@@ -47,8 +49,8 @@ ul {
 }
 
 .button {
-  width: 200px;
-  height: 50px;
+  width: 250px;
+  height: 70px;
   margin: 10px;
   font-size: 150%;
   background: #dd490f;
@@ -63,14 +65,15 @@ ul {
 
 .single-list {
   overflow-y: auto;
+  margin-top: 0;
 }
 
 .toggle-button {
   background: darkgray;
   color: gray;
   border: none;
-  width: 100px;
-  height: 40px;
+  width: 125px;
+  height: 50px;
 }
 
 .toggle-right {
@@ -86,7 +89,14 @@ ul {
 .toggle-button:disabled {
   background: #dd490f;
   color: white;
-  box-shadow: 0 0 10px #dd490fc7;
+}
+
+.toggle-left:disabled {
+  box-shadow: -3px 0 10px 3px #dd490fc7;
+}
+
+.toggle-right:disabled {
+  box-shadow: 3px 0 10px 3px #dd490fc7;
 }
 
 .text-input {

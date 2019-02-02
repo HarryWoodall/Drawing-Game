@@ -1,0 +1,19 @@
+#countdown-content {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#countdown-container {
+  position: relative;
+  margin-top: 25px;
+  font-size: 500%;
+}
+
+@media (max-width: 600px) {
+  #countdown-container {
+    font-size: 300%;
+  }
+}
