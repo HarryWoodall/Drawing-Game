@@ -17,3 +17,15 @@
   margin: auto;
   width: 80%;
 }
+
+#readytrue {
+  background-color: #dd490f;
+  color: white;
+  box-shadow: 0 0 10px 4px #dd490fc9;
+}
+
+#readyfalse {
+  background-color: white;
+  color: #dd490f;
+  border: 2px solid #dd490f;
+}

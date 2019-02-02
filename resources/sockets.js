@@ -41,23 +41,25 @@ module.exports = class Sockets {
           console.log("user Disconnected");
           let user = userList.getUser(userId);
           let room = roomList.getRoom(roomName);
-          let returnData = { user: user.name };
+          if (user) {
+            let returnData = { user: user.name };
 
-          userList.removeUser(userId);
-          if (room) {
-            room.removeUser(userId);
-          }
-
-          if (user.isLeader) {
-            if (room.isEmpty()) {
-              roomList.removeRoom(roomName);
-            } else {
-              room.setNewLeader();
-              returnData.newLeader = room.getLeader();
+            userList.removeUser(userId);
+            if (room) {
+              room.removeUser(userId);
             }
-          }
 
-          io.to(roomName).emit("REMOVED_USER_FROM_ROOM", returnData);
+            if (user.isLeader) {
+              if (room.isEmpty()) {
+                roomList.removeRoom(roomName);
+              } else {
+                room.setNewLeader();
+                returnData.newLeader = room.getLeader();
+              }
+            }
+
+            io.to(roomName).emit("REMOVED_USER_FROM_ROOM", returnData);
+          }
         });
 
         socket.on("INIT_LOBBY_REQ", data => {
@@ -129,10 +131,14 @@ module.exports = class Sockets {
           }
         });
 
-        socket.on("USER_READY", data => {
-          userList.getUser(userId).isReady = true;
-          if (roomList.getRoom(roomName).isReady()) {
-            io.in(roomName).emit("ROOM_READY_FOR_RESET");
+        socket.on("USER_READY", isReady => {
+          if (isReady) {
+            userList.getUser(userId).isReady = true;
+            if (roomList.getRoom(roomName).isReady()) {
+              io.in(roomName).emit("ROOM_READY_FOR_RESET");
+            }
+          } else {
+            userList.getUser(userId).isReady = false;
           }
         });
       }
@@ -181,7 +187,7 @@ module.exports = class Sockets {
           usersNotSelected[i].otherDrawing = users[selectedIndex].myDrawing;
           arrays.splice(i, 1);
           usersNotSelected.splice(i, 1);
-          if (arrays[i]) {
+          if (arrays[0] != undefined) {
             removeSelection(selectedIndex);
           }
         }
@@ -213,5 +219,23 @@ module.exports = class Sockets {
     function selectIndex(max) {
       return Math.floor(Math.random() * max);
     }
+
+    //debug
+    //console.table(users);
+  }
+
+  //debug
+  getUsers() {
+    let users = [];
+
+    for (let i = 0; i < 3; i++) {
+      let user = {
+        id: i,
+        myDrawing: i + " drawing"
+      };
+      users.push(user);
+    }
+
+    return users;
   }
 };

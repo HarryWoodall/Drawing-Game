@@ -57,6 +57,10 @@ ul {
   border-radius: 5px;
 }
 
+.button:focus {
+  outline: none;
+}
+
 .single-list {
   overflow-y: auto;
 }
@@ -83,9 +87,6 @@ ul {
   background: #dd490f;
   color: white;
   box-shadow: 0 0 10px #dd490fc7;
-}
-
-.selection-button {
 }
 
 .text-input {

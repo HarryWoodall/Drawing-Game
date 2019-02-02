@@ -16,7 +16,8 @@ class DrawingGame01A extends Component {
       isDrawn: false,
       phase: 0,
       isDrawingReady: false,
-      suggestion: null
+      suggestion: null,
+      isReadyForNextGame: false
     };
 
     this.getMainText = this.getMainText.bind(this);
@@ -163,7 +164,13 @@ class DrawingGame01A extends Component {
         />
       );
     } else if (this.state.gameComplete) {
-      return <PrimaryButton text="Ready" handleClick={this.handleReadyClick} />;
+      return (
+        <PrimaryButton
+          text="Ready"
+          handleClick={this.handleReadyClick}
+          id={"ready" + this.state.isReadyForNextGame}
+        />
+      );
     }
   }
 
@@ -206,7 +213,8 @@ class DrawingGame01A extends Component {
         peer: null,
         peerGuess: null,
         otherDrawingAnswer: null,
-        gameComplete: false
+        gameComplete: false,
+        isReadyForNextGame: false
       },
       () => {
         this.getSuggestion();
@@ -232,7 +240,12 @@ class DrawingGame01A extends Component {
   }
 
   handleReadyClick() {
-    this.props.socket.emit("USER_READY");
+    this.setState(
+      { isReadyForNextGame: !this.state.isReadyForNextGame },
+      () => {
+        this.props.socket.emit("USER_READY", this.state.isReadyForNextGame);
+      }
+    );
   }
 
   getValues(answer) {
