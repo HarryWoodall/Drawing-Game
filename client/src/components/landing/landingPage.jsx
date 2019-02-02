@@ -44,6 +44,19 @@ class LandingPage extends Component {
             </div>
           </div>
 
+          <div
+            id="landing-login-error-text"
+            style={{
+              visibility: this.state.errorMessage ? "visible" : "hidden"
+            }}
+          >
+            <h4>
+              {this.state.errorMessage
+                ? this.state.errorMessage
+                : "errorMessage"}
+            </h4>
+          </div>
+
           <div id="toggle-buttons">
             <input
               type="button"
@@ -97,6 +110,7 @@ class LandingPage extends Component {
     let xhr = new XMLHttpRequest();
     let url = "/";
     let props = this.props;
+    let landingPage = this;
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function() {
@@ -105,6 +119,8 @@ class LandingPage extends Component {
         console.log(json);
         if (json.success) {
           props.handleSubmit();
+        } else {
+          landingPage.setState({ errorMessage: json.error });
         }
       }
     };
