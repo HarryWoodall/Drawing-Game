@@ -8,6 +8,7 @@ import PrimaryButton from "../../partial/primaryButton";
 import SelectionButtons from "../../partial/selectionButtons";
 import TimerBar from "../../partial/timerBar";
 import Countdown from "../../partial/countdown/countdown";
+import ReadyTable from "../../partial/readyTable/readyTable";
 
 class DrawingGame01A extends Component {
   constructor(props) {
@@ -135,6 +136,7 @@ class DrawingGame01A extends Component {
           {this.getFeedbackText()}
         </h3>
         {this.getButtons()}
+        <ReadyTable socket={this.props.socket} />
       </div>
     );
   }

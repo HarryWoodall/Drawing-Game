@@ -132,14 +132,22 @@ module.exports = class Sockets {
         });
 
         socket.on("USER_READY", isReady => {
+          let user = userList.getUser(userId);
           if (isReady) {
-            userList.getUser(userId).isReady = true;
+            user.isReady = true;
             if (roomList.getRoom(roomName).isReady()) {
               io.in(roomName).emit("ROOM_READY_FOR_RESET");
+              return;
             }
           } else {
-            userList.getUser(userId).isReady = false;
+            user.isReady = false;
           }
+
+          let data = {
+            user: user.name,
+            ready: isReady
+          };
+          io.in(roomName).emit("READY_CHANGE", data);
         });
       }
     });
