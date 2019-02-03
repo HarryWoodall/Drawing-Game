@@ -3,28 +3,69 @@
 }
 
 #feedback-text {
-  color: grey;
-  margin: 10px;
-  font-size: 125%;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 5px;
+  font-size: 150%;
+  font-weight: 300;
+  width: 40%;
+}
+
+#main-feedback {
+  font-size: 60%;
+}
+
+#main-feedback h2 {
+  font-size: 200%;
+  margin: 0px;
 }
 
 .main-feedback-correct-answer {
-  color: rgb(42, 179, 42);
+  color: rgb(29, 189, 29);
   font-weight: bold;
 }
 
 .main-feedback-incorrect-answer {
-  color: darkred;
+  color: rgb(182, 19, 19);
   font-weight: bold;
 }
 
 .main-feedback-answer {
-  color: rgb(42, 179, 42);
+  color: rgb(29, 189, 29);
   font-weight: bold;
 }
 
 .main-feedback-guess {
+  color: rgb(182, 19, 19);
   font-weight: bold;
+}
+
+.feedback-is-true {
+  color: white;
+  background-color: rgba(29, 189, 29, 0.8);
+  border-radius: 10px;
+  animation: fadein 2s;
+}
+
+.feedback-is-false {
+  color: white;
+  background-color: rgba(182, 19, 19, 0.8);
+  border-radius: 10px;
+  animation: fadein 1s;
+}
+
+.feedback-not-given {
+  color: gray;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .timer-bar {
@@ -55,6 +96,7 @@
   }
 
   #feedback-text {
-    font-size: 100%;
+    font-size: 90%;
+    width: 85%;
   }
 }

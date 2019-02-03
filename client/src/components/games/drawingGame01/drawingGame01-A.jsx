@@ -35,6 +35,7 @@ class DrawingGame01A extends Component {
 
     this.getMainText = this.getMainText.bind(this);
     this.getFeedbackText = this.getFeedbackText.bind(this);
+    this.getFeedbackClass = this.getFeedbackClass.bind(this);
     this.getButtons = this.getButtons.bind(this);
     this.getSuggestion = this.getSuggestion.bind(this);
     this.startCountdown = this.startCountdown.bind(this);
@@ -64,7 +65,7 @@ class DrawingGame01A extends Component {
       this.setState({
         peer: data.owner,
         peerGuess: data.guess,
-        phase: this.state.phase === "DRAWING" ? "DRAWING" : "FEEDBACK"
+        phase: this.state.phase === "GUESSING" ? "GUESSING" : "FEEDBACK"
       });
     });
 
@@ -121,8 +122,9 @@ class DrawingGame01A extends Component {
           />
         </div>
         <h1 id="drawing-game-01-main-header">{this.getMainText()}</h1>
-        <h2
+        <h3
           id="feedback-text"
+          className={this.getFeedbackClass()}
           style={{
             visibility:
               this.state.phase === "GUESSING" || this.state.phase === "FEEDBACK"
@@ -131,7 +133,7 @@ class DrawingGame01A extends Component {
           }}
         >
           {this.getFeedbackText()}
-        </h2>
+        </h3>
         {this.getButtons()}
       </div>
     );
@@ -148,7 +150,7 @@ class DrawingGame01A extends Component {
         if (this.state.otherDrawingAnswer === this.state.guess) {
           return (
             <div id="main-feedback">
-              <span class="main-feedback-correct-answer">Correct!, </span>
+              <h2 class="main-feedback-correct-answer">Correct! </h2>
               <span class="main-feedback-owner">
                 {this.state.otherDrawing.ownerName}
               </span>{" "}
@@ -161,16 +163,16 @@ class DrawingGame01A extends Component {
         } else {
           return (
             <div id="main-feedback">
-              <span class="main-feedback-incorrect-answer">Incorrect!, </span>
+              <h2 class="main-feedback-incorrect-answer">Incorrect!</h2>
               <span class="main-feedback-owner">
                 {this.state.otherDrawing.ownerName}
               </span>{" "}
               drew a{" "}
               <span class="main-feedback-answer">
                 {this.state.otherDrawingAnswer}
-              </span>{" "}
-              and not a{" "}
-              <span class="main-feedback-guess">{this.state.guess}</span>
+              </span>
+              {", "}
+              not a <span class="main-feedback-guess">{this.state.guess}</span>
             </div>
           );
         }
@@ -181,21 +183,21 @@ class DrawingGame01A extends Component {
 
   getFeedbackText() {
     if (this.state.peerGuess) {
-      if (this.state.peerGuess === this.state.suggestion) {
-        return (
-          this.state.peer +
-          " guessed correctly that your drawing was a " +
-          this.state.peerGuess
-        );
-      } else {
-        return (
-          this.state.peer +
-          " unfortunatly thought your drawing was a  " +
-          this.state.peerGuess
-        );
-      }
+      return this.state.peer + " thought your drew a " + this.state.peerGuess;
     } else {
       return "Awaiting feedback...";
+    }
+  }
+
+  getFeedbackClass() {
+    if (this.state.peerGuess) {
+      if (this.state.peerGuess === this.state.suggestion) {
+        return "feedback-is-true";
+      } else {
+        return "feedback-is-false";
+      }
+    } else {
+      return "feedback-not-given";
     }
   }
 
