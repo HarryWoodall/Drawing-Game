@@ -136,7 +136,7 @@ class DrawingGame01A extends Component {
           {this.getFeedbackText()}
         </h3>
         {this.getButtons()}
-        <ReadyTable socket={this.props.socket} />
+        {/* <ReadyTable socket={this.props.socket} /> */}
       </div>
     );
   }

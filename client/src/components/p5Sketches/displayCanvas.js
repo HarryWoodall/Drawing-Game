@@ -7,8 +7,8 @@ export default function displayCanvas(sketch) {
   let drawing;
 
   sketch.setup = function() {
-    x = window.innerWidth * 0.6;
-    y = window.innerHeight * 0.525;
+    x = window.innerWidth * 0.54;
+    y = window.innerHeight * 0.475;
     sketch.background(255);
     sketch.createCanvas(x, y);
     sketch.strokeWeight(4);
@@ -28,13 +28,6 @@ export default function displayCanvas(sketch) {
   };
 
   //Helper Functions
-
-  function drawBorder() {
-    sketch.strokeWeight(1);
-    sketch.rect(0, 0, x - 1, y - 1);
-    sketch.stroke(0);
-    sketch.strokeWeight(4);
-  }
 
   function drawSketch(data) {
     let prevX = -1;

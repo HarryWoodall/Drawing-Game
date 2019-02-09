@@ -47,14 +47,14 @@ module.exports = class Sockets {
             userList.removeUser(userId);
             if (room) {
               room.removeUser(userId);
-            }
 
-            if (user.isLeader) {
-              if (room.isEmpty()) {
-                roomList.removeRoom(roomName);
-              } else {
-                room.setNewLeader();
-                returnData.newLeader = room.getLeader();
+              if (user.isLeader) {
+                if (room.isEmpty()) {
+                  roomList.removeRoom(roomName);
+                } else {
+                  room.setNewLeader();
+                  returnData.newLeader = room.getLeader();
+                }
               }
             }
 

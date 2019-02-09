@@ -25,13 +25,17 @@ li.ready-user {
   font-weight: 300;
 }
 
-.ready-user {
+.add-user {
   width: 0;
   animation: new-item-animation 0.2s linear forwards;
 }
 
-.removing-item {
+.removing-user {
   animation: remove-item-animation 0.2s linear forwards;
+}
+
+.moving-up {
+  animation: move-item-up-animation 0.2s linear forwards;
 }
 
 @keyframes new-item-animation {
@@ -54,17 +58,37 @@ li.ready-user {
   }
 }
 
+@keyframes move-item-up-animation {
+  from {
+    transform: translateY(70px);
+  }
+
+  to {
+    transform: translateY(0px);
+  }
+}
+
 @media (max-width: 600px) {
-  #ready-table-container {
+  #ready-table {
     width: 20%;
     margin-top: 20px;
   }
 
-  .ready-user {
+  li.ready-user {
     max-height: 20px;
     font-size: 100%;
     padding: 3px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
+  }
+
+  @keyframes move-item-up-animation {
+    from {
+      transform: translateY(30px);
+    }
+
+    to {
+      transform: translateY(0px);
+    }
   }
 }

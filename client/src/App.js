@@ -3,12 +3,14 @@ import "./App.css";
 import DrawingGame01 from "./components/games/drawingGame01/drawingGame01-A.jsx";
 import Lobby from "./components/lobby/lobby";
 import LandingPage from "./components/landing/landingPage";
+import readyTableTest from "./components/tests/readyTableTest";
+import ReadyTableTest from "./components/tests/readyTableTest";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: "LANDING"
+      location: "LANDING" //DEFAULT = LANDING
     };
 
     this.landingSubmitHandleClick = this.landingSubmitHandleClick.bind(this);
@@ -49,6 +51,8 @@ class App extends Component {
             userName={this.state.userName}
           />
         );
+      case "TEST":
+        return <ReadyTableTest />;
       default:
         return null;
     }
