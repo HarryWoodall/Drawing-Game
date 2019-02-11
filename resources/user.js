@@ -9,5 +9,6 @@ module.exports = class User {
     this.otherDrawing;
     this.givenFeedback = false;
     this.isReady = false;
+    this.score = 0;
   }
 };

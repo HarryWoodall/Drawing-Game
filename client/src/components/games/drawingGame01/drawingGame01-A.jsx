@@ -19,7 +19,8 @@ class DrawingGame01A extends Component {
       phase: "COUNTDOWN",
       isDrawingReady: false,
       suggestion: null,
-      isReadyForNextGame: false
+      isReadyForNextGame: false,
+      score: 0
     };
 
     this.countdownDuration = 4;
@@ -66,7 +67,11 @@ class DrawingGame01A extends Component {
       this.setState({
         peer: data.owner,
         peerGuess: data.guess,
-        phase: this.state.phase === "GUESSING" ? "GUESSING" : "FEEDBACK"
+        phase: this.state.phase === "GUESSING" ? "GUESSING" : "FEEDBACK",
+        score:
+          data.guess === this.state.suggestion
+            ? this.state.score + 1
+            : this.state.score
       });
     });
 
@@ -137,6 +142,9 @@ class DrawingGame01A extends Component {
         </h3>
         {this.getButtons()}
         {/* <ReadyTable socket={this.props.socket} /> */}
+        <div id="user-score">
+          <h2>{this.state.score}</h2>
+        </div>
       </div>
     );
   }
@@ -306,7 +314,11 @@ class DrawingGame01A extends Component {
     this.setState(
       {
         phase: "FEEDBACK",
-        guess: e.target.value
+        guess: e.target.value,
+        score:
+          e.target.value === this.state.otherDrawingAnswer
+            ? this.state.score + 1
+            : this.state.score
       },
       () => {
         this.props.socket.emit("GUESS_SUBMISSION", data);
