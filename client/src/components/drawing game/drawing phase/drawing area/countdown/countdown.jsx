@@ -17,7 +17,6 @@ class Countdown extends Component {
   }
 
   render() {
-    let yOffset = window.innerHeight;
     return (
       <div
         className="countdown"
@@ -41,7 +40,7 @@ class Countdown extends Component {
           currentIndex: this.state.currentIndex + 1
         });
       }
-    }, 30000);
+    }, 300);
   }
 
   handleCompletion() {

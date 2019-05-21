@@ -1,0 +1,8 @@
+.query-user {
+  position: absolute;
+  top: 48vh;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin: 0px;
+  padding: 0px;
+}

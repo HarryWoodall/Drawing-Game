@@ -11,7 +11,7 @@ class guessArea extends Component {
     };
 
     this.testChangeState = this.testChangeState.bind(this);
-    this.testChangeState();
+    // this.testChangeState();
   }
 
   render() {

@@ -9,8 +9,12 @@ class DrawingPhase extends Component {
     this.state = {
       phase: "COUNTDOWN"
     };
-    this.handleCountdownCompletion = this.handleCountdownCompletion.bind(this);
-    this.handleDrawingCompletion = this.handleDrawingCompletion.bind(this);
+    this.handleCountdownCompletion = this.handleCountdownCompletion.bind(
+      this
+    );
+    this.handleDrawingCompletion = this.handleDrawingCompletion.bind(
+      this
+    );
 
     console.log("props", this.props);
   }
@@ -22,7 +26,10 @@ class DrawingPhase extends Component {
           countdownComplete={this.handleCountdownCompletion}
         />
         {this.state.phase === "DRAWING" ? (
-          <TimerBar time={2} timeOut={this.handleDrawingCompletion} />
+          <TimerBar
+            time={2}
+            timeOut={this.handleDrawingCompletion}
+          />
         ) : (
           undefined
         )}

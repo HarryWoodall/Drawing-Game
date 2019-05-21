@@ -1,0 +1,12 @@
+.peer-review {
+  position: absolute;
+  left: 50%;
+  bottom: 35vh;
+  transform: translate(-50%, 0);
+}
+
+.peer-review h3 {
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+}
