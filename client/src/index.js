@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import Io from "./sockets/api";
+import Io from "./sockets/socket";
 import "./fonts.css";
 
 const io = new Io(null);

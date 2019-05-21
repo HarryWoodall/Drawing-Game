@@ -5,6 +5,9 @@ import Lobby from "./components/lobby/lobby";
 import LandingPage from "./components/landing/landingPage";
 import readyTableTest from "./components/tests/readyTableTest";
 import ReadyTableTest from "./components/tests/readyTableTest";
+import Tests from "./components/tests/testApp";
+
+import DrawingGame from "./components/drawing game/drawingGame";
 
 class App extends Component {
   constructor(props) {
@@ -30,7 +33,8 @@ class App extends Component {
   }
 
   render() {
-    return <div className="App">{this.setLocation()}</div>;
+    // return <div className="App">{this.setLocation()}</div>;
+    return <Tests socket={this.props.socket} testName={"DRAWING_GAME"} />;
   }
 
   setLocation() {
