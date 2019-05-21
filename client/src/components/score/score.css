@@ -1,0 +1,10 @@
+#score {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#score h2 {
+  margin: 0px;
+  padding: 0px;
+}

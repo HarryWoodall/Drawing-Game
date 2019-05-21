@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class ReadyButton extends Component {
   render() {
-    return "Drawing Area";
+    return <input type="button" value="Ready" />;
   }
 }
 

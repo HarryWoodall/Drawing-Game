@@ -16,8 +16,12 @@ class App extends Component {
       location: "LANDING" //DEFAULT = LANDING
     };
 
-    this.landingSubmitHandleClick = this.landingSubmitHandleClick.bind(this);
-    this.lobbySubmitHandleClick = this.lobbySubmitHandleClick.bind(this);
+    this.landingSubmitHandleClick = this.landingSubmitHandleClick.bind(
+      this
+    );
+    this.lobbySubmitHandleClick = this.lobbySubmitHandleClick.bind(
+      this
+    );
 
     this.props.socket.on("GAME_START", data => {
       this.setState({
@@ -34,13 +38,19 @@ class App extends Component {
 
   render() {
     // return <div className="App">{this.setLocation()}</div>;
-    return <Tests socket={this.props.socket} testName={"DRAWING_GAME"} />;
+    return (
+      <Tests socket={this.props.socket} testName={"GAME"} />
+    );
   }
 
   setLocation() {
     switch (this.state.location) {
       case "LANDING":
-        return <LandingPage handleSubmit={this.landingSubmitHandleClick} />;
+        return (
+          <LandingPage
+            handleSubmit={this.landingSubmitHandleClick}
+          />
+        );
       case "LOBBY":
         return (
           <Lobby

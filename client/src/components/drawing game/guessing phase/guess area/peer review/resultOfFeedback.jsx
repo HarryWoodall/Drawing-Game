@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class ResultOfFeedback extends Component {
   render() {
-    return "Drawing Area";
+    return "Result";
   }
 }
 

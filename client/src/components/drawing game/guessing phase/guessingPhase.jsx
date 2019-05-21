@@ -1,8 +1,15 @@
 import React, { Component } from "react";
+import ViewingCanvas from "./viewing canvas/viewingCanvas";
+import GuessingArea from "./guess area/guessArea";
 
 class GuessingPhase extends Component {
   render() {
-    return "Guessing Phase";
+    return (
+      <React.Fragment>
+        <ViewingCanvas socket={this.props.socket} />
+        <GuessingArea />
+      </React.Fragment>
+    );
   }
 }
 

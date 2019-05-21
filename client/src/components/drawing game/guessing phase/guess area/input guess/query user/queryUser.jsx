@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class QueryUser extends Component {
   render() {
-    return "Drawing Area";
+    return <h1>What is it?</h1>;
   }
 }
 

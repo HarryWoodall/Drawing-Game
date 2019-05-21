@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class AwaitingFeedback extends Component {
   render() {
-    return "Drawing Area";
+    return <h3>Awaiting Feedback...</h3>;
   }
 }
 
