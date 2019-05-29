@@ -5,7 +5,7 @@ class Suggestion extends Component {
   render() {
     return (
       <div className="suggestion">
-        <h2>Suggestion</h2>
+        <h2>{this.props.clientData.suggestion}</h2>
       </div>
     );
   }

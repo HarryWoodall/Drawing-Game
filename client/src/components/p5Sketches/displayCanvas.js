@@ -3,7 +3,6 @@ export default function displayCanvas(sketch) {
   let y;
   let xScale;
   let yScale;
-  let socket;
   let drawing;
 
   sketch.setup = function() {
@@ -14,17 +13,16 @@ export default function displayCanvas(sketch) {
     sketch.strokeWeight(4);
   };
 
-  //sketch.draw = function() {};
-
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
-    socket = props.socket;
-    socket.on("OTHER_DRAWING", data => {
-      drawing = data.content;
-      xScale = x / data.dimentions.width;
-      yScale = y / data.dimentions.height;
+    if (props.drawingData !== null) {
+      console.log("drawing recienved", props.drawingData);
+
+      drawing = props.drawingData.content;
+      xScale = x / props.drawingData.dimentions.width;
+      yScale = y / props.drawingData.dimentions.height;
       console.log("drawing other sketch");
       drawSketch(drawing);
-    });
+    }
   };
 
   //Helper Functions

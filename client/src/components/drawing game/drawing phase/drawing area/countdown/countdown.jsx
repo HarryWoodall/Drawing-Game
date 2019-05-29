@@ -11,9 +11,7 @@ class Countdown extends Component {
     this.display = ["3", "2", "1", "Draw"];
 
     this.startTimer = this.startTimer.bind(this);
-    this.handleCompletion = this.handleCompletion.bind(
-      this
-    );
+    this.handleCompletion = this.handleCompletion.bind(this);
   }
 
   render() {
@@ -29,10 +27,7 @@ class Countdown extends Component {
 
   startTimer() {
     let timer = setInterval(() => {
-      if (
-        this.state.currentIndex ===
-        this.display.length - 1
-      ) {
+      if (this.state.currentIndex === this.display.length - 1) {
         clearTimeout(timer);
         this.handleCompletion();
       } else {

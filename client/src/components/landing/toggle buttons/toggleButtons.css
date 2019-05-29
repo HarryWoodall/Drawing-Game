@@ -1,0 +1,30 @@
+.toggle-button {
+  background: darkgray;
+  color: gray;
+  border: none;
+  width: 125px;
+  height: 50px;
+}
+
+.toggle-right {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.toggle-left {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.toggle-button:disabled {
+  background: #dd490f;
+  color: white;
+}
+
+.toggle-left:disabled {
+  box-shadow: -3px 0 10px 3px #dd490fc7;
+}
+
+.toggle-right:disabled {
+  box-shadow: 3px 0 10px 3px #dd490fc7;
+}

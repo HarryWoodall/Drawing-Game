@@ -1,3 +1,5 @@
+import { connect } from "net";
+
 export default function sketch(sketch) {
   let x;
   let y;
@@ -5,8 +7,7 @@ export default function sketch(sketch) {
   let isEnabled = true;
   let previousX = -1;
   let previousY = -1;
-  let socket;
-  let owner;
+  let handleDrawingEnd;
 
   let line = [];
   let drawing = [];
@@ -22,11 +23,9 @@ export default function sketch(sketch) {
   //sketch.draw = function() {};
 
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
-    socket = props.socket;
-    owner = props.owner;
-
-    if (props.isDrawn) {
-      emitDrawing(props.suggestion);
+    handleDrawingEnd = props.getDrawing;
+    if (props.isComplete) {
+      getDrawing(props.suggestion);
     }
   };
 
@@ -94,36 +93,30 @@ export default function sketch(sketch) {
     line = [];
   }
 
-  function emitDrawing(suggestion) {
+  function getDrawing(suggestion) {
     if (isDrawing) {
       endLine();
     }
-
-    let data = {
-      suggestion: suggestion,
-      dimentions: {
-        width: x,
-        height: y
-      },
-      content: drawing,
-      ownerName: owner
+    let dimentions = {
+      width: x,
+      height: y
     };
-    socket.emit("SEND_DRAWING", data);
+    handleDrawingEnd(dimentions, drawing);
   }
 
-  function drawSketch(data) {
-    let prevX = -1;
-    let prevY = -1;
-    for (let line of data) {
-      for (let point of line) {
-        if (prevX !== -1 && prevY !== -1) {
-          sketch.line(prevX, prevY, point.x, point.y);
-        }
-        prevX = point.x;
-        prevY = point.y;
-      }
-      prevX = -1;
-      prevY = -1;
-    }
-  }
+  // function drawSketch(data) {
+  //   let prevX = -1;
+  //   let prevY = -1;
+  //   for (let line of data) {
+  //     for (let point of line) {
+  //       if (prevX !== -1 && prevY !== -1) {
+  //         sketch.line(prevX, prevY, point.x, point.y);
+  //       }
+  //       prevX = point.x;
+  //       prevY = point.y;
+  //     }
+  //     prevX = -1;
+  //     prevY = -1;
+  //   }
+  // }
 }

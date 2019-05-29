@@ -1,0 +1,26 @@
+.text-input {
+  border: none;
+  border-bottom: 1px solid gray;
+  font-size: 250%;
+  color: #dd490f;
+  border-color: #dd490f;
+}
+
+.text-input:hover {
+  outline: none;
+}
+
+::placeholder {
+  color: #dd490f59;
+}
+
+@media (max-width: 600px) {
+  .text-input {
+    margin: 0px;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    padding: 0px;
+    font-size: 200%;
+    width: 100%;
+  }
+}

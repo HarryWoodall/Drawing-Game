@@ -1,31 +1,31 @@
 import React, { Component } from "react";
 import "./App.css";
-import DrawingGame01 from "./components/games/drawingGame01/drawingGame01-A.jsx";
 import Lobby from "./components/lobby/lobby";
 import LandingPage from "./components/landing/landingPage";
 import readyTableTest from "./components/tests/readyTableTest";
 import ReadyTableTest from "./components/tests/readyTableTest";
 import Tests from "./components/tests/testApp";
-
-import DrawingGame from "./components/drawing game/drawingGame";
+import LobbyRefactored from "./components/lobby/lobbyRefactored";
+import LandingPageRefactored from "./components/landing/landingPageRefactored";
+import Game from "./components/game/game";
+import ClientData from "./data/clientData";
+import RoomData from "./data/roomData";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: "LANDING" //DEFAULT = LANDING
+      location: "LANDING",
+      clientData: null,
+      roomData: null
     };
 
-    this.landingSubmitHandleClick = this.landingSubmitHandleClick.bind(
-      this
-    );
-    this.lobbySubmitHandleClick = this.lobbySubmitHandleClick.bind(
-      this
-    );
+    this.handleLandingSubmit = this.handleLandingSubmit.bind(this);
+    this.handleLobbySubmit = this.handleLobbySubmit.bind(this);
 
     this.props.socket.on("GAME_START", data => {
       this.setState({
-        location: "DRAWING_GAME_01"
+        location: "GAME"
       });
     });
 
@@ -34,35 +34,55 @@ class App extends Component {
         userName: data.name
       });
     });
+
+    // fetch("/api/drawing/categories/random/1")
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     console.log("data", data);
+
+    //     this.setState(
+    //       {
+    //         suggestion: data[0]
+    //       },
+    //       () => {
+    //         this.startCountdown();
+    //       }
+    //     );
+    //   });
   }
 
   render() {
-    // return <div className="App">{this.setLocation()}</div>;
-    return (
-      <Tests socket={this.props.socket} testName={"GAME"} />
-    );
+    return <div className="App">{this.setLocation()}</div>;
+    // return (
+    //   <Tests
+    //     socket={this.props.socket}
+    //     testSet="INTERMISSION"
+    //     testName="INTERMISSION"
+    //   />
+    // );
   }
 
   setLocation() {
     switch (this.state.location) {
       case "LANDING":
         return (
-          <LandingPage
-            handleSubmit={this.landingSubmitHandleClick}
-          />
+          <LandingPageRefactored handleSubmit={this.handleLandingSubmit} />
         );
       case "LOBBY":
         return (
-          <Lobby
+          <LobbyRefactored
             socket={this.props.socket}
-            submitHandle={this.lobbySubmitHandleClick}
+            onSubmit={this.handleLobbySubmit}
+            roomData={this.state.roomData}
+            clientData={this.state.clientData}
           />
         );
-      case "DRAWING_GAME_01":
+      case "GAME":
         return (
-          <DrawingGame01
+          <Game
             socket={this.props.socket}
-            userName={this.state.userName}
+            roomData={this.state.roomData}
+            clientData={this.state.clientData}
           />
         );
       case "TEST":
@@ -72,10 +92,11 @@ class App extends Component {
     }
   }
 
-  landingSubmitHandleClick() {
-    console.log("click");
+  handleLandingSubmit(clientData, roomData) {
     this.setState(
       {
+        clientData: clientData,
+        roomData: roomData,
         location: "LOBBY"
       },
       () => {
@@ -84,9 +105,7 @@ class App extends Component {
     );
   }
 
-  lobbySubmitHandleClick() {
-    console.log("click");
-
+  handleLobbySubmit() {
     this.props.socket.emit("START_GAME_REQ");
   }
 }

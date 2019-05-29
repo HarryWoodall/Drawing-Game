@@ -15,12 +15,17 @@ module.exports = class Sockets {
   }
 
   startSocket() {
+    const test = io.of("/test");
+    test.on("connection", socket => {
+      console.log("connected to test namespace|");
+    });
+
     io.on("connection", socket => {
       let userId = socket.request.session.id;
+      // console.log(socket);
 
       if (!userList.checkUserExists(userId)) {
-        console.log("no room found, dissconnecting");
-
+        console.log("no user found, dissconnecting");
         socket.disconnect();
       } else {
         userList.getUser(userId).socketId = socket.id;
@@ -33,8 +38,11 @@ module.exports = class Sockets {
           userList.getUser(userId).name + " Connected to " + roomName
         );
 
-        io.to(roomName).emit("ADDED_USER_TO_ROOM", {
-          user: userList.getUser(userId).name
+        console.log(roomList.getRoom(roomName).getUserNames());
+        io.to(roomName).emit("ROOM_UPDATE", {
+          // user: userList.getUser(userId).name
+          users: roomList.getRoom(roomName).getUserNames(),
+          leader: roomList.getRoom(roomName).getLeader()
         });
 
         socket.on("disconnect", data => {
@@ -42,8 +50,6 @@ module.exports = class Sockets {
           let user = userList.getUser(userId);
           let room = roomList.getRoom(roomName);
           if (user) {
-            let returnData = { user: user.name };
-
             userList.removeUser(userId);
             if (room) {
               room.removeUser(userId);
@@ -53,38 +59,15 @@ module.exports = class Sockets {
                   roomList.removeRoom(roomName);
                 } else {
                   room.setNewLeader();
-                  returnData.newLeader = room.getLeader();
                 }
               }
             }
 
-            io.to(roomName).emit("REMOVED_USER_FROM_ROOM", returnData);
+            io.to(roomName).emit("ROOM_UPDATE", {
+              users: room.getUserNames(),
+              leader: room.getLeader()
+            });
           }
-        });
-
-        socket.on("INIT_LOBBY_REQ", data => {
-          console.log("Init lobby request");
-
-          let user = userList.getUser(userId);
-          let room = roomList.getRoom(user.room);
-          let users = [];
-
-          for (let user of room.users) {
-            users.push(user.name);
-          }
-
-          let lobbyData = {
-            userName: user.name,
-            roomName: room.name,
-            users: users,
-            leader: room.getLeader()
-          };
-
-          socket.emit("INIT_LOBBY_DATA", lobbyData);
-        });
-
-        socket.on("GET_USER", data => {
-          socket.emit("SEND_USER", userList.getUser(userId));
         });
 
         socket.on("START_GAME_REQ", data => {
@@ -94,21 +77,22 @@ module.exports = class Sockets {
         });
 
         socket.on("SEND_DRAWING", data => {
-          let user = roomList.getRoom(roomName).getUser(userId);
-          data.owner = userId;
+          console.log("Drawing", data);
+          data.ownerId = userId;
           userList.getUser(userId).myDrawing = data;
+
           if (this.checkForDrawings(roomName)) {
             this.distributeDrawings(roomName);
             io.in(roomName).emit("DRAWINGS_READY");
           }
         });
 
-        socket.on("REQUEST_OTHER_DRAWING", data => {
+        socket.on("REQUEST_PEER_DRAWING", data => {
           console.log("sending other drawings");
 
           let room = roomList.getRoom(roomName);
           let user = room.getUser(userId);
-          socket.emit("OTHER_DRAWING", user.otherDrawing);
+          socket.emit("PEER_DRAWING", user.otherDrawing);
         });
 
         socket.on("GUESS_SUBMISSION", data => {
@@ -121,7 +105,7 @@ module.exports = class Sockets {
 
           user.givenFeedback = true;
 
-          io.to(userList.getUser(data.owner).socketId).emit(
+          io.to(userList.getUser(data.ownerId).socketId).emit(
             "RETURN_ANSWER",
             returnData
           );
@@ -129,6 +113,22 @@ module.exports = class Sockets {
           if (roomList.getRoom(roomName).hasGivenFeedback()) {
             io.in(roomName).emit("GAME_COMPLETE");
           }
+        });
+
+        socket.on("UPDATE_SCORE", data => {
+          userList.getUser(userId).score = data;
+        });
+
+        socket.on("GET_ROOM_LEADERBOARD", () => {
+          let roomLeaderboardData = [];
+          for (let user of roomList.getRoom(roomName).users) {
+            let data = {
+              name: user.name,
+              score: user.score
+            };
+            roomLeaderboardData.push(data);
+          }
+          io.in(roomName).emit("ROOM_LEADERBOARD", roomLeaderboardData);
         });
 
         socket.on("USER_READY", isReady => {

@@ -4,11 +4,20 @@ import Result from "./resultOfFeedback";
 import "./peerReview.css";
 
 class PeerReview extends Component {
+  constructor() {
+    super();
+    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
+  }
+
   render() {
     if (this.props.gotResult) {
       return (
         <div className="peer-review">
-          <Result />
+          <Result
+            peerResult={this.props.peerResult}
+            clientData={this.props.clientData}
+            onScoreUpdate={this.handleScoreUpdate}
+          />
         </div>
       );
     } else {
@@ -18,6 +27,10 @@ class PeerReview extends Component {
         </div>
       );
     }
+  }
+
+  handleScoreUpdate() {
+    this.props.onScoreUpdate();
   }
 }
 

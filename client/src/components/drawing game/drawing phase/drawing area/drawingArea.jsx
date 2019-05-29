@@ -14,7 +14,13 @@ class DrawingArea extends Component {
     if (this.state.phase === "COUNTDOWN") {
       return <Countdown isComplete={this.handleCountdownCompletion} />;
     } else if (this.state.phase === "DRAWING") {
-      return <DrawingCanvas socket={this.props.socket} />;
+      return (
+        <DrawingCanvas
+          socket={this.props.socket}
+          isComplete={this.props.isComplete}
+          clientData={this.props.clientData}
+        />
+      );
     }
   }
 

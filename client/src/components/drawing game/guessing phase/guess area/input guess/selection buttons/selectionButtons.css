@@ -3,11 +3,19 @@
   bottom: 0;
   left: 50%;
   height: 35vh;
+  width: 100%;
   transform: translate(-50%, 0);
 }
 
 .selection-container {
   position: relative;
   top: 50%;
+  height: 80%;
+  text-align: center;
   transform: translate(0, -50%);
+}
+
+@media (max-width: 800px) {
+  .selection-button {
+  }
 }

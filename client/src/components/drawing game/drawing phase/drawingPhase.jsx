@@ -9,14 +9,9 @@ class DrawingPhase extends Component {
     this.state = {
       phase: "COUNTDOWN"
     };
-    this.handleCountdownCompletion = this.handleCountdownCompletion.bind(
-      this
-    );
-    this.handleDrawingCompletion = this.handleDrawingCompletion.bind(
-      this
-    );
-
-    console.log("props", this.props);
+    this.handleCountdownCompletion = this.handleCountdownCompletion.bind(this);
+    this.handleDrawingCompletion = this.handleDrawingCompletion.bind(this);
+    this.props.clientData.getSuggestion().then(() => this.forceUpdate());
   }
   render() {
     return (
@@ -24,16 +19,15 @@ class DrawingPhase extends Component {
         <DrawingArea
           socket={this.props.socket}
           countdownComplete={this.handleCountdownCompletion}
+          isComplete={this.state.phase === "COMPLETE"}
+          clientData={this.props.clientData}
         />
         {this.state.phase === "DRAWING" ? (
-          <TimerBar
-            time={2}
-            timeOut={this.handleDrawingCompletion}
-          />
+          <TimerBar time={2} timeOut={this.handleDrawingCompletion} />
         ) : (
           undefined
         )}
-        <Suggestion />
+        <Suggestion clientData={this.props.clientData} />
       </React.Fragment>
     );
   }

@@ -3,15 +3,29 @@ import InputGuess from "./input guess/inputGuess";
 import OutputResult from "./output result/outputResult";
 
 class guessArea extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       gotPeerReview: false,
-      hasAnsweredQuestion: false
+      hasAnsweredQuestion: false,
+      peerResult: null
     };
 
-    this.testChangeState = this.testChangeState.bind(this);
-    // this.testChangeState();
+    this.handleUserSelection = this.handleUserSelection.bind(this);
+    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
+
+    this.props.socket.on("RETURN_ANSWER", data => {
+      if (data.guess === data.answer) {
+        console.log("correct");
+        this.props.clientData.score++;
+        this.handleScoreUpdate();
+      }
+
+      this.setState({
+        peerResult: data,
+        gotPeerReview: true
+      });
+    });
   }
 
   render() {
@@ -19,32 +33,32 @@ class guessArea extends Component {
       return (
         <OutputResult
           gotPeerReview={this.state.gotPeerReview}
+          peerResult={this.state.peerResult}
+          clientData={this.props.clientData}
+          socket={this.props.socket}
+          onScoreUpdate={this.handleScoreUpdate}
         />
       );
     } else {
       return (
         <InputGuess
           gotPeerReview={this.state.gotPeerReview}
+          clientData={this.props.clientData}
+          socket={this.props.socket}
+          peerResult={this.state.peerResult}
+          onSelection={this.handleUserSelection}
+          onScoreUpdate={this.handleScoreUpdate}
         />
       );
     }
   }
 
-  testChangeState() {
-    setTimeout(() => {
-      console.log("Question Change");
+  handleUserSelection() {
+    this.setState({ hasAnsweredQuestion: true });
+  }
 
-      this.setState({
-        hasAnsweredQuestion: true
-      });
-    }, 1000);
-    setTimeout(() => {
-      console.log("Review Change");
-
-      this.setState({
-        gotPeerReview: true
-      });
-    }, 3000);
+  handleScoreUpdate() {
+    this.props.onScoreUpdate();
   }
 }
 

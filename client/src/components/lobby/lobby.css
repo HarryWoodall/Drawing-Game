@@ -21,7 +21,6 @@
 .user-item {
   color: grey;
   font-size: 300%;
-  transform: translateX(-25px);
 }
 
 .current-user {
@@ -56,7 +55,6 @@
 
   .user-item {
     font-size: 200%;
-    transform: translateX(-15px);
   }
 
   .leader-icon {

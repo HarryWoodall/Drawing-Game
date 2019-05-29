@@ -1,0 +1,29 @@
+#intermission-leaderboard {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  height: 50vh;
+  width: 70%;
+  transform: translate(-50%, 0);
+  overflow-y: auto;
+}
+#intermission-leaderboard span {
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  display: inline-block;
+}
+
+#intermission-leaderboard h2 {
+  margin: 10px;
+  font-weight: 100;
+  color: white;
+}
+
+.leaderboard-name {
+  width: 60%;
+}
+
+.leaderboard-score {
+  width: 40%;
+}

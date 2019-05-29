@@ -1,6 +1,7 @@
 module.exports = class Sockets {
   constructor(name) {
     this.name = name;
+    this.leader = null;
     this.users = [];
     this.expectedMembers = 0;
   }
@@ -8,6 +9,13 @@ module.exports = class Sockets {
   addUser(user) {
     console.log("adding user");
     this.users.push(user);
+
+    if (this.leader === null) {
+      this.leader = this.getLeader();
+    }
+    if (!this.hasLeader()) {
+      this.setNewLeader();
+    }
   }
 
   getUser(userId) {
@@ -15,6 +23,26 @@ module.exports = class Sockets {
       if (this.users[i].id == userId) {
         return this.users[i];
       }
+    }
+  }
+
+  getUserByName(userName) {
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].name == userName) {
+        return this.users[i];
+      }
+    }
+  }
+
+  getUserNames() {
+    if (this.users.length > 0) {
+      let userNames = [];
+      for (let user of this.users) {
+        userNames.push(user.name);
+      }
+      return userNames;
+    } else {
+      console.log("no users found");
     }
   }
 
@@ -41,8 +69,13 @@ module.exports = class Sockets {
     for (let i = 0; i < this.users.length; i++) {
       if (this.users[i].id === userId) {
         this.users.splice(i, 1);
+        if (!this.hadLeader) {
+          this.setNewLeader();
+        }
+        return;
       }
     }
+    console.log("user not found");
   }
 
   hasLeader() {
@@ -60,11 +93,13 @@ module.exports = class Sockets {
         return this.users[i].name;
       }
     }
+    console.log("no leader found");
   }
 
   setNewLeader() {
     if (this.users[0]) {
       this.users[0].isLeader = true;
+      this.leader = this.users[0].name;
     }
   }
 

@@ -4,19 +4,34 @@ import Canvas from "../../../../p5Sketches/drawingCanvas";
 import "./drawingCanvas.css";
 
 class DrawingCanvas extends Component {
+  constructor() {
+    super();
+    this.handleDrawingEnd = this.handleDrawingEnd.bind(this);
+  }
+
   render() {
     return (
       <div className="drawing-canvas">
         <P5Wrapper
           sketch={Canvas}
-          // suggestion={this.state.suggestion}
-          // isDrawn={this.state.isDrawn}
-          socket={this.props.socket}
-          // otherDrawing={this.state.otherDrawing}
-          // owner={this.props.userName}
+          isComplete={this.props.isComplete}
+          getDrawing={this.handleDrawingEnd}
         />
       </div>
     );
+  }
+
+  handleDrawingEnd(dimentions, content) {
+    let data = {
+      suggestion: this.props.clientData.suggestion,
+      dimentions: dimentions,
+      content: content,
+      owner: this.props.clientData.userName,
+      ownerId: null
+    };
+
+    this.props.clientData.selfDrawing = data; // Possible redundant
+    this.props.socket.emit("SEND_DRAWING", data);
   }
 }
 

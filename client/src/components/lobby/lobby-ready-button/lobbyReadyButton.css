@@ -1,0 +1,9 @@
+#lobby-ready-button {
+  position: absolute;
+  left: 50%;
+  top: 70vh;
+  transform: translate(-50%, 0);
+  margin: 0px;
+  padding: 0px;
+  margin-top: 20px;
+}

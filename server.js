@@ -32,10 +32,13 @@ app.use(sess);
 app.use(express.static(path.join(__dirname, "client/build")));
 
 app.get("/", (req, res) => {
+  console.log(req);
+
   res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
 });
 
 app.post("/", (req, res) => {
+  console.log(req.body);
   let roomName = req.body.roomName;
   let userName = req.body.userName;
   let data = {};
@@ -83,6 +86,7 @@ app.post("/", (req, res) => {
   userList.addUser(user);
 
   data.success = true;
+  data.room = room;
   res.send(data);
 });
 
@@ -91,10 +95,13 @@ app.get("/api/users", (req, res) => {
 });
 
 app.get("/api/drawing/categories", (req, res) => {
+  console.log("getting items");
   res.sendFile(__dirname + "/resources/drawingCategories.json");
 });
 
 app.get("/api/drawing/categories/random/:ammount", (req, res) => {
+  console.log("getting items");
+
   let drawingData;
   let resCategories = [];
 

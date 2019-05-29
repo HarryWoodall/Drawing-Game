@@ -1,0 +1,27 @@
+.user-list {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding-top: 30px;
+  top: 20vh;
+  padding: 0px;
+  margin: 0px;
+  width: 60%;
+  height: 50vh;
+  overflow-y: auto;
+}
+
+.user-item {
+  position: relative;
+  text-align: center;
+  padding-top: 20px;
+  margin-bottom: 5px;
+}
+
+.leaders-crown {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-size: 60%;
+}

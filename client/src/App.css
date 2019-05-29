@@ -68,37 +68,6 @@ ul {
   margin-top: 0;
 }
 
-.toggle-button {
-  background: darkgray;
-  color: gray;
-  border: none;
-  width: 125px;
-  height: 50px;
-}
-
-.toggle-right {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.toggle-left {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
-.toggle-button:disabled {
-  background: #dd490f;
-  color: white;
-}
-
-.toggle-left:disabled {
-  box-shadow: -3px 0 10px 3px #dd490fc7;
-}
-
-.toggle-right:disabled {
-  box-shadow: 3px 0 10px 3px #dd490fc7;
-}
-
 .text-input {
   border: none;
   border-bottom: 1px solid gray;
@@ -133,6 +102,25 @@ ul {
   }
 }
 
+@media (max-width: 900px) {
+  .selection-button {
+    width: 200px;
+    font-size: 175%;
+  }
+}
+
+@media (max-width: 700px) {
+  .selection-button {
+    font-size: 150%;
+    display: block;
+    width: 80%;
+    height: 25%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
 @media (max-width: 600px) {
   h1 {
     font-size: 200%;
@@ -152,10 +140,7 @@ ul {
 
   .selection-button {
     font-size: 125%;
-    display: block;
     width: 80%;
-    height: 40px;
-    margin: auto;
-    margin-bottom: 5px;
+    height: 25%;
   }
 }

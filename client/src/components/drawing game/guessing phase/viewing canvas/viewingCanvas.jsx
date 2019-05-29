@@ -9,11 +9,7 @@ class ViewingCanvas extends Component {
       <div className="viewing-canvas">
         <P5Wrapper
           sketch={Canvas}
-          // suggestion={this.state.suggestion}
-          // isDrawn={this.state.isDrawn}
-          socket={this.props.socket}
-          // otherDrawing={this.state.otherDrawing}
-          // owner={this.props.userName}
+          drawingData={this.props.clientData.peerDrawing}
         />
       </div>
     );

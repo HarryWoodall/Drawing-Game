@@ -1,0 +1,26 @@
+.ready-button {
+  position: absolute;
+  left: 50%;
+  /* height: 35vh; */
+  top: 80vh;
+  transform: translate(-50%, 0);
+  z-index: 1;
+}
+
+.ready-button-ready {
+  background-color: #dd490f;
+  color: white;
+}
+
+.ready-button input {
+  position: relative;
+  background-color: white;
+  color: #dd490f;
+  padding: 0px;
+  margin: 0px;
+}
+
+.ready-button input.ready {
+  background-color: #dd490f;
+  color: white;
+}

@@ -1,0 +1,25 @@
+#intermission-ready-list {
+  position: absolute;
+  left: 50%;
+  top: 10vh;
+  transform: translate(-50%, 0);
+  margin: 0px;
+  padding: 0px;
+  width: 60%;
+  height: 65vh;
+  overflow-y: auto;
+}
+
+.ready-list-item {
+  background-color: #dd490f;
+  border-radius: 20px;
+  color: white;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
