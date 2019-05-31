@@ -1,15 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
-import Lobby from "./components/lobby/lobby";
-import LandingPage from "./components/landing/landingPage";
-import readyTableTest from "./components/tests/readyTableTest";
-import ReadyTableTest from "./components/tests/readyTableTest";
 import Tests from "./components/tests/testApp";
-import LobbyRefactored from "./components/lobby/lobbyRefactored";
-import LandingPageRefactored from "./components/landing/landingPageRefactored";
+import LobbyRefactored from "./components/lobby/lobby";
+import LandingPageRefactored from "./components/landing/landingPage";
 import Game from "./components/game/game";
-import ClientData from "./data/clientData";
-import RoomData from "./data/roomData";
 
 class App extends Component {
   constructor(props) {
@@ -34,32 +28,13 @@ class App extends Component {
         userName: data.name
       });
     });
-
-    // fetch("/api/drawing/categories/random/1")
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     console.log("data", data);
-
-    //     this.setState(
-    //       {
-    //         suggestion: data[0]
-    //       },
-    //       () => {
-    //         this.startCountdown();
-    //       }
-    //     );
-    //   });
   }
 
   render() {
-    return <div className="App">{this.setLocation()}</div>;
-    // return (
-    //   <Tests
-    //     socket={this.props.socket}
-    //     testSet="INTERMISSION"
-    //     testName="INTERMISSION"
-    //   />
-    // );
+    // return <div className="App">{this.setLocation()}</div>;
+    return (
+      <Tests socket={this.props.socket} testSet="LOBBY" testName="LOBBY" />
+    );
   }
 
   setLocation() {
@@ -85,8 +60,6 @@ class App extends Component {
             clientData={this.state.clientData}
           />
         );
-      case "TEST":
-        return <ReadyTableTest />;
       default:
         return null;
     }

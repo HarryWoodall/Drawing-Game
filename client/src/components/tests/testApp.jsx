@@ -13,10 +13,10 @@ import OutputResult from "../drawing game/guessing phase/guess area/output resul
 
 import TextInput from "../landing/text input/textInput";
 import ToggleButtons from "../landing/toggle buttons/toggleButtons";
-import LandingPage from "../landing/landingPageRefactored";
+import LandingPage from "../landing/landingPage";
 
 import LobbyUserList from "../lobby/lobby user list/lobbyUserList";
-import Lobby from "../lobby/lobbyRefactored";
+import Lobby from "../lobby/lobby";
 
 import Leaderboard from "../game/intermission/leaderboard/leaderboard";
 import Intermission from "../game/intermission/intermission";
@@ -27,7 +27,7 @@ import RoomData from "../../data/roomData";
 class testApp extends Component {
   constructor() {
     super();
-    this.roomData = new RoomData("Room_01", "Beth", [
+    this.roomData = new RoomData("Room_01", "Frank", [
       "Billy",
       "Frank",
       "Bobby",
@@ -101,7 +101,11 @@ class testApp extends Component {
       switch (this.props.testName) {
         case "LOBBY":
           return (
-            <Lobby clientData={this.clientData} roomData={this.roomData} />
+            <Lobby
+              clientData={this.clientData}
+              roomData={this.roomData}
+              socket={this.props.socket}
+            />
           );
         case "LOBBY_USER_LIST":
           return (

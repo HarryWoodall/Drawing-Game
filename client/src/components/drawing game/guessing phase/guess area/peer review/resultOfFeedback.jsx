@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 
 class ResultOfFeedback extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     let className = "peer-result";
     if (this.props.peerResult.answer === this.props.peerResult.guess) {

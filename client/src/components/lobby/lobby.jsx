@@ -1,130 +1,47 @@
 import React, { Component } from "react";
-import SingleList from "../partial/singleList";
-import StartButton from "../partial/primaryButton";
+import LobbyUserList from "./lobby user list/lobbyUserList";
+import LobbyReadyButton from "./lobby-ready-button/lobbyReadyButton";
+import Socket from "../../sockets/socket";
 import "./lobby.css";
 
 class Lobby extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      socket: props.socket,
-      identifiers: ["room-leader", "current-user"]
+      socket: new Socket(this.props.socket)
     };
-
-    this.applyClassName = this.applyClassName.bind(this);
-    this.getExtra = this.getExtra.bind(this);
-    this.setLeaderVisibility = this.setLeaderVisibility.bind(this);
-
-    this.props.socket.connect();
-
-    this.props.socket.on("INIT_LOBBY_DATA", data => {
-      console.log("data", data);
-
-      this.setState({
-        userName: data.userName,
-        roomName: data.roomName,
-        users: data.users,
-        leader: data.leader
-      });
+    this.state.socket.connect();
+    this.state.socket.lobbyUpdate(data => {
+      this.props.roomData.roomUsers = data.users;
+      this.props.roomData.roomLeader = data.leader;
+      this.forceUpdate();
     });
 
-    this.props.socket.on("ADDED_USER_TO_ROOM", data => {
-      if (this.state.users) {
-        let userList = this.state.users;
-        userList.push(data.user);
-        this.setState({
-          users: userList
-        });
-      }
-    });
-
-    this.props.socket.on("REMOVED_USER_FROM_ROOM", data => {
-      console.log("return data", data);
-
-      if (this.state.users) {
-        let userList = this.state.users;
-        for (let i = 0; i < userList.length; i++) {
-          if (userList[i] === data.user) {
-            userList.splice(i, 1);
-          }
-        }
-        this.setState({
-          users: userList
-        });
-
-        if (data.newLeader) {
-          this.setState({
-            leader: data.newLeader
-          });
-        }
-      }
-    });
-  }
-
-  componentDidMount() {
-    this.props.socket.connect();
-    console.log("component Mounted");
-    console.log(this.props.socket);
-
-    this.props.socket.emit("INIT_LOBBY_REQ");
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
     return (
-      <main>
-        <h1 id="lobby-main-header">{this.state.roomName}</h1>
-        <h3 id="lobby-sub-header">lobby</h3>
-        <div
-          className="users-container"
-          style={{ height: window.innerHeight * 0.6 }}
-        >
-          <h2 id="lobby-users-header">Users</h2>
-          <SingleList
-            items={this.state.users}
-            itemClass="user-item"
-            applyAltClasses={this.applyClassName}
-            extras={this.getExtra}
-            applyExtraStyle={this.setLeaderVisibility}
-          />
+      <div>
+        <div id="lobby-header">
+          <h1 id="lobby-room-name">{this.props.roomData.roomName}</h1>
+          <h3>lobby</h3>
         </div>
-        {this.renderButton()}
-      </main>
+        <LobbyUserList
+          roomData={this.props.roomData}
+          clientData={this.props.clientData}
+        />
+        <LobbyReadyButton
+          roomData={this.props.roomData}
+          clientData={this.props.clientData}
+          onSubmit={this.handleSubmit}
+        />
+      </div>
     );
   }
 
-  renderButton() {
-    if (this.state.leader === this.state.userName) {
-      return <StartButton text="Start" handleClick={this.props.submitHandle} />;
-    }
-  }
-
-  applyClassName(item) {
-    let className = "";
-    if (item === this.state.leader) {
-      className += " room-leader";
-    }
-
-    if (item === this.state.userName) {
-      className += " current-user";
-    }
-
-    return className;
-  }
-
-  setLeaderVisibility(item) {
-    if (item === this.state.leader) {
-      return { visibility: "visible" };
-    } else {
-      return { visibility: "hidden" };
-    }
-  }
-
-  getExtra(item) {
-    return (
-      <span className="leader-icon" style={this.setLeaderVisibility(item)}>
-        ★
-      </span>
-    );
+  handleSubmit() {
+    this.props.onSubmit();
   }
 }
 

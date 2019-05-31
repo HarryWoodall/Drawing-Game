@@ -1,5 +1,3 @@
-import { connect } from "net";
-
 export default function sketch(sketch) {
   let x;
   let y;

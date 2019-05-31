@@ -3,11 +3,11 @@
   left: 50%;
   transform: translate(-50%, 0);
   padding-top: 30px;
-  top: 20vh;
+  top: 15vh;
   padding: 0px;
   margin: 0px;
   width: 60%;
-  height: 50vh;
+  height: 55vh;
   overflow-y: auto;
 }
 
@@ -16,6 +16,17 @@
   text-align: center;
   padding-top: 20px;
   margin-bottom: 5px;
+  font-size: 250%;
+  font-weight: 100;
+  color: gray;
+}
+
+.current-user {
+  color: #dd490f;
+}
+
+.leader {
+  font-weight: bold;
 }
 
 .leaders-crown {

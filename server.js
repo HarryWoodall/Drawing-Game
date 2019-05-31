@@ -63,11 +63,6 @@ app.post("/", (req, res) => {
       res.send(data);
       return;
     }
-  } else if (roomList.checkRoomExists(roomName)) {
-    data.success = false;
-    data.error = "ROOM_ALREADY_EXISTS";
-    res.send(data);
-    return;
   }
 
   let user;

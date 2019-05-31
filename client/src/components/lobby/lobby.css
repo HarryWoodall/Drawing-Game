@@ -1,63 +1,18 @@
-#lobby-main-header {
-  font-size: 800%;
+#lobby-header {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+}
+
+#lobby-header h1,
+h3 {
   margin: 0;
-  font-weight: 400;
-}
-
-#lobby-sub-header {
-  margin: 0px;
-  font-size: 150%;
-}
-
-#lobby-users-header {
-  padding-top: 15px;
-  font-weight: 300;
-}
-
-.users-container {
-  margin-top: 30px;
-}
-
-.user-item {
-  color: grey;
-  font-size: 300%;
-}
-
-.current-user {
-  color: #dd490f;
-}
-
-.leader-icon {
-  display: inline-block;
-  width: 50px;
-}
-
-@media (max-width: 1000px) {
+  padding: 0;
 }
 
 @media (max-width: 600px) {
-  #lobby-main-header {
-    font-size: 400%;
-    margin-top: 5px;
-  }
-
-  #lobby-sub-header {
-    font-size: 100%;
-  }
-
-  #lobby-users-header {
-    margin: 0px;
-  }
-
-  .users-container {
-    margin-top: 0px;
-  }
-
-  .user-item {
-    font-size: 200%;
-  }
-
-  .leader-icon {
-    width: 30px;
+  #lobby-header h1 {
+    font-size: 250%;
   }
 }
