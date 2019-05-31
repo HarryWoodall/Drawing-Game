@@ -1,12 +1,23 @@
 import React, { Component } from "react";
 import "./readyList.css";
+import Socket from "../../../../../sockets/socket";
 
 class ReadyList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      readyList: ["Frank", "Paul", "Bobby"]
+      readyList: [],
+      socket: new Socket(this.props.socket)
     };
+
+    this.state.socket.readyChange(data => {
+      console.log("Ready change data", data);
+      this.setState({ readyList: data });
+    });
+  }
+
+  componentWillUnmount() {
+    this.state.socket.disconnectReadyChange();
   }
   render() {
     const listItems = this.state.readyList.map(item => (

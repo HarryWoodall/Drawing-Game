@@ -133,4 +133,14 @@ module.exports = class Sockets {
     }
     return true;
   }
+
+  getReadyUsers() {
+    let users = [];
+    for (let user of this.users) {
+      if (user.isReady) {
+        users.push(user.name);
+      }
+    }
+    return users;
+  }
 };

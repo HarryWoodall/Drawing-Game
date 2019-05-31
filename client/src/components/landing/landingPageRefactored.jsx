@@ -32,7 +32,7 @@ class LandingPage extends Component {
           value="Enter"
           onClick={this.handleSubmit}
           id="landing-submit-button"
-          class="button"
+          className="button"
         />
       </div>
     );

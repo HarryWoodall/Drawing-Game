@@ -1,30 +1,45 @@
 import React, { Component } from "react";
 import InputGuess from "./input guess/inputGuess";
 import OutputResult from "./output result/outputResult";
+import Socket from "../../../../sockets/socket";
 
 class guessArea extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = false;
     this.state = {
+      socket: null,
       gotPeerReview: false,
       hasAnsweredQuestion: false,
       peerResult: null
     };
 
     this.handleUserSelection = this.handleUserSelection.bind(this);
-    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
+  }
 
-    this.props.socket.on("RETURN_ANSWER", data => {
-      if (data.guess === data.answer) {
-        console.log("correct");
-        this.props.clientData.score++;
-        this.handleScoreUpdate();
-      }
+  componentWillMount() {
+    console.log("Mounting guessArea");
 
-      this.setState({
-        peerResult: data,
-        gotPeerReview: true
+    this.setState({ socket: new Socket(this.props.socket) }, () => {
+      console.log("Setting guessArea", this.state);
+
+      this.state.socket.returnAnswer(data => {
+        console.log("Returning answer");
+
+        if (data.guess === data.answer) {
+          console.log("updating score");
+
+          this.props.clientData.score++;
+          this.props.onScoreUpdate();
+        }
+
+        this.setState({
+          peerResult: data,
+          gotPeerReview: true
+        });
       });
+      // console.log("destroying socket", this.state.socket);
+      // this.state.socket.destroySocket();
     });
   }
 
@@ -36,7 +51,7 @@ class guessArea extends Component {
           peerResult={this.state.peerResult}
           clientData={this.props.clientData}
           socket={this.props.socket}
-          onScoreUpdate={this.handleScoreUpdate}
+          onScoreUpdate={this.props.onScoreUpdate}
         />
       );
     } else {
@@ -47,7 +62,7 @@ class guessArea extends Component {
           socket={this.props.socket}
           peerResult={this.state.peerResult}
           onSelection={this.handleUserSelection}
-          onScoreUpdate={this.handleScoreUpdate}
+          onScoreUpdate={this.props.onScoreUpdate}
         />
       );
     }
@@ -55,10 +70,6 @@ class guessArea extends Component {
 
   handleUserSelection() {
     this.setState({ hasAnsweredQuestion: true });
-  }
-
-  handleScoreUpdate() {
-    this.props.onScoreUpdate();
   }
 }
 

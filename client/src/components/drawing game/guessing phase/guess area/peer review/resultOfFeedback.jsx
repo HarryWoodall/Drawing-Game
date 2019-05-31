@@ -3,7 +3,6 @@ import React, { Component } from "react";
 class ResultOfFeedback extends Component {
   constructor() {
     super();
-    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
   }
 
   render() {
@@ -20,10 +19,6 @@ class ResultOfFeedback extends Component {
         {this.props.peerResult.guess}
       </h3>
     );
-  }
-
-  handleScoreUpdate() {
-    this.props.onScoreUpdate();
   }
 }
 

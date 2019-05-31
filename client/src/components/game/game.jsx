@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import DrawingGame from "../drawing game/drawingGame";
 import Intermission from "./intermission/intermission";
 import Score from "./score/score";
+import Socket from "../../sockets/socket";
 import "./game.css";
 
 class Game extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
+      socket: new Socket(this.props.socket),
       game: "DRAWING_GAME",
       roundEnd: false,
       roundCount: 0
@@ -15,6 +17,10 @@ class Game extends Component {
 
     this.handleGameCompletion = this.handleGameCompletion.bind(this);
     this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
+
+    this.state.socket.roomReadyForReset(() => {
+      this.setState({ roundEnd: false });
+    });
   }
   render() {
     if (this.state.roundEnd) {
@@ -35,6 +41,7 @@ class Game extends Component {
               clientData={this.props.clientData}
               onGameCompletion={this.handleGameCompletion}
               onScoreUpdate={this.handleScoreUpdate}
+              maxRound={0}
             />
           );
           break;
@@ -58,8 +65,6 @@ class Game extends Component {
   }
 
   handleGameCompletion() {
-    console.log("game complete");
-
     if (this.state.roundCount === 0) {
       this.setState({ roundEnd: true, roundCount: 0 });
     } else {
@@ -68,8 +73,6 @@ class Game extends Component {
   }
 
   handleScoreUpdate() {
-    console.log("score update");
-
     this.forceUpdate();
   }
 }

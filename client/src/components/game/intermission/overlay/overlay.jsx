@@ -6,7 +6,7 @@ class Overlay extends Component {
   render() {
     return (
       <div id="intermission-overlay">
-        <ReadyList />
+        <ReadyList socket={this.props.socket} roomData={this.props.roomData} />
       </div>
     );
   }

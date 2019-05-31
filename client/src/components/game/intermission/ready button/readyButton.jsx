@@ -29,10 +29,9 @@ class ReadyButton extends Component {
   }
 
   handleReadyToggle() {
-    console.log("ready click");
-
     this.setState({ isReady: !this.state.isReady }, () => {
       this.props.onReady(this.state.isReady);
+      this.props.socket.emit("USER_READY", this.state.isReady);
     });
   }
 }

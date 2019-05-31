@@ -8,7 +8,6 @@ class InputGuess extends Component {
   constructor() {
     super();
     this.handleSelection = this.handleSelection.bind(this);
-    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
   }
   render() {
     return (
@@ -19,7 +18,7 @@ class InputGuess extends Component {
           gotResult={this.props.gotPeerReview}
           peerResult={this.props.peerResult}
           clientData={this.props.clientData}
-          onScoreUpdate={this.handleScoreUpdate}
+          onScoreUpdate={this.props.onScoreUpdate}
         />
         {this.props.clientData.peerDrawing ? (
           <SelectionButtons
@@ -34,10 +33,6 @@ class InputGuess extends Component {
   handleSelection(data) {
     this.props.onSelection();
     this.props.socket.emit("GUESS_SUBMISSION", data);
-  }
-
-  handleScoreUpdate() {
-    this.props.onScoreUpdate();
   }
 }
 

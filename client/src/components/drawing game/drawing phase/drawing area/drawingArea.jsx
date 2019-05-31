@@ -25,6 +25,8 @@ class DrawingArea extends Component {
   }
 
   handleCountdownCompletion() {
+    console.log("countdown completed");
+
     this.setState({
       phase: "DRAWING"
     });

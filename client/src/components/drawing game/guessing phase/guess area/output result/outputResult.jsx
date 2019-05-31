@@ -5,34 +5,40 @@ import PeerReview from "../peer review/peerReview";
 class OutputResult extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = false;
     this.state = {
       isGameComplete: false
     };
-    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
 
     this.props.socket.on("GAME_COMPLETE", () => {
-      this.setState({ isGameComplete: true });
+      if (this._isMounted) {
+        this.setState({ isGameComplete: true });
+      }
     });
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
   render() {
     return (
       <React.Fragment>
         <ResultText
           clientData={this.props.clientData}
-          onScoreUpdate={this.handleScoreUpdate}
+          onScoreUpdate={this.props.onScoreUpdate}
         />
         <PeerReview
           gotResult={this.props.gotPeerReview}
           peerResult={this.props.peerResult}
           clientData={this.props.clientData}
-          onScoreUpdate={this.handleScoreUpdate}
+          onScoreUpdate={this.props.onScoreUpdate}
         />
       </React.Fragment>
     );
-  }
-
-  handleScoreUpdate() {
-    this.props.onScoreUpdate();
   }
 }
 

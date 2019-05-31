@@ -16,18 +16,12 @@ class TimerBar extends Component {
   }
 
   componentDidUpdate() {
-    if (
-      this.props.status === "START" &&
-      this.state.isActive === false
-    ) {
+    if (this.props.status === "START" && this.state.isActive === false) {
       this.toggleTimer(true);
       this.setState = {
         isActive: true
       };
-    } else if (
-      this.props.status === "PAUSE" &&
-      this.state.isActive === true
-    ) {
+    } else if (this.props.status === "PAUSE" && this.state.isActive === true) {
       this.toggleTimer(false);
       this.setState = {
         isActive: false
@@ -35,16 +29,13 @@ class TimerBar extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.reset();
+  componentWillMount() {
+    //this.reset();
   }
 
   render() {
     return (
-      <div
-        style={{ width: this.state.percent + "%" }}
-        className="timer-bar"
-      />
+      <div style={{ width: this.state.percent + "%" }} className="timer-bar" />
     );
   }
 
@@ -53,8 +44,7 @@ class TimerBar extends Component {
       this.timer = setInterval(() => {
         if (this.state.percent >= 0) {
           this.setState({
-            percent:
-              this.state.percent - 1 / this.props.time
+            percent: this.state.percent - 1 / this.props.time
           });
         } else {
           clearInterval(this.timer);
@@ -67,6 +57,7 @@ class TimerBar extends Component {
   }
 
   reset() {
+    clearInterval(this.timer);
     this.setState({
       isActive: false,
       percent: 100

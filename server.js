@@ -95,13 +95,10 @@ app.get("/api/users", (req, res) => {
 });
 
 app.get("/api/drawing/categories", (req, res) => {
-  console.log("getting items");
   res.sendFile(__dirname + "/resources/drawingCategories.json");
 });
 
 app.get("/api/drawing/categories/random/:ammount", (req, res) => {
-  console.log("getting items");
-
   let drawingData;
   let resCategories = [];
 

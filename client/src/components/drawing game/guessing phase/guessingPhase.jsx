@@ -1,25 +1,31 @@
 import React, { Component } from "react";
 import ViewingCanvas from "./viewing canvas/viewingCanvas";
 import GuessingArea from "./guess area/guessArea";
+import Socket from "../../../sockets/socket";
 
 class GuessingPhase extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      peerDrawingData: null
+      socket: null
     };
-    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
+  }
 
-    this.props.socket.on("DRAWINGS_READY", () => {
-      this.props.socket.emit("REQUEST_PEER_DRAWING");
-    });
+  componentWillMount() {
+    this.setState({ socket: new Socket(this.props.socket) }, () => {
+      this.state.socket.drawingsReady(() =>
+        console.log("Requesting a new drawing")
+      );
 
-    this.props.socket.on("PEER_DRAWING", data => {
-      this.props.clientData.peerDrawing = data;
-      this.setState({
-        peerDrawingData: data
+      this.state.socket.peerDrawing(data => {
+        this.props.clientData.peerDrawing = data;
+        this.forceUpdate();
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.setState({ socket: null });
   }
 
   render() {
@@ -32,14 +38,10 @@ class GuessingPhase extends Component {
         <GuessingArea
           clientData={this.props.clientData}
           socket={this.props.socket}
-          onScoreUpdate={this.handleScoreUpdate}
+          onScoreUpdate={this.props.onScoreUpdate}
         />
       </React.Fragment>
     );
-  }
-
-  handleScoreUpdate() {
-    this.props.onScoreUpdate();
   }
 }
 

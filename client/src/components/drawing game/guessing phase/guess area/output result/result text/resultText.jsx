@@ -12,9 +12,8 @@ class ResultText extends Component {
 
     if (this.state.isCorrect) {
       this.props.clientData.score++;
-      this.handleScoreUpdate();
+      this.props.onScoreUpdate();
     }
-    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
   }
 
   render() {
@@ -33,10 +32,6 @@ class ResultText extends Component {
         </h1>
       );
     }
-  }
-
-  handleScoreUpdate() {
-    this.props.onScoreUpdate();
   }
 }
 

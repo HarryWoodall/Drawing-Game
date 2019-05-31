@@ -15,12 +15,9 @@ export default function displayCanvas(sketch) {
 
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
     if (props.drawingData !== null) {
-      console.log("drawing recienved", props.drawingData);
-
       drawing = props.drawingData.content;
       xScale = x / props.drawingData.dimentions.width;
       yScale = y / props.drawingData.dimentions.height;
-      console.log("drawing other sketch");
       drawSketch(drawing);
     }
   };

@@ -5,7 +5,7 @@ class SelectionButtons extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      options: [],
+      options: ["option 1", "option 2", "option 3"],
       answer: this.props.clientData.peerDrawing.suggestion
     };
 
@@ -23,19 +23,19 @@ class SelectionButtons extends Component {
       <div className="selection-buttons">
         <div className="selection-container">
           <input
-            type="Button"
+            type="submit"
             value={this.state.options[0]}
             className="button selection-button"
             onClick={this.handleSubmit}
           />
           <input
-            type="Button"
+            type="submit"
             value={this.state.options[1]}
             className="button selection-button"
             onClick={this.handleSubmit}
           />
           <input
-            type="Button"
+            type="submit"
             value={this.state.options[2]}
             className="button selection-button"
             onClick={this.handleSubmit}

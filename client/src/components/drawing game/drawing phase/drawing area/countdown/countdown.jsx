@@ -4,10 +4,12 @@ import "./countdown.css";
 class Countdown extends Component {
   constructor(props) {
     super(props);
+
     this.startTimer();
     this.state = {
       currentIndex: 0
     };
+    this.timer = null;
     this.display = ["3", "2", "1", "Draw"];
 
     this.startTimer = this.startTimer.bind(this);
@@ -16,10 +18,7 @@ class Countdown extends Component {
 
   render() {
     return (
-      <div
-        className="countdown"
-        // style={{ top: yOffset / 3 }}
-      >
+      <div className="countdown">
         <h1>{this.display[this.state.currentIndex]}</h1>
       </div>
     );
@@ -28,7 +27,8 @@ class Countdown extends Component {
   startTimer() {
     let timer = setInterval(() => {
       if (this.state.currentIndex === this.display.length - 1) {
-        clearTimeout(timer);
+        clearInterval(timer);
+
         this.handleCompletion();
       } else {
         this.setState({

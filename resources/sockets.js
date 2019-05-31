@@ -29,7 +29,6 @@ module.exports = class Sockets {
         socket.disconnect();
       } else {
         userList.getUser(userId).socketId = socket.id;
-        console.log(socket.id, userId);
 
         let roomName = userList.getUser(userId).room;
 
@@ -38,7 +37,6 @@ module.exports = class Sockets {
           userList.getUser(userId).name + " Connected to " + roomName
         );
 
-        console.log(roomList.getRoom(roomName).getUserNames());
         io.to(roomName).emit("ROOM_UPDATE", {
           // user: userList.getUser(userId).name
           users: roomList.getRoom(roomName).getUserNames(),
@@ -71,23 +69,24 @@ module.exports = class Sockets {
         });
 
         socket.on("START_GAME_REQ", data => {
-          console.log("start game request recieved");
-
           io.in(roomName).emit("GAME_START");
         });
 
         socket.on("SEND_DRAWING", data => {
-          console.log("Drawing", data);
           data.ownerId = userId;
           userList.getUser(userId).myDrawing = data;
-
+          console.log("Drawing recieved");
           if (this.checkForDrawings(roomName)) {
             this.distributeDrawings(roomName);
-            io.in(roomName).emit("DRAWINGS_READY");
+            io.in(roomName).emit(
+              "DRAWINGS_READY",
+              io.sockets.adapter.rooms[roomName].sockets
+            );
+            console.log("Drawing ready");
           }
         });
 
-        socket.on("REQUEST_PEER_DRAWING", data => {
+        socket.on("REQUEST_PEER_DRAWING", () => {
           console.log("sending other drawings");
 
           let room = roomList.getRoom(roomName);
@@ -133,21 +132,16 @@ module.exports = class Sockets {
 
         socket.on("USER_READY", isReady => {
           let user = userList.getUser(userId);
-          if (isReady) {
-            user.isReady = true;
-            if (roomList.getRoom(roomName).isReady()) {
-              io.in(roomName).emit("ROOM_READY_FOR_RESET");
-              return;
-            }
-          } else {
-            user.isReady = false;
-          }
+          let room = roomList.getRoom(roomName);
 
-          let data = {
-            user: user.name,
-            ready: isReady
-          };
-          io.in(roomName).emit("READY_CHANGE", data);
+          user.isReady = isReady;
+          io.in(roomName).emit("READY_CHANGE", room.getReadyUsers());
+
+          if (isReady) {
+            if (room.isReady()) {
+              io.in(roomName).emit("ROOM_READY_FOR_RESET");
+            }
+          }
         });
       }
     });

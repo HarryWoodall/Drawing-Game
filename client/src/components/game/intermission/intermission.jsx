@@ -2,19 +2,20 @@ import React, { Component } from "react";
 import LeaderBoard from "./leaderboard/leaderboard";
 import ReadyButton from "./ready button/readyButton";
 import Overlay from "./overlay/overlay";
+import Socket from "../../../sockets/socket";
 import "./intermission.css";
-import { Socket } from "dgram";
 
 class Intermission extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      socket: new Socket(this.props.socket),
       isReady: false,
       hasRecievedScoreData: false
     };
 
-    this.props.socket.emit("GET_ROOM_LEADERBOARD");
-    this.props.socket.on("ROOM_LEADERBOARD", data => {
+    this.state.socket.requestRoomLeaderboard();
+    this.state.socket.roomLeaderboard(data => {
       console.log(data);
       this.props.roomData.scoreData = data;
 
@@ -33,8 +34,13 @@ class Intermission extends Component {
             clientData={this.props.clientData}
           />
         ) : null}
-        <ReadyButton onReady={this.handleReadyToggle} />
-        {this.state.isReady ? <Overlay /> : null}
+        <ReadyButton
+          onReady={this.handleReadyToggle}
+          socket={this.props.socket}
+        />
+        {this.state.isReady ? (
+          <Overlay socket={this.props.socket} roomData={this.props.roomData} />
+        ) : null}
       </div>
     );
   }

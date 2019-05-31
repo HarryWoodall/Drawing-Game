@@ -24,9 +24,7 @@ class DrawingPhase extends Component {
         />
         {this.state.phase === "DRAWING" ? (
           <TimerBar time={2} timeOut={this.handleDrawingCompletion} />
-        ) : (
-          undefined
-        )}
+        ) : null}
         <Suggestion clientData={this.props.clientData} />
       </React.Fragment>
     );

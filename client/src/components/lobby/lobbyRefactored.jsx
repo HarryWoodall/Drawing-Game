@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import StartButton from "../partial/primaryButton";
 import LobbyUserList from "./lobby user list/lobbyUserList";
-import "./lobbyRefactored.css";
 import LobbyReadyButton from "./lobby-ready-button/lobbyReadyButton";
+import Socket from "../../sockets/socket";
+import "./lobbyRefactored.css";
 
 class Lobby extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      socket: props.socket
+      socket: new Socket(this.props.socket)
     };
-    this.props.socket.connect();
-    this.props.socket.on("ROOM_UPDATE", data => {
+    this.state.socket.connect();
+    this.state.socket.lobbyUpdate(data => {
       this.props.roomData.roomUsers = data.users;
       this.props.roomData.roomLeader = data.leader;
       this.forceUpdate();
