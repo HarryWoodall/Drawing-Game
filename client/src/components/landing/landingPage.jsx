@@ -10,12 +10,14 @@ class LandingPage extends Component {
     super(props);
     this.state = {
       newRoom: false,
-      errorMessage: null
+      errorMessage: null,
+      keyboard: false
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleKeyboard = this.handleKeyboard.bind(this);
     this.sendData = this.sendData.bind(this);
   }
 
@@ -26,18 +28,23 @@ class LandingPage extends Component {
         <TextInput
           onTextChange={this.handleTextChange}
           newRoom={this.state.newRoom}
+          isKeyboard={this.handleKeyboard}
         />
         {this.state.errorMessage !== null ? (
           <h3 id="landing-error-message">{this.state.errorMessage}</h3>
         ) : null}
-        <ToggleButtons onToggle={this.handleToggle} />
-        <input
-          type="button"
-          value="Enter"
-          onClick={this.handleSubmit}
-          id="landing-submit-button"
-          className="button"
-        />
+        {!this.state.keyboard ? (
+          <ToggleButtons onToggle={this.handleToggle} />
+        ) : null}
+        {!this.state.keyboard ? (
+          <input
+            type="button"
+            value="Enter"
+            onClick={this.handleSubmit}
+            id="landing-submit-button"
+            className="button"
+          />
+        ) : null}
       </div>
     );
   }
@@ -67,6 +74,14 @@ class LandingPage extends Component {
       this.sendData(this.state.userName, true, null);
     } else {
       this.sendData(this.state.userName, false, this.state.roomName);
+    }
+  }
+
+  handleKeyboard(isKeyboard) {
+    console.log("isKeyboard", isKeyboard);
+
+    if (this.state.keyboard !== isKeyboard) {
+      this.setState({ keyboard: isKeyboard });
     }
   }
 
