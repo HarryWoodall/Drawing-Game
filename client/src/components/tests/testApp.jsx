@@ -78,7 +78,12 @@ class testApp extends Component {
             />
           );
         case "GUESSING_PHASE":
-          return <GuessingPhase socket={this.props.socket} />;
+          return (
+            <GuessingPhase
+              socket={this.props.socket}
+              clientData={this.clientData}
+            />
+          );
         case "INPUT_GUESS":
           return <InputGuess />;
         case "OUTPUT_RESULT":

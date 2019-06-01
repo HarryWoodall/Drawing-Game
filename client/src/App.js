@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-// import Tests from "./components/tests/testApp";
+import Tests from "./components/tests/testApp";
 import LobbyRefactored from "./components/lobby/lobby";
 import LandingPageRefactored from "./components/landing/landingPage";
 import Game from "./components/game/game";
@@ -33,7 +33,11 @@ class App extends Component {
   render() {
     return <div className="App">{this.setLocation()}</div>;
     // return (
-    //   <Tests socket={this.props.socket} testSet="LOBBY" testName="LOBBY" />
+    //   <Tests
+    //     socket={this.props.socket}
+    //     testSet="DRAWING_GAME"
+    //     testName="GUESSING_PHASE"
+    //   />
     // );
   }
 
