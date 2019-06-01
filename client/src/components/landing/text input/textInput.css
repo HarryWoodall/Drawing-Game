@@ -14,6 +14,10 @@
   color: #dd490f59;
 }
 
+#room-name-input {
+  text-transform: uppercase;
+}
+
 @media (max-width: 600px) {
   .text-input {
     margin: 0px;

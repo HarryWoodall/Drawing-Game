@@ -12,8 +12,6 @@ class TextInput extends Component {
 
     this.handleTextChanged = this.handleTextChanged.bind(this);
     this.sendTextChange = this.sendTextChange.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
   }
 
   render() {
@@ -26,8 +24,6 @@ class TextInput extends Component {
             className="setup-text-input text-input"
             placeholder="USER NAME"
             onChange={this.handleTextChanged}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
           />
         </div>
       );
@@ -40,8 +36,6 @@ class TextInput extends Component {
             className="setup-text-input text-input"
             placeholder="USER NAME"
             onChange={this.handleTextChanged}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
           />
 
           <input
@@ -77,20 +71,6 @@ class TextInput extends Component {
           this.sendTextChange();
         }
       );
-    }
-  }
-
-  handleFocus() {
-    if (window.innerHeight < 500) {
-      console.log("keyboard");
-      this.props.isKeyboard(true);
-    }
-  }
-
-  handleBlur() {
-    if (window.innerHeight >= 500) {
-      console.log("no keyboard");
-      this.props.isKeyboard(false);
     }
   }
 

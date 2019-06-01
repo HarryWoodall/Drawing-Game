@@ -56,3 +56,17 @@
     transform: translate(-50%, 0);
   }
 }
+
+@media (max-height: 450px) {
+  #landing-toggle-buttons {
+    display: none;
+  }
+
+  #landing-submit-button {
+    display: none;
+  }
+
+  .landing-page-text-input {
+    top: 45vh;
+  }
+}

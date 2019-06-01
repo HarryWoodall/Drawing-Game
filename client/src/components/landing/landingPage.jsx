@@ -10,14 +10,12 @@ class LandingPage extends Component {
     super(props);
     this.state = {
       newRoom: false,
-      errorMessage: null,
-      keyboard: false
+      errorMessage: null
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleKeyboard = this.handleKeyboard.bind(this);
     this.sendData = this.sendData.bind(this);
   }
 
@@ -25,18 +23,15 @@ class LandingPage extends Component {
     return (
       <div>
         <h1 id="landing-page-header">Generic Mobile App Game</h1>
-        <TextInput
-          onTextChange={this.handleTextChange}
-          newRoom={this.state.newRoom}
-          isKeyboard={this.handleKeyboard}
-        />
-        {this.state.errorMessage !== null ? (
-          <h3 id="landing-error-message">{this.state.errorMessage}</h3>
-        ) : null}
-        {!this.state.keyboard ? (
+        <form autoComplete="off">
+          <TextInput
+            onTextChange={this.handleTextChange}
+            newRoom={this.state.newRoom}
+          />
+          {this.state.errorMessage !== null ? (
+            <h3 id="landing-error-message">{this.state.errorMessage}</h3>
+          ) : null}
           <ToggleButtons onToggle={this.handleToggle} />
-        ) : null}
-        {!this.state.keyboard ? (
           <input
             type="button"
             value="Enter"
@@ -44,7 +39,7 @@ class LandingPage extends Component {
             id="landing-submit-button"
             className="button"
           />
-        ) : null}
+        </form>
       </div>
     );
   }
@@ -74,14 +69,6 @@ class LandingPage extends Component {
       this.sendData(this.state.userName, true, null);
     } else {
       this.sendData(this.state.userName, false, this.state.roomName);
-    }
-  }
-
-  handleKeyboard(isKeyboard) {
-    console.log("isKeyboard", isKeyboard);
-
-    if (this.state.keyboard !== isKeyboard) {
-      this.setState({ keyboard: isKeyboard });
     }
   }
 
