@@ -1,6 +1,6 @@
 .timer-bar {
   position: absolute;
-  top: 60vh;
+  /* top: 70vh; */
   height: 5px;
   background-color: black;
 }
