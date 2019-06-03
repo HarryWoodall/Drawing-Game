@@ -7,7 +7,10 @@ class PeerReview extends Component {
   render() {
     if (this.props.gotResult) {
       return (
-        <div className="peer-review">
+        <div
+          className="peer-review"
+          style={{ bottom: window.innerHeight * 0.35 + "px" }}
+        >
           <Result
             peerResult={this.props.peerResult}
             clientData={this.props.clientData}
@@ -17,7 +20,10 @@ class PeerReview extends Component {
       );
     } else {
       return (
-        <div className="peer-review">
+        <div
+          className="peer-review"
+          style={{ bottom: window.innerHeight * 0.35 + "px" }}
+        >
           <AwaitingFeedback />
         </div>
       );

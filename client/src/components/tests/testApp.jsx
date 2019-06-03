@@ -39,6 +39,7 @@ class testApp extends Component {
       "Beth"
     ]);
     this.clientData = new ClientData("Frank");
+    this.clientData.peerDrawing = { suggestion: "flowers" };
     this.leaderboardData = [
       { name: "Billy", score: 3 },
       { name: "Frank", score: 4 },
@@ -85,9 +86,14 @@ class testApp extends Component {
             />
           );
         case "INPUT_GUESS":
-          return <InputGuess />;
+          return <InputGuess clientData={this.clientData} />;
         case "OUTPUT_RESULT":
-          return <OutputResult />;
+          return (
+            <OutputResult
+              socket={this.props.socket}
+              clientData={this.clientData}
+            />
+          );
         default:
           return <h1>Invalid Test</h1>;
       }

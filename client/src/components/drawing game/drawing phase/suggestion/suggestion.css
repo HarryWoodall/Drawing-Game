@@ -1,6 +1,5 @@
 .suggestion {
   position: absolute;
   left: 50%;
-  top: 70vh;
   transform: translate(-50%);
 }

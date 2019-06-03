@@ -11,7 +11,12 @@ class InputGuess extends Component {
   render() {
     return (
       <React.Fragment>
-        <h1 className="query-user">What is it?</h1>
+        <h1
+          className="query-user"
+          style={{ top: window.innerHeight * 0.5 + "px" }}
+        >
+          What is it?
+        </h1>
         <PeerReview
           gotResult={this.props.gotPeerReview}
           peerResult={this.props.peerResult}

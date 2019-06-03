@@ -31,14 +31,14 @@ class App extends Component {
   }
 
   render() {
-    return <div className="App">{this.setLocation()}</div>;
-    // return (
-    //   <Tests
-    //     socket={this.props.socket}
-    //     testSet="DRAWING_GAME"
-    //     testName="DRAWING_PHASE"
-    //   />
-    // );
+    // return <div className="App">{this.setLocation()}</div>;
+    return (
+      <Tests
+        socket={this.props.socket}
+        testSet="DRAWING_GAME"
+        testName="OUTPUT_RESULT"
+      />
+    );
   }
 
   setLocation() {

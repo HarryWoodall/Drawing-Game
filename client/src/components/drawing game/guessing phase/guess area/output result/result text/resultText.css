@@ -1,11 +1,19 @@
-.output-result {
+.output-result-container {
   position: absolute;
   left: 50%;
-  top: 48vh;
+  bottom: 0;
+  height: 35vh;
   width: 70%;
   transform: translate(-50%, 0);
   margin: 0px;
   margin-top: 10px;
   padding: 0px;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.output-result {
   text-align: center;
 }
