@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import AwaitingFeedback from "./awaitingFeedback";
-import Result from "./resultOfFeedback";
+import Result from "./result of feedback/resultOfFeedback";
 import "./peerReview.css";
 
 class PeerReview extends Component {
@@ -24,7 +23,7 @@ class PeerReview extends Component {
           className="peer-review"
           style={{ bottom: window.innerHeight * 0.35 + "px" }}
         >
-          <AwaitingFeedback />
+          <h3 className="peer-review-pre-text">Awaiting Feedback...</h3>
         </div>
       );
     }

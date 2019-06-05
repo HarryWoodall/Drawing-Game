@@ -29,7 +29,7 @@ class socketAPI {
     this.socket.connect();
   }
 
-  lobbyUpdate(onRoomUpdate) {
+  roomUpdate(onRoomUpdate) {
     this.socket.on("ROOM_UPDATE", onRoomUpdate);
   }
 

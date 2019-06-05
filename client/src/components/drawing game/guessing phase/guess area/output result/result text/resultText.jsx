@@ -17,22 +17,30 @@ class ResultText extends Component {
   }
 
   render() {
+    const output = (
+      <h1 className="output-result-text">
+        <span className="peer-username">
+          {this.props.clientData.peerDrawing.owner}
+        </span>{" "}
+        drew a {this.props.clientData.peerDrawing.suggestion}
+      </h1>
+    );
     if (this.state.isCorrect) {
       return (
         <div className="output-result-container">
-          <h1 className="output-result">
-            Correct, {this.props.clientData.peerDrawing.owner} drew a{" "}
-            {this.props.clientData.peerDrawing.suggestion}
-          </h1>
+          <div className="output-result output-result-correct">
+            <h1 className="result-text">Correct</h1>
+            {output}
+          </div>
         </div>
       );
     } else {
       return (
         <div className="output-result-container">
-          <h1 className="output-result">
-            Incorrect, {this.props.clientData.peerDrawing.owner} drew a{" "}
-            {this.props.clientData.peerDrawing.suggestion}
-          </h1>
+          <div className="output-result output-result-incorrect">
+            <h1 className="result-text">Incorrect</h1>
+            {output}
+          </div>
         </div>
       );
     }

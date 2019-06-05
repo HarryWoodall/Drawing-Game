@@ -1,0 +1,20 @@
+.peer-review .peer-result {
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  width: 80%;
+  margin: auto;
+  font-weight: 100;
+}
+
+.peer-result-correct {
+  background-color: #1ca03d;
+}
+
+.peer-result-incorrect {
+  background-color: rgb(158, 27, 27);
+}
+
+.peer-result-username {
+  font-weight: bold;
+}

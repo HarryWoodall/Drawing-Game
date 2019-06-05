@@ -10,6 +10,7 @@ import DrawingGame from "../drawing game/drawingGame";
 import ViewingCanvas from "../drawing game/guessing phase/viewing canvas/viewingCanvas";
 import InputGuess from "../drawing game/guessing phase/guess area/input guess/inputGuess";
 import OutputResult from "../drawing game/guessing phase/guess area/output result/outputResult";
+import PeerReview from "../drawing game/guessing phase/guess area/peer review/peerReview";
 
 import TextInput from "../landing/text input/textInput";
 import ToggleButtons from "../landing/toggle buttons/toggleButtons";
@@ -39,7 +40,8 @@ class testApp extends Component {
       "Beth"
     ]);
     this.clientData = new ClientData("Frank");
-    this.clientData.peerDrawing = { suggestion: "flowers" };
+    this.clientData.peerDrawing = { suggestion: "flowers", owner: "Polly" };
+    this.peerResult = { answer: "Grape", guess: "Pinapple", owner: "Polly" };
     this.leaderboardData = [
       { name: "Billy", score: 3 },
       { name: "Frank", score: 4 },
@@ -92,8 +94,11 @@ class testApp extends Component {
             <OutputResult
               socket={this.props.socket}
               clientData={this.clientData}
+              peerResult={this.peerResult}
             />
           );
+        case "PEER_REVIEW":
+          return <PeerReview gotResult={true} peerResult={this.peerResult} />;
         default:
           return <h1>Invalid Test</h1>;
       }

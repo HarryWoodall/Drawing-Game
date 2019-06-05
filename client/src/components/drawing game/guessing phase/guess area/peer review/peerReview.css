@@ -2,10 +2,16 @@
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
+  width: 100%;
 }
 
 .peer-review h3 {
   margin: 0px;
   padding: 0px;
   text-align: center;
+}
+
+.peer-review-pre-text {
+  font-weight: 100;
+  color: gray;
 }

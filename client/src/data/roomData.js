@@ -5,12 +5,6 @@ class RoomData {
     this.roomUsers = roomUsers || [];
     this.scoreData = [];
   }
-
-  // addUser(user) {
-  //   if (!this.roomUsers.includes(user)) {
-  //     this.roomUsers.push(user);
-  //   }
-  // }
 }
 
 export default RoomData;

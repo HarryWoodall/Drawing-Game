@@ -23,11 +23,20 @@ class App extends Component {
       });
     });
 
-    this.props.socket.on("SEND_USER", data => {
-      this.setState({
-        userName: data.name
-      });
+    this.props.socket.on("ROOM_UPDATE", data => {
+      if (this.state.roomData !== null) {
+        let roomData = this.state.roomData;
+        roomData.roomUsers = data.users;
+        roomData.roomLeader = data.leader;
+        this.setState({ roomData: roomData });
+      }
     });
+
+    // this.props.socket.on("SEND_USER", data => {
+    //   this.setState({
+    //     userName: data.name
+    //   });
+    // });
   }
 
   render() {
@@ -36,7 +45,7 @@ class App extends Component {
     //   <Tests
     //     socket={this.props.socket}
     //     testSet="DRAWING_GAME"
-    //     testName="OUTPUT_RESULT"
+    //     testName="PEER_REVIEW"
     //   />
     // );
   }

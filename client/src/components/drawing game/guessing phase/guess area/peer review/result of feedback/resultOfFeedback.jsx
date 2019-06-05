@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./resultOfFeedback.css";
 
 class ResultOfFeedback extends Component {
   render() {
@@ -11,8 +12,10 @@ class ResultOfFeedback extends Component {
 
     return (
       <h3 className={className}>
-        {this.props.peerResult.owner} thought you drew a{" "}
-        {this.props.peerResult.guess}
+        <span className="peer-result-username">
+          {this.props.peerResult.owner}
+        </span>{" "}
+        thought you drew a {this.props.peerResult.guess}
       </h3>
     );
   }

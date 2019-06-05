@@ -3,7 +3,7 @@
   left: 50%;
   bottom: 0;
   height: 35vh;
-  width: 70%;
+  width: 100%;
   transform: translate(-50%, 0);
   margin: 0px;
   margin-top: 10px;
@@ -14,6 +14,35 @@
   justify-content: center;
 }
 
+.output-result-correct {
+  background-color: #1ca03d;
+}
+
+.output-result-incorrect {
+  background-color: rgb(158, 27, 27);
+}
+
 .output-result {
+  padding: 10px;
+  width: 100%;
+}
+
+.output-result h1 {
+  padding: 0px;
+  margin: 0px;
   text-align: center;
+  color: white;
+}
+
+.result-text {
+  font-weight: bold;
+  font-size: 250%;
+}
+
+.output-result-text {
+  font-style: italic;
+}
+
+.peer-username {
+  font-weight: bold;
 }
