@@ -77,10 +77,11 @@ class testApp extends Component {
               drawingCompletion={() => {
                 console.log("completed");
               }}
-              clientData={new ClientData("Test_01")}
+              clientData={this.clientData}
             />
           );
         case "GUESSING_PHASE":
+          this.clientData.peerDrawing = null;
           return (
             <GuessingPhase
               socket={this.props.socket}

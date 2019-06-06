@@ -23,7 +23,7 @@ class LandingPage extends Component {
     return (
       <div>
         <h1 id="landing-page-header">Generic Mobile App Game</h1>
-        <form autoComplete="off">
+        <form autoComplete="off" onSubmit={this.handleSubmit}>
           <TextInput
             onTextChange={this.handleTextChange}
             newRoom={this.state.newRoom}
@@ -33,9 +33,9 @@ class LandingPage extends Component {
           ) : null}
           <ToggleButtons onToggle={this.handleToggle} />
           <input
-            type="button"
+            type="submit"
             value="Enter"
-            onClick={this.handleSubmit}
+            // onClick={this.handleSubmit}
             id="landing-submit-button"
             className="button"
           />
@@ -63,7 +63,8 @@ class LandingPage extends Component {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     this.clientData = new ClientData(this.state.userName);
     if (this.state.newRoom) {
       this.sendData(this.state.userName, true, null);

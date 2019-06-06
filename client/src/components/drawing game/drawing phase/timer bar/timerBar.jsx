@@ -29,16 +29,12 @@ class TimerBar extends Component {
     }
   }
 
-  componentWillMount() {
-    //this.reset();
-  }
-
   render() {
     return (
       <div
         style={{
-          width: this.state.percent + "%",
-          top: window.innerHeight * 0.7 + "px"
+          width: this.state.percent + "%"
+          // top: window.innerHeight * 0.8 + "px"
         }}
         className="timer-bar"
       />

@@ -13,7 +13,7 @@ class InputGuess extends Component {
       <React.Fragment>
         <h1
           className="query-user"
-          style={{ top: window.innerHeight * 0.5 + "px" }}
+          style={{ top: window.innerHeight * 0.55 + "px" }}
         >
           What is it?
         </h1>

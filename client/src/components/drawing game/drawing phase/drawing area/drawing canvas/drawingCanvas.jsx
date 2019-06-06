@@ -11,7 +11,10 @@ class DrawingCanvas extends Component {
 
   render() {
     return (
-      <div className="drawing-canvas">
+      <div
+        className="drawing-canvas"
+        style={{ top: window.innerHeight * 0.05 + "px" }}
+      >
         <P5Wrapper
           sketch={Canvas}
           isComplete={this.props.isComplete}

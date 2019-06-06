@@ -6,7 +6,10 @@ import "./viewingCanvas.css";
 class ViewingCanvas extends Component {
   render() {
     return (
-      <div className="viewing-canvas">
+      <div
+        className="viewing-canvas"
+        style={{ top: window.innerHeight * 0.05 + "px" }}
+      >
         <P5Wrapper
           sketch={Canvas}
           drawingData={this.props.clientData.peerDrawing}

@@ -15,7 +15,8 @@ export default function sketch(sketch) {
     y = window.innerHeight * 0.7;
     sketch.background(255);
     sketch.createCanvas(x, y);
-    drawBorder();
+    // drawBorder();
+    sketch.strokeWeight(4);
   };
 
   //sketch.draw = function() {};

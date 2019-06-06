@@ -6,7 +6,7 @@ class Suggestion extends Component {
     return (
       <div
         className="suggestion"
-        style={{ top: window.innerHeight * 0.75 + "px" }}
+        style={{ top: window.innerHeight * 0.8 + "px" }}
       >
         <h2>{this.props.clientData.suggestion}</h2>
       </div>

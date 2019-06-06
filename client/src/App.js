@@ -45,7 +45,7 @@ class App extends Component {
     //   <Tests
     //     socket={this.props.socket}
     //     testSet="DRAWING_GAME"
-    //     testName="PEER_REVIEW"
+    //     testName="GUESSING_PHASE"
     //   />
     // );
   }
