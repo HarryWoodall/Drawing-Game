@@ -14,14 +14,6 @@
   justify-content: center;
 }
 
-.output-result-correct {
-  background-color: #1ca03d;
-}
-
-.output-result-incorrect {
-  background-color: rgb(158, 27, 27);
-}
-
 .output-result {
   padding: 10px;
   width: 100%;
@@ -31,12 +23,19 @@
   padding: 0px;
   margin: 0px;
   text-align: center;
-  color: white;
 }
 
 .result-text {
   font-weight: bold;
   font-size: 250%;
+}
+
+.output-result-incorrect .result-text {
+  color: rgb(201, 13, 13);
+}
+
+.output-result-correct .result-text {
+  color: #1ca03d;
 }
 
 .output-result-text {

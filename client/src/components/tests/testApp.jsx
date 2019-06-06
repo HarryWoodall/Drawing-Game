@@ -42,10 +42,10 @@ class testApp extends Component {
     this.clientData = new ClientData("Frank");
     this.clientData.peerDrawing = { suggestion: "flowers", owner: "Polly" };
     this.peerResult = { answer: "Grape", guess: "Pinapple", owner: "Polly" };
-    this.leaderboardData = [
+    this.roomData.scoreData = [
       { name: "Billy", score: 3 },
       { name: "Frank", score: 4 },
-      { name: "Bobby", score: 6 },
+      { name: "DingleFinger", score: 6 },
       { name: "Beth", score: 700 },
       { name: "Kathy", score: 4 },
       { name: "James", score: 5 },
@@ -91,6 +91,7 @@ class testApp extends Component {
         case "INPUT_GUESS":
           return <InputGuess clientData={this.clientData} />;
         case "OUTPUT_RESULT":
+          this.clientData.guess = "flowers";
           return (
             <OutputResult
               socket={this.props.socket}
@@ -137,9 +138,11 @@ class testApp extends Component {
     } else if (this.props.testSet === "INTERMISSION") {
       switch (this.props.testName) {
         case "LEADERBOARD":
-          return <Leaderboard leaderboardData={this.leaderboardData} />;
+          return <Leaderboard roomData={this.roomData} />;
         case "INTERMISSION":
-          return <Intermission leaderboardData={this.leaderboardData} />;
+          return (
+            <Intermission roomData={this.roomData} socket={this.props.socket} />
+          );
         default:
           return <h1>Invalid Test</h1>;
       }

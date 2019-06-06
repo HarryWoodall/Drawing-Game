@@ -31,12 +31,6 @@ class App extends Component {
         this.setState({ roomData: roomData });
       }
     });
-
-    // this.props.socket.on("SEND_USER", data => {
-    //   this.setState({
-    //     userName: data.name
-    //   });
-    // });
   }
 
   render() {
@@ -45,7 +39,7 @@ class App extends Component {
     //   <Tests
     //     socket={this.props.socket}
     //     testSet="DRAWING_GAME"
-    //     testName="GUESSING_PHASE"
+    //     testName="OUTPUT_RESULT"
     //   />
     // );
   }

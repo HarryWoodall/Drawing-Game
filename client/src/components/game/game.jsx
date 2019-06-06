@@ -50,15 +50,7 @@ class Game extends Component {
           break;
       }
 
-      let content = (
-        <div className="game-container">
-          <Score
-            clientData={this.props.clientData}
-            socket={this.props.socket}
-          />
-          {currentGame}
-        </div>
-      );
+      let content = <div className="game-container">{currentGame}</div>;
 
       return content;
     }
@@ -73,7 +65,7 @@ class Game extends Component {
   }
 
   handleScoreUpdate() {
-    this.forceUpdate();
+    this.props.socket.emit("UPDATE_SCORE", this.props.clientData.score);
   }
 }
 

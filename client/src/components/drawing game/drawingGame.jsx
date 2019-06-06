@@ -26,7 +26,7 @@ class DrawingGame extends Component {
             this.props.clientData.reset();
           });
         }
-      }, 1000);
+      }, 5000);
     }, this.props.maxRound);
   }
 

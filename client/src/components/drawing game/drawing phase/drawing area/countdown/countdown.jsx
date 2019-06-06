@@ -35,7 +35,7 @@ class Countdown extends Component {
           currentIndex: this.state.currentIndex + 1
         });
       }
-    }, 300);
+    }, 500);
   }
 
   handleCompletion() {
