@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import DrawingGame from "../drawing game/drawingGame";
 import Intermission from "./intermission/intermission";
-import Score from "./score/score";
 import Socket from "../../sockets/socket";
 import "./game.css";
 
@@ -39,6 +38,7 @@ class Game extends Component {
             <DrawingGame
               socket={this.props.socket}
               clientData={this.props.clientData}
+              settingsData={this.props.settingsData}
               onGameCompletion={this.handleGameCompletion}
               onScoreUpdate={this.handleScoreUpdate}
               maxRound={0}

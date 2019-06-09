@@ -21,9 +21,13 @@ class DrawingPhase extends Component {
           countdownComplete={this.handleCountdownCompletion}
           isComplete={this.state.phase === "COMPLETE"}
           clientData={this.props.clientData}
+          settingsData={this.props.settingsData}
         />
         {this.state.phase === "DRAWING" ? (
-          <TimerBar time={3} timeOut={this.handleDrawingCompletion} />
+          <TimerBar
+            time={this.props.settingsData.roomSettings.drawTime}
+            timeOut={this.handleDrawingCompletion}
+          />
         ) : null}
         <Suggestion clientData={this.props.clientData} />
       </React.Fragment>

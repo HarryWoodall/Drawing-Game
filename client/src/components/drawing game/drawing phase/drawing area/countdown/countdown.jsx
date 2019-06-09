@@ -4,8 +4,6 @@ import "./countdown.css";
 class Countdown extends Component {
   constructor(props) {
     super(props);
-
-    this.startTimer();
     this.state = {
       currentIndex: 0
     };
@@ -14,6 +12,8 @@ class Countdown extends Component {
 
     this.startTimer = this.startTimer.bind(this);
     this.handleCompletion = this.handleCompletion.bind(this);
+
+    this.startTimer();
   }
 
   render() {
@@ -35,7 +35,7 @@ class Countdown extends Component {
           currentIndex: this.state.currentIndex + 1
         });
       }
-    }, 500);
+    }, (this.props.settingsData.roomSettings.countdownTime / this.display.length) * 1000);
   }
 
   handleCompletion() {

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import LobbyUserList from "./lobby user list/lobbyUserList";
 import LobbyReadyButton from "./lobby-ready-button/lobbyReadyButton";
 import Socket from "../../sockets/socket";
+import Settings from "../game/settings/settings";
 import "./lobby.css";
 
 class Lobby extends Component {
@@ -23,19 +24,25 @@ class Lobby extends Component {
   render() {
     return (
       <div>
-        <div id="lobby-header">
-          <h1 id="lobby-room-name">{this.props.roomData.roomName}</h1>
-          <h3>lobby</h3>
+        <Settings
+          settingsData={this.props.settingsData}
+          socket={this.props.socket}
+        />
+        <div id="lobby-wrapper">
+          <div id="lobby-header">
+            <h1 id="lobby-room-name">{this.props.roomData.roomName}</h1>
+            <h3>lobby</h3>
+          </div>
+          <LobbyUserList
+            roomData={this.props.roomData}
+            clientData={this.props.clientData}
+          />
+          <LobbyReadyButton
+            roomData={this.props.roomData}
+            clientData={this.props.clientData}
+            onSubmit={this.handleSubmit}
+          />
         </div>
-        <LobbyUserList
-          roomData={this.props.roomData}
-          clientData={this.props.clientData}
-        />
-        <LobbyReadyButton
-          roomData={this.props.roomData}
-          clientData={this.props.clientData}
-          onSubmit={this.handleSubmit}
-        />
       </div>
     );
   }

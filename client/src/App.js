@@ -4,6 +4,7 @@ import Tests from "./components/tests/testApp";
 import LobbyRefactored from "./components/lobby/lobby";
 import LandingPageRefactored from "./components/landing/landingPage";
 import Game from "./components/game/game";
+import SettingsData from "./data/settingsData";
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class App extends Component {
     this.state = {
       location: "LANDING",
       clientData: null,
-      roomData: null
+      roomData: null,
+      settingsData: new SettingsData()
     };
 
     this.handleLandingSubmit = this.handleLandingSubmit.bind(this);
@@ -31,16 +33,22 @@ class App extends Component {
         this.setState({ roomData: roomData });
       }
     });
+
+    this.props.socket.on("ROOM_SETTINGS_UPDATE", settings => {
+      console.log("room settings update");
+
+      if (this.state.roomData !== null) {
+        let settingsData = this.state.settingsData;
+        settingsData.roomSettings = settings;
+        this.setState({ settingsData: settingsData });
+      }
+    });
   }
 
   render() {
     return <div className="App">{this.setLocation()}</div>;
     // return (
-    //   <Tests
-    //     socket={this.props.socket}
-    //     testSet="DRAWING_GAME"
-    //     testName="OUTPUT_RESULT"
-    //   />
+    //   <Tests socket={this.props.socket} testSet="LOBBY" testName="LOBBY" />
     // );
   }
 
@@ -57,6 +65,7 @@ class App extends Component {
             onSubmit={this.handleLobbySubmit}
             roomData={this.state.roomData}
             clientData={this.state.clientData}
+            settingsData={this.state.settingsData}
           />
         );
       case "GAME":
@@ -65,6 +74,7 @@ class App extends Component {
             socket={this.props.socket}
             roomData={this.state.roomData}
             clientData={this.state.clientData}
+            settingsData={this.state.settingsData}
           />
         );
       default:

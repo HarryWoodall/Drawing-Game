@@ -1,3 +1,7 @@
+#lobby-wrapper {
+  /* z-index: 0; */
+}
+
 #lobby-header {
   position: absolute;
   left: 50%;

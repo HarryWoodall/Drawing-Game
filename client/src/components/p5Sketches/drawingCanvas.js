@@ -15,11 +15,8 @@ export default function sketch(sketch) {
     y = window.innerHeight * 0.7;
     sketch.background(255);
     sketch.createCanvas(x, y);
-    // drawBorder();
     sketch.strokeWeight(4);
   };
-
-  //sketch.draw = function() {};
 
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
     handleDrawingEnd = props.getDrawing;
@@ -53,14 +50,6 @@ export default function sketch(sketch) {
   };
 
   //Helper Functions
-
-  function drawBorder() {
-    sketch.stroke(155);
-    sketch.strokeWeight(4);
-    sketch.rect(0, 0, x, y);
-    sketch.stroke(0);
-    sketch.strokeWeight(4);
-  }
 
   function draw() {
     if (isDrawing && isEnabled) {

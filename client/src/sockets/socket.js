@@ -81,5 +81,11 @@ class socketAPI {
   roomReadyForReset(onRoomReadyForReset) {
     this.socket.on("ROOM_READY_FOR_RESET", onRoomReadyForReset);
   }
+
+  roomSettingsChange(settings) {
+    console.log("Submitting Settings", settings);
+
+    this.socket.emit("ROOM_SETTINGS_UPDATE", settings);
+  }
 }
 export default socketAPI;

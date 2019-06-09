@@ -143,6 +143,10 @@ module.exports = class Sockets {
             }
           }
         });
+
+        socket.on("ROOM_SETTINGS_UPDATE", settings => {
+          io.in(roomName).emit("ROOM_SETTINGS_UPDATE", settings);
+        });
       }
     });
   }

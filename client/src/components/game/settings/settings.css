@@ -1,0 +1,136 @@
+#settings-overlay {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
+#settings-overlay.settings-visible {
+  background-color: rgba(10, 10, 10, 0.9);
+  z-index: 1;
+}
+
+#settings-overlay.settings-hidden {
+  background-color: none;
+  z-index: 0;
+}
+
+#settings-icon {
+  fill: gray;
+  width: 50px;
+  height: 50px;
+}
+
+#settings-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 5px;
+}
+
+#settings-toggle:focus {
+  outline: none;
+}
+
+#settings-toggle:active {
+  padding: 5px;
+}
+
+#settings-header {
+  position: absolute;
+  width: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: white;
+  margin: 0px;
+  border-radius: 10px;
+}
+
+#settings-main-content {
+  position: absolute;
+  width: 80%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  overflow-y: auto;
+}
+
+#settings-submit {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin: 0px;
+  padding: 0px;
+}
+
+.settings-input-container {
+  background-color: white;
+  width: 90%;
+  margin: auto;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
+
+.settings-input-container h2 {
+  font-size: 100%;
+  color: gray;
+  margin: 0px;
+  padding: 0px;
+}
+
+.settings-input-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.settings-text-input {
+  width: 50px;
+  margin: 10px;
+  background: none;
+  border: none;
+  text-align: center;
+  color: #dd490f;
+  font-size: 150%;
+}
+
+.settings-slider-input {
+  height: 10px;
+  outline: none;
+  -webkit-appearance: none;
+  border-radius: 10px;
+  background: lightgray;
+}
+
+.settings-slider-input::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #dd490f;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.settings-slider-input::-webkit-slider-thumb {
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #dd490f;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  #settings-icon {
+    fill: gray;
+    width: 40px;
+    height: 40px;
+  }
+
+  #settings-header {
+    transform: translate(-50%, 0);
+  }
+}

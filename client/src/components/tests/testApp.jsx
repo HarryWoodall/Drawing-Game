@@ -22,8 +22,11 @@ import Lobby from "../lobby/lobby";
 import Leaderboard from "../game/intermission/leaderboard/leaderboard";
 import Intermission from "../game/intermission/intermission";
 
+import Settings from "../game/settings/settings";
+
 import ClientData from "../../data/clientData";
 import RoomData from "../../data/roomData";
+import SettingsData from "../../data/settingsData";
 
 class testApp extends Component {
   constructor() {
@@ -51,6 +54,7 @@ class testApp extends Component {
       { name: "James", score: 5 },
       { name: "Ben", score: 3 }
     ];
+    this.settingsData = new SettingsData();
   }
 
   render() {
@@ -123,6 +127,7 @@ class testApp extends Component {
               clientData={this.clientData}
               roomData={this.roomData}
               socket={this.props.socket}
+              settingsData={this.settingsData}
             />
           );
         case "LOBBY_USER_LIST":
@@ -142,6 +147,18 @@ class testApp extends Component {
         case "INTERMISSION":
           return (
             <Intermission roomData={this.roomData} socket={this.props.socket} />
+          );
+        default:
+          return <h1>Invalid Test</h1>;
+      }
+    } else if (this.props.testSet === "SETTINGS") {
+      switch (this.props.testName) {
+        case "SETTINGS":
+          return (
+            <Settings
+              settingsData={this.settingsData}
+              socket={this.props.socket}
+            />
           );
         default:
           return <h1>Invalid Test</h1>;

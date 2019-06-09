@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import SelectionButtons from "./selection buttons/selectionButtons";
 import PeerReview from "../peer review/peerReview";
-import "./inputGuess.css";
 
 class InputGuess extends Component {
   constructor() {
@@ -11,12 +10,6 @@ class InputGuess extends Component {
   render() {
     return (
       <React.Fragment>
-        <h1
-          className="query-user"
-          style={{ top: window.innerHeight * 0.55 + "px" }}
-        >
-          What is it?
-        </h1>
         <PeerReview
           gotResult={this.props.gotPeerReview}
           peerResult={this.props.peerResult}

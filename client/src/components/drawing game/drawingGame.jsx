@@ -12,6 +12,10 @@ class DrawingGame extends Component {
       socket: new Socket(this.props.socket)
     };
     this.handleDrawingCompletion = this.handleDrawingCompletion.bind(this);
+    console.log(
+      "Settings",
+      this.props.settingsData.roomSettings.gameCompleteTime
+    );
 
     this.state.socket.gameCompletion(() => {
       setTimeout(() => {
@@ -26,7 +30,7 @@ class DrawingGame extends Component {
             this.props.clientData.reset();
           });
         }
-      }, 5000);
+      }, this.props.settingsData.roomSettings.gameCompleteTime * 1000);
     }, this.props.maxRound);
   }
 
@@ -38,6 +42,7 @@ class DrawingGame extends Component {
           otherProp={"MyProp"}
           drawingCompletion={this.handleDrawingCompletion}
           clientData={this.props.clientData}
+          settingsData={this.props.settingsData}
         />
       );
     } else if (this.state.phase === "GUESSING") {
