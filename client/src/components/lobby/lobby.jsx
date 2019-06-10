@@ -27,6 +27,7 @@ class Lobby extends Component {
         <Settings
           settingsData={this.props.settingsData}
           socket={this.props.socket}
+          location="Lobby"
         />
         <div id="lobby-wrapper">
           <div id="lobby-header">

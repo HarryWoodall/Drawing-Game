@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "p5": "^0.7.3",
+    "rc-slider": "^8.6.12",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-p5-wrapper": "0.0.4",

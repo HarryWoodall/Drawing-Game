@@ -6,7 +6,7 @@
 
 #settings-overlay.settings-visible {
   background-color: rgba(10, 10, 10, 0.9);
-  z-index: 1;
+  z-index: 2;
 }
 
 #settings-overlay.settings-hidden {
@@ -15,7 +15,6 @@
 }
 
 #settings-icon {
-  fill: gray;
   width: 50px;
   height: 50px;
 }
@@ -98,34 +97,34 @@
   font-size: 150%;
 }
 
-.settings-slider-input {
-  height: 10px;
+.rc-slider {
+  width: 100px;
+}
+
+.rc-slider-track {
+  background-color: #dd490f;
+}
+
+.rc-slider-handle {
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -8px;
+  border: solid 3px #dd490f;
+}
+
+.rc-slider-handle:hover {
+  border-color: #dd490f;
+}
+
+.rc-slider-handle:focus {
+  border-color: #dd490f;
+  box-shadow: 0 0 1px 2px #dd490f;
   outline: none;
-  -webkit-appearance: none;
-  border-radius: 10px;
-  background: lightgray;
-}
-
-.settings-slider-input::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  background: #dd490f;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.settings-slider-input::-webkit-slider-thumb {
-  appearance: none;
-  width: 25px;
-  height: 25px;
-  background: #dd490f;
-  border-radius: 50%;
-  cursor: pointer;
 }
 
 @media (max-width: 600px) {
   #settings-icon {
-    fill: gray;
     width: 40px;
     height: 40px;
   }

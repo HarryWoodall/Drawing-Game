@@ -3,6 +3,7 @@ import LeaderBoard from "./leaderboard/leaderboard";
 import ReadyButton from "./ready button/readyButton";
 import Overlay from "./overlay/overlay";
 import Socket from "../../../sockets/socket";
+import Settings from "../settings/settings";
 import "./intermission.css";
 
 class Intermission extends Component {
@@ -28,6 +29,11 @@ class Intermission extends Component {
   render() {
     return (
       <div id="intermission-container">
+        <Settings
+          settingsData={this.props.settingsData}
+          socket={this.props.socket}
+          location="Intermission"
+        />
         {this.state.hasRecievedScoreData ? (
           <LeaderBoard
             roomData={this.props.roomData}

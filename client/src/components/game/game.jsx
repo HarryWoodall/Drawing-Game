@@ -28,6 +28,7 @@ class Game extends Component {
           socket={this.props.socket}
           roomData={this.props.roomData}
           clientData={this.props.clientData}
+          settingsData={this.props.settingsData}
         />
       );
     } else {

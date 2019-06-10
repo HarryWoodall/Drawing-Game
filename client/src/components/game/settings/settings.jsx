@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Slider, { Range } from "rc-slider";
+import "rc-slider/assets/index.css";
 import Socket from "../../../sockets/socket";
 import { ReactComponent as SettingsIcon } from "./settings-icon.svg";
 import "./settings.css";
@@ -15,7 +17,11 @@ class Settings extends Component {
     };
 
     this.handleToggle = this.handleToggle.bind(this);
-    this.handleSlider = this.handleSlider.bind(this);
+    this.handleDrawTimeSlider = this.handleDrawTimeSlider.bind(this);
+    this.handleCountdownTimeSlider = this.handleCountdownTimeSlider.bind(this);
+    this.handleGameCompleteTimeSlider = this.handleGameCompleteTimeSlider.bind(
+      this
+    );
     this.handleText = this.handleText.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -40,14 +46,12 @@ class Settings extends Component {
           <div className="settings-input-container">
             <h2>Drawing time</h2>
             <div className="settings-input-wrapper">
-              <input
-                type="range"
-                min="1"
-                max="20"
+              <Slider
+                onChange={this.handleDrawTimeSlider}
+                min={0.5}
+                max={10}
+                step={0.5}
                 value={this.state.drawTime}
-                id="dt-settings-slider"
-                className="settings-slider-input"
-                onChange={this.handleSlider}
               />
               <input
                 type="text"
@@ -62,14 +66,12 @@ class Settings extends Component {
           <div className="settings-input-container">
             <h2>Countdown time</h2>
             <div className="settings-input-wrapper">
-              <input
-                type="range"
-                min="1"
-                max="20"
+              <Slider
+                onChange={this.handleCountdownTimeSlider}
+                min={0.5}
+                max={10}
+                step={0.5}
                 value={this.state.countdownTime}
-                id="ct-settings-slider"
-                className="settings-slider-input"
-                onChange={this.handleSlider}
               />
               <input
                 type="text"
@@ -84,14 +86,12 @@ class Settings extends Component {
           <div className="settings-input-container">
             <h2>Game complete time</h2>
             <div className="settings-input-wrapper">
-              <input
-                type="range"
-                min="1"
-                max="20"
+              <Slider
+                onChange={this.handleGameCompleteTimeSlider}
+                min={0.5}
+                max={10}
+                step={0.5}
                 value={this.state.gameCompleteTime}
-                id="gct-settings-slider"
-                className="settings-slider-input"
-                onChange={this.handleSlider}
               />
               <input
                 type="text"
@@ -105,10 +105,10 @@ class Settings extends Component {
         </div>
         <input
           type="submit"
-          value="Confirm"
-          id="settings-submit"
           className="button"
-          style={{ top: window.innerHeight * 0.8 }}
+          id="settings-submit"
+          value="Confirm"
+          style={{ top: window.innerHeight * 0.75 + "px" }}
           onClick={this.handleSubmit}
         />
       </div>
@@ -120,7 +120,10 @@ class Settings extends Component {
         className={this.state.isShown ? "settings-visible" : "settings-hidden"}
       >
         <button id="settings-toggle" onClick={this.handleToggle}>
-          <SettingsIcon id="settings-icon" />
+          <SettingsIcon
+            id="settings-icon"
+            fill={this.props.location === "Lobby" ? "gray" : "white"}
+          />
         </button>
         {this.state.isShown ? content : null}
       </div>
@@ -131,25 +134,20 @@ class Settings extends Component {
     this.setState({ isShown: !this.state.isShown });
   }
 
-  handleSlider(e) {
-    if (e.target === document.activeElement) {
-      switch (e.target.id) {
-        case "dt-settings-slider":
-          this.setState({ drawTime: e.target.value });
-          break;
-        case "ct-settings-slider":
-          this.setState({ countdownTime: e.target.value });
-          break;
-        case "gct-settings-slider":
-          this.setState({ gameCompleteTime: e.target.value });
-          break;
-        default:
-          return;
-      }
-    }
+  handleDrawTimeSlider(e) {
+    this.setState({ drawTime: e });
+  }
+
+  handleCountdownTimeSlider(e) {
+    this.setState({ countdownTime: e });
+  }
+
+  handleGameCompleteTimeSlider(e) {
+    this.setState({ gameCompleteTime: e });
   }
 
   handleText(e) {
+    this.validateInput(e.target.value);
     if (e.target === document.activeElement) {
       switch (e.target.id) {
         case "dt-settings-text":
