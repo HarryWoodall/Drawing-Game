@@ -29,11 +29,13 @@ class Intermission extends Component {
   render() {
     return (
       <div id="intermission-container">
-        <Settings
-          settingsData={this.props.settingsData}
-          socket={this.props.socket}
-          location="Intermission"
-        />
+        {this.props.clientData.userName === this.props.roomData.roomLeader ? (
+          <Settings
+            settingsData={this.props.settingsData}
+            socket={this.props.socket}
+            location="Intermission"
+          />
+        ) : null}
         {this.state.hasRecievedScoreData ? (
           <LeaderBoard
             roomData={this.props.roomData}

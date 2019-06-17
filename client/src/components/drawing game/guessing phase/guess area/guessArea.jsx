@@ -45,6 +45,8 @@ class guessArea extends Component {
 
   render() {
     if (this.state.hasAnsweredQuestion) {
+      console.log("Guess area being rendered");
+
       return (
         <OutputResult
           gotPeerReview={this.state.gotPeerReview}

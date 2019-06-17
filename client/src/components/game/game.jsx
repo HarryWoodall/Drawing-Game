@@ -42,7 +42,7 @@ class Game extends Component {
               settingsData={this.props.settingsData}
               onGameCompletion={this.handleGameCompletion}
               onScoreUpdate={this.handleScoreUpdate}
-              maxRound={0}
+              maxRound={this.props.settingsData.roomSettings.roundCount}
             />
           );
           break;
@@ -58,7 +58,10 @@ class Game extends Component {
   }
 
   handleGameCompletion() {
-    if (this.state.roundCount === 0) {
+    if (
+      this.state.roundCount >=
+      this.props.settingsData.roomSettings.roundCount - 1
+    ) {
       this.setState({ roundEnd: true, roundCount: 0 });
     } else {
       this.setState({ roundCount: this.state.roundCount + 1 });

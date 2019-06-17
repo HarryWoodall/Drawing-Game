@@ -35,7 +35,7 @@ class socketAPI {
 
   gameCompletion(onGameCompletion, maxRound) {
     this.socket.on("GAME_COMPLETE", () => {
-      if (this.currentRound === maxRound) {
+      if (this.currentRound === maxRound - 1) {
         console.log("Removing listener to GAME_COMPLETE");
 
         this.socket.off("GAME_COMPLETE");

@@ -13,7 +13,8 @@ class Settings extends Component {
       isShown: false,
       drawTime: props.settingsData.roomSettings.drawTime,
       countdownTime: props.settingsData.roomSettings.countdownTime,
-      gameCompleteTime: props.settingsData.roomSettings.gameCompleteTime
+      gameCompleteTime: props.settingsData.roomSettings.gameCompleteTime,
+      gamesInRound: props.settingsData.roomSettings.roundCount
     };
 
     this.handleToggle = this.handleToggle.bind(this);
@@ -22,6 +23,7 @@ class Settings extends Component {
     this.handleGameCompleteTimeSlider = this.handleGameCompleteTimeSlider.bind(
       this
     );
+    this.handleGamesInRoundSlider = this.handleGamesInRoundSlider.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -40,7 +42,7 @@ class Settings extends Component {
           id="settings-main-content"
           style={{
             top: window.innerHeight * 0.2,
-            height: window.innerHeight * 0.6
+            height: window.innerHeight * 0.5
           }}
         >
           <div className="settings-input-container">
@@ -102,6 +104,26 @@ class Settings extends Component {
               />
             </div>
           </div>
+
+          <div className="settings-input-container">
+            <h2>Games in round</h2>
+            <div className="settings-input-wrapper">
+              <Slider
+                onChange={this.handleGamesInRoundSlider}
+                min={1}
+                max={10}
+                step={1}
+                value={this.state.gamesInRound}
+              />
+              <input
+                type="text"
+                value={this.state.gamesInRound}
+                id="gir-settings-text"
+                className="settings-text-input"
+                onChange={this.handleText}
+              />
+            </div>
+          </div>
         </div>
         <input
           type="submit"
@@ -146,6 +168,10 @@ class Settings extends Component {
     this.setState({ gameCompleteTime: e });
   }
 
+  handleGamesInRoundSlider(e) {
+    this.setState({ gamesInRound: e });
+  }
+
   handleText(e) {
     this.validateInput(e.target.value);
     if (e.target === document.activeElement) {
@@ -169,7 +195,8 @@ class Settings extends Component {
     const settings = {
       drawTime: this.state.drawTime,
       countdownTime: this.state.countdownTime,
-      gameCompleteTime: this.state.gameCompleteTime
+      gameCompleteTime: this.state.gameCompleteTime,
+      roundCount: this.state.gamesInRound
     };
     this.state.socket.roomSettingsChange(settings);
     this.setState({ isShown: !this.state.isShown });

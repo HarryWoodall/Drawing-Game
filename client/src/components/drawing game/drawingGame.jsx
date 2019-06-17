@@ -18,13 +18,23 @@ class DrawingGame extends Component {
     );
 
     this.state.socket.gameCompletion(() => {
+      console.log("GAME_COMPLETE");
+      console.log(
+        "Round count: ",
+        this.state.round,
+        "Max Round",
+        this.props.maxRound
+      );
       setTimeout(() => {
-        console.log("game complete timeout complete");
-        if (this.state.round !== this.props.maxRound) {
+        if (this.state.round < this.props.maxRound - 1) {
           this.props.onGameCompletion();
+          console.log("Game being reset");
+
           this.props.clientData.reset();
           this.setState({ phase: "DRAWING", round: this.state.round + 1 });
         } else {
+          console.log("Match over");
+
           this.setState({ round: 0 }, () => {
             this.props.onGameCompletion();
             this.props.clientData.reset();

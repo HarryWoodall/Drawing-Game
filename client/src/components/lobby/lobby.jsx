@@ -24,11 +24,13 @@ class Lobby extends Component {
   render() {
     return (
       <div>
-        <Settings
-          settingsData={this.props.settingsData}
-          socket={this.props.socket}
-          location="Lobby"
-        />
+        {this.props.clientData.userName === this.props.roomData.roomLeader ? (
+          <Settings
+            settingsData={this.props.settingsData}
+            socket={this.props.socket}
+            location="Lobby"
+          />
+        ) : null}
         <div id="lobby-wrapper">
           <div id="lobby-header">
             <h1 id="lobby-room-name">{this.props.roomData.roomName}</h1>

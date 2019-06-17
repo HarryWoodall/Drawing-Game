@@ -3,28 +3,9 @@ import ResultText from "./result text/resultText";
 import PeerReview from "../peer review/peerReview";
 
 class OutputResult extends Component {
-  constructor(props) {
-    super(props);
-    this._isMounted = false;
-    this.state = {
-      isGameComplete: false
-    };
-
-    this.props.socket.on("GAME_COMPLETE", () => {
-      if (this._isMounted) {
-        this.setState({ isGameComplete: true });
-      }
-    });
-  }
-
-  componentDidMount() {
-    this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
   render() {
+    console.log("Output result being rendered");
+
     return (
       <React.Fragment>
         <ResultText
