@@ -68,8 +68,23 @@ class Game extends Component {
     }
   }
 
-  handleScoreUpdate() {
-    this.props.socket.emit("UPDATE_SCORE", this.props.clientData.score);
+  handleScoreUpdate(isClient) {
+    const data = {
+      score: this.props.clientData.score,
+      currentGame: this.state.roundCount
+    };
+
+    if (isClient) {
+      data.isWeighted = true;
+      const date = new Date();
+      data.name = this.props.clientData.userName;
+      data.timeStamp = date.getTime();
+    } else {
+      data.isWeighted = false;
+    }
+
+    console.log(this.props.clientData.scoreWeightData);
+    this.props.socket.emit("UPDATE_SCORE", data);
   }
 }
 

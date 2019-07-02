@@ -1,10 +1,10 @@
 class SettingsData {
   constructor() {
     this.roomSettings = {
-      drawTime: 5,
-      countdownTime: 3,
-      gameCompleteTime: 5,
-      roundCount: 3
+      drawTime: 0.5,
+      countdownTime: 0.5,
+      gameCompleteTime: 0.5,
+      roundCount: 2
     };
   }
 }

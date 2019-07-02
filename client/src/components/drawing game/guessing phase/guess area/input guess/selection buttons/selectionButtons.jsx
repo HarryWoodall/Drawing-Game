@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import posed from "react-pose";
 import "./selectionButtons.css";
 
 class SelectionButtons extends Component {
@@ -6,7 +7,8 @@ class SelectionButtons extends Component {
     super(props);
     this.state = {
       options: ["option 1", "option 2", "option 3"],
-      answer: this.props.clientData.peerDrawing.suggestion
+      answer: this.props.clientData.peerDrawing.suggestion,
+      isVisible: true
     };
 
     fetch("/api/drawing/categories/random/2")
@@ -17,7 +19,10 @@ class SelectionButtons extends Component {
 
     this.shuffleValues = this.shuffleValues.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.animationSetup = this.animationSetup.bind(this);
+    this.animTest = this.animTest.bind(this);
   }
+
   render() {
     return (
       <div className="selection-buttons">
@@ -41,6 +46,7 @@ class SelectionButtons extends Component {
             onClick={this.handleSubmit}
           />
         </div>
+        {this.animTest()}
       </div>
     );
   }

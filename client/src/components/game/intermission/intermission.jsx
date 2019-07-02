@@ -15,10 +15,13 @@ class Intermission extends Component {
       hasRecievedScoreData: false
     };
 
-    this.state.socket.requestRoomLeaderboard();
+    if (this.props.roomData.roomLeader === this.props.clientData.userName) {
+      this.state.socket.requestRoomLeaderboard();
+    }
+
     this.state.socket.roomLeaderboard(data => {
       console.log(data);
-      this.props.roomData.scoreData = data;
+      this.props.roomData.scoreData = data.leaderboardData;
 
       this.setState({ hasRecievedScoreData: true });
     });

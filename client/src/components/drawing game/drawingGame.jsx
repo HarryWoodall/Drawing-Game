@@ -37,7 +37,7 @@ class DrawingGame extends Component {
 
           this.setState({ round: 0 }, () => {
             this.props.onGameCompletion();
-            this.props.clientData.reset();
+            this.props.clientData.roundReset();
           });
         }
       }, this.props.settingsData.roomSettings.gameCompleteTime * 1000);

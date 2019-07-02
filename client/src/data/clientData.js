@@ -2,31 +2,13 @@ class ClientData {
   constructor(userName) {
     this.userName = userName;
     this.score = 0;
+    this.scoreWeightData = [];
     this.lastSuggestion = null;
     this.suggestion = null;
     this.selfDrawing = null;
     this.peerDrawing = null;
     this.guess = null;
   }
-
-  // sendData(isNewRoom, roomName) {
-  //   fetch("/", {
-  //     headers: {
-  //       "content-type": "application/json; charset=UTF-8"
-  //     },
-  //     body: JSON.stringify({
-  //       newRoom: isNewRoom,
-  //       roomName: roomName,
-  //       userName: this.userName
-  //     }),
-  //     method: "POST"
-  //   }).then(response => {
-  //     console.log(response);
-  //     response.json().then(data => {
-  //       console.log(data);
-  //     });
-  //   });
-  // }
 
   getSuggestion() {
     return fetch("/api/drawing/categories/random/1")
@@ -46,6 +28,11 @@ class ClientData {
     this.selfDrawing = null;
     this.peerDrawing = null;
     this.guess = null;
+  }
+
+  roundReset() {
+    this.reset();
+    this.scoreWeightData = [];
   }
 }
 

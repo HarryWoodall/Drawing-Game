@@ -4,6 +4,8 @@ module.exports = class Sockets {
     this.leader = null;
     this.users = [];
     this.expectedMembers = 0;
+    this.scoreWeights = [];
+    this.noOfRounds = 2; // Sync with SettingsData.js on client
   }
 
   addUser(user) {

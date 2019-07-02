@@ -10,5 +10,6 @@ module.exports = class User {
     this.givenFeedback = false;
     this.isReady = false;
     this.score = 0;
+    this.weightedScoreData = [];
   }
 };

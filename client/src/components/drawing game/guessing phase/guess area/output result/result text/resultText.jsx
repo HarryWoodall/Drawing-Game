@@ -10,7 +10,7 @@ class ResultText extends Component {
 
     if (this.isCorrect) {
       this.props.clientData.score++;
-      this.props.onScoreUpdate();
+      this.props.onScoreUpdate(true);
     }
   }
 

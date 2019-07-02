@@ -1,8 +1,10 @@
 const socketIO = require("socket.io");
+const BonusPointTally = require("./bonusPointTally");
 
 let userList;
 let roomList;
 let io;
+let extraPoints = null;
 
 module.exports = class Sockets {
   constructor(server, sess, rooms, users) {
@@ -22,7 +24,6 @@ module.exports = class Sockets {
 
     io.on("connection", socket => {
       let userId = socket.request.session.id;
-      // console.log(socket);
 
       if (!userList.checkUserExists(userId)) {
         console.log("no user found, dissconnecting");
@@ -38,7 +39,6 @@ module.exports = class Sockets {
         );
 
         io.to(roomName).emit("ROOM_UPDATE", {
-          // user: userList.getUser(userId).name
           users: roomList.getRoom(roomName).getUserNames(),
           leader: roomList.getRoom(roomName).getLeader()
         });
@@ -115,18 +115,48 @@ module.exports = class Sockets {
         });
 
         socket.on("UPDATE_SCORE", data => {
-          userList.getUser(userId).score = data;
+          if (extraPoints === null) {
+            extraPoints = new BonusPointTally(
+              roomList.getRoom(roomName).noOfRounds
+            );
+          }
+          const user = userList.getUser(userId);
+          user.score = data.score;
+
+          if (data.isWeighted) {
+            console.log("Weighted Data", data);
+            let bonusPointData = {
+              name: data.name,
+              timeStamp: data.timeStamp
+            };
+            extraPoints.addData(data.currentGame, bonusPointData);
+            if (data.currentGame === 0) {
+              user.weightedScore = [];
+            }
+            const weightData = {
+              currentGame: data.currentGame,
+              timeStamp: data.timeStamp
+            };
+            user.weightedScoreData.push(weightData);
+          }
         });
 
         socket.on("GET_ROOM_LEADERBOARD", () => {
-          let roomLeaderboardData = [];
+          let bonusPointData = extraPoints.calculateExtraPoints();
+          let roomLeaderboardData = {
+            leaderboardData: [],
+            bonusPointData: bonusPointData
+          };
+
           for (let user of roomList.getRoom(roomName).users) {
             let data = {
               name: user.name,
               score: user.score
             };
-            roomLeaderboardData.push(data);
+            roomLeaderboardData.leaderboardData.push(data);
           }
+          extraPoints = null;
+
           io.in(roomName).emit("ROOM_LEADERBOARD", roomLeaderboardData);
         });
 
@@ -145,6 +175,7 @@ module.exports = class Sockets {
         });
 
         socket.on("ROOM_SETTINGS_UPDATE", settings => {
+          roomList.getRoom(roomName).noOfRounds = settings.roundCount;
           io.in(roomName).emit("ROOM_SETTINGS_UPDATE", settings);
         });
       }
@@ -225,9 +256,6 @@ module.exports = class Sockets {
     function selectIndex(max) {
       return Math.floor(Math.random() * max);
     }
-
-    //debug
-    //console.table(users);
   }
 
   //debug
