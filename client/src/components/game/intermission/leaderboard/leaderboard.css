@@ -23,7 +23,7 @@
   display: inline-block;
 }
 
-#intermission-leaderboard .intermission-constant {
+.intermission-constant {
   margin: 10px;
   font-weight: 100;
   color: white;
@@ -43,6 +43,7 @@
   position: relative;
   width: 100%;
   height: 100%;
+  font-size: 200%;
   grid-column: 3;
   justify-self: start;
   align-self: center;
@@ -81,7 +82,7 @@ li.pos-3 .intermission-constant {
     grid-template-columns: 60% 25% 15%;
   }
 
-  #intermission-leaderboard .intermission-constant {
+  .intermission-constant {
     font-size: 150%;
   }
 
@@ -94,6 +95,6 @@ li.pos-3 .intermission-constant {
   }
 
   .leaderboard-bonus {
-    font-size: 150%;
+    font-size: 200%;
   }
 }
