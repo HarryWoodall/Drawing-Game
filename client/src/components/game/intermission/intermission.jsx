@@ -21,7 +21,7 @@ class Intermission extends Component {
 
     this.state.socket.roomLeaderboard(data => {
       console.log(data);
-      this.props.roomData.scoreData = data.leaderboardData;
+      this.props.roomData.scoreData = data;
 
       this.setState({ hasRecievedScoreData: true });
     });
@@ -43,6 +43,7 @@ class Intermission extends Component {
           <LeaderBoard
             roomData={this.props.roomData}
             clientData={this.props.clientData}
+            onScoreUpdate={this.props.onScoreUpdate}
           />
         ) : null}
         <ReadyButton

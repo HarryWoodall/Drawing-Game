@@ -122,9 +122,9 @@ module.exports = class Sockets {
           }
           const user = userList.getUser(userId);
           user.score = data.score;
+          console.log("User score: ", user.score);
 
           if (data.isWeighted) {
-            console.log("Weighted Data", data);
             let bonusPointData = {
               name: data.name,
               timeStamp: data.timeStamp

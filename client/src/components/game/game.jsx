@@ -29,6 +29,7 @@ class Game extends Component {
           roomData={this.props.roomData}
           clientData={this.props.clientData}
           settingsData={this.props.settingsData}
+          onScoreUpdate={this.handleScoreUpdate}
         />
       );
     } else {

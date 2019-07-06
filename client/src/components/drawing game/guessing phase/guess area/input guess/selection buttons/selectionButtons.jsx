@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import posed from "react-pose";
+import { Spring } from "react-spring/renderprops";
 import "./selectionButtons.css";
 
 class SelectionButtons extends Component {
@@ -19,34 +19,46 @@ class SelectionButtons extends Component {
 
     this.shuffleValues = this.shuffleValues.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.animationSetup = this.animationSetup.bind(this);
-    this.animTest = this.animTest.bind(this);
   }
 
   render() {
     return (
       <div className="selection-buttons">
         <div className="selection-container">
-          <input
-            type="submit"
-            value={this.state.options[0]}
-            className="button selection-button"
-            onClick={this.handleSubmit}
-          />
-          <input
-            type="submit"
-            value={this.state.options[1]}
-            className="button selection-button"
-            onClick={this.handleSubmit}
-          />
-          <input
-            type="submit"
-            value={this.state.options[2]}
-            className="button selection-button"
-            onClick={this.handleSubmit}
-          />
+          <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+            {props => (
+              <input
+                type="submit"
+                value={this.state.options[0]}
+                className="button selection-button"
+                style={props}
+                onClick={this.handleSubmit}
+              />
+            )}
+          </Spring>
+          <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+            {props => (
+              <input
+                type="submit"
+                value={this.state.options[1]}
+                className="button selection-button"
+                style={props}
+                onClick={this.handleSubmit}
+              />
+            )}
+          </Spring>
+          <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+            {props => (
+              <input
+                type="submit"
+                value={this.state.options[2]}
+                className="button selection-button"
+                style={props}
+                onClick={this.handleSubmit}
+              />
+            )}
+          </Spring>
         </div>
-        {this.animTest()}
       </div>
     );
   }

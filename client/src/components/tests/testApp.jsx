@@ -45,15 +45,18 @@ class testApp extends Component {
     this.clientData = new ClientData("Frank");
     this.clientData.peerDrawing = { suggestion: "flowers", owner: "Polly" };
     this.peerResult = { answer: "Grape", guess: "Pinapple", owner: "Polly" };
-    this.roomData.scoreData = [
-      { name: "Billy", score: 3 },
-      { name: "Frank", score: 4 },
-      { name: "DingleFinger", score: 6 },
-      { name: "Beth", score: 700 },
-      { name: "Kathy", score: 4 },
-      { name: "James", score: 5 },
-      { name: "Ben", score: 3 }
-    ];
+    this.roomData.scoreData = {
+      leaderboardData: [
+        { name: "Billy", score: 3 },
+        { name: "Frank", score: 4 },
+        { name: "DingleFinger", score: 6 },
+        { name: "Beth", score: 700 },
+        { name: "Kathy", score: 4 },
+        { name: "James", score: 5 },
+        { name: "Ben", score: 3 }
+      ],
+      bonusPointData: ["Kathy", "Kathy", "Frank", "Beth", "Ben", "Beth"]
+    };
     this.settingsData = new SettingsData();
   }
 
@@ -143,7 +146,15 @@ class testApp extends Component {
     } else if (this.props.testSet === "INTERMISSION") {
       switch (this.props.testName) {
         case "LEADERBOARD":
-          return <Leaderboard roomData={this.roomData} />;
+          return (
+            <Leaderboard
+              roomData={this.roomData}
+              clientData={this.clientData}
+              onScoreUpdate={() => {
+                console.log("Score Updated");
+              }}
+            />
+          );
         case "INTERMISSION":
           return (
             <Intermission roomData={this.roomData} socket={this.props.socket} />

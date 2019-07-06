@@ -3,7 +3,7 @@ class RoomData {
     this.roomName = roomName;
     this.roomLeader = roomLeader;
     this.roomUsers = roomUsers || [];
-    this.scoreData = [];
+    this.scoreData = {};
     this.roomSettings = {
       drawTime: 4,
       countdownTime: 3,
