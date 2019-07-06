@@ -16,6 +16,9 @@ class Leaderboard extends Component {
 
     this.sortList = this.sortList.bind(this);
     this.updateScore = this.updateScore.bind(this);
+    this.getFontSize = this.getFontSize.bind(this);
+
+    console.log(window.innerWidth);
   }
 
   componentDidMount() {
@@ -56,8 +59,8 @@ class Leaderboard extends Component {
             <Transition
               items={this.bonusPointCount(item.name)}
               config={{ duration: 200 }}
-              from={{ opacity: 0, fontSize: "500%" }}
-              enter={{ opacity: 1, fontSize: "200%" }}
+              from={{ opacity: 0, fontSize: this.getFontSize("FROM") }}
+              enter={{ opacity: 1, fontSize: this.getFontSize("ENTER") }}
               leave={{ duration: 0, opacity: 0 }}
             >
               {item => props => (
@@ -102,6 +105,22 @@ class Leaderboard extends Component {
       }
     }
     return count;
+  }
+
+  getFontSize(phase) {
+    if (phase === "FROM") {
+      if (window.innerWidth < 600) {
+        return "200%";
+      } else {
+        return "500%";
+      }
+    } else {
+      if (window.innerWidth < 600) {
+        return "75%";
+      } else {
+        return "200%";
+      }
+    }
   }
 
   updateScore(name) {

@@ -76,15 +76,24 @@ li.pos-3 .intermission-constant {
 }
 
 @media (max-width: 600px) {
-  #intermission-leaderboard h2 {
+  #intermission-leaderboard li {
+    display: grid;
+    grid-template-columns: 60% 25% 15%;
+  }
+
+  #intermission-leaderboard .intermission-constant {
     font-size: 150%;
   }
 
-  #intermission-leaderboard li.pos-1 h2 {
+  li.pos-1 .intermission-constant {
     font-size: 250%;
   }
 
-  #intermission-leaderboard li.pos-2 h2 {
+  li.pos-2 .intermission-constant {
     font-size: 200%;
+  }
+
+  .leaderboard-bonus {
+    font-size: 150%;
   }
 }
