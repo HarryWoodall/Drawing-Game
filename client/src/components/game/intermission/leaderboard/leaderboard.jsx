@@ -109,17 +109,25 @@ class Leaderboard extends Component {
 
   getFontSize(phase) {
     if (phase === "FROM") {
-      if (window.innerWidth < 600) {
-        return "200%";
-      } else {
-        return "500%";
+      if (window.innerWidth < 400) {
+        return "175%";
       }
+
+      if (window.innerWidth < 700) {
+        return "200%";
+      }
+
+      return "500%";
     } else {
-      if (window.innerWidth < 600) {
-        return "75%";
-      } else {
-        return "200%";
+      if (window.innerWidth < 400) {
+        return "50%";
       }
+
+      if (window.innerWidth < 700) {
+        return "75%";
+      }
+
+      return "200%";
     }
   }
 

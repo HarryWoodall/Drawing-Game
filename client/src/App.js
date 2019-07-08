@@ -46,14 +46,14 @@ class App extends Component {
   }
 
   render() {
-    return <div className="App">{this.setLocation()}</div>;
-    // return (
-    //   <Tests
-    //     socket={this.props.socket}
-    //     testSet="INTERMISSION"
-    //     testName="LEADERBOARD"
-    //   />
-    // );
+    // return <div className="App">{this.setLocation()}</div>;
+    return (
+      <Tests
+        socket={this.props.socket}
+        testSet="INTERMISSION"
+        testName="LEADERBOARD"
+      />
+    );
   }
 
   setLocation() {

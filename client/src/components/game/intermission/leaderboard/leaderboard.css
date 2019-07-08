@@ -37,6 +37,7 @@
 
 .leaderboard-score {
   grid-column: 2;
+  justify-self: end;
 }
 
 .leaderboard-bonus {
@@ -76,10 +77,14 @@ li.pos-3 .intermission-constant {
   text-shadow: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+  #intermission-leaderboard {
+    width: 90%;
+  }
+
   #intermission-leaderboard li {
     display: grid;
-    grid-template-columns: 60% 25% 15%;
+    grid-template-columns: 55% 30% 15%;
   }
 
   .intermission-constant {
@@ -96,5 +101,23 @@ li.pos-3 .intermission-constant {
 
   .leaderboard-bonus {
     font-size: 200%;
+  }
+}
+
+@media (max-width: 400px) {
+  .intermission-constant {
+    font-size: 150%;
+  }
+
+  li.pos-1 .intermission-constant {
+    font-size: 175%;
+  }
+
+  li.pos-2 .intermission-constant {
+    font-size: 165%;
+  }
+
+  .leaderboard-bonus {
+    font-size: 175%;
   }
 }
