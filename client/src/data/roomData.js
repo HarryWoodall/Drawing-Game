@@ -4,6 +4,7 @@ class RoomData {
     this.roomLeader = roomLeader;
     this.roomUsers = roomUsers || [];
     this.scoreData = {};
+    this.roundCount = 0;
     this.roomSettings = {
       drawTime: 4,
       countdownTime: 3,

@@ -153,11 +153,18 @@ class testApp extends Component {
               onScoreUpdate={() => {
                 console.log("Score Updated");
               }}
+              onBonusComplete={() => console.log("Bonus Complete")}
             />
           );
         case "INTERMISSION":
           return (
-            <Intermission roomData={this.roomData} socket={this.props.socket} />
+            <Intermission
+              roomData={this.roomData}
+              socket={this.props.socket}
+              clientData={this.clientData}
+              settingsData={this.settingsData}
+              onScoreUpdate={() => console.log("Score Updated")}
+            />
           );
         default:
           return <h1>Invalid Test</h1>;

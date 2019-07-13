@@ -141,20 +141,59 @@ module.exports = class Sockets {
           }
         });
 
-        socket.on("GET_ROOM_LEADERBOARD", () => {
-          let bonusPointData = extraPoints.calculateExtraPoints();
-          let roomLeaderboardData = {
-            leaderboardData: [],
-            bonusPointData: bonusPointData
-          };
+        socket.on("READY_FOR_DEBUFFS", roundCount => {
+          console.log("Round count", roundCount);
+          const leaderboard = roomList.getRoom(roomName).getLeaderboardData();
 
-          for (let user of roomList.getRoom(roomName).users) {
-            let data = {
-              name: user.name,
-              score: user.score
-            };
-            roomLeaderboardData.leaderboardData.push(data);
+          if (roundCount !== null) {
+            // Change to for loop
+            roomList.getRoom(roomName).debuffSelectors = [
+              leaderboard[leaderboard.length - 1].name
+            ]; // Type Array
+            console.log("Leaderboard", leaderboard);
+
+            io.in(roomName).emit("DEBUFF_SELECTION_ACTIVE", [
+              leaderboard[leaderboard.length - 1].name
+            ]);
           }
+        });
+
+        socket.on("SELECT_USER_FOR_DEBUFF", userName => {
+          const user = userList.getUser(userId);
+          const room = roomList.getRoom(roomName);
+
+          console.log("Recieved " + user.name + "'s selection");
+          console.log(room.debuffSelectors);
+
+          room.usersChosenForDebuff.push(userName);
+          user.selectedUserForDebuff = true;
+
+          if (room.hasSelectedUsersForDebuff()) {
+            console.log(room.usersChosenForDebuff);
+
+            io.in(roomName).emit("APPLY_DEBUFF", room.usersChosenForDebuff);
+          }
+        });
+
+        socket.on("GET_ROOM_LEADERBOARD", () => {
+          let bonusPointData;
+          let roomLeaderboardData;
+          if (extraPoints) {
+            bonusPointData = extraPoints.calculateExtraPoints();
+            roomLeaderboardData = {
+              leaderboardData: [],
+              bonusPointData: bonusPointData
+            };
+          } else {
+            roomLeaderboardData = {
+              leaderboardData: []
+            };
+          }
+
+          roomLeaderboardData.leaderboardData = roomList
+            .getRoom(roomName)
+            .getLeaderboardData();
+
           extraPoints = null;
 
           io.in(roomName).emit("ROOM_LEADERBOARD", roomLeaderboardData);
@@ -175,7 +214,7 @@ module.exports = class Sockets {
         });
 
         socket.on("ROOM_SETTINGS_UPDATE", settings => {
-          roomList.getRoom(roomName).noOfRounds = settings.roundCount;
+          roomList.getRoom(roomName).noOfRounds = settings.gamesInRound;
           io.in(roomName).emit("ROOM_SETTINGS_UPDATE", settings);
         });
       }

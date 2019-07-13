@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Transition } from "react-spring/renderprops";
 import "./leaderboard.css";
+import Socket from "../../../../sockets/socket";
 
 class Leaderboard extends Component {
   constructor(props) {
@@ -11,43 +12,77 @@ class Leaderboard extends Component {
     this.sortedList = this.sortList();
 
     this.state = {
+      socket: new Socket(this.props.socket),
+      selectAvailable: false,
       bonusesAdded: []
     };
 
-    this.sortList = this.sortList.bind(this);
-    this.updateScore = this.updateScore.bind(this);
-    this.getFontSize = this.getFontSize.bind(this);
+    if (this.props.roomData.scoreData.bonusPointData) {
+      for (let name of this.props.roomData.scoreData.bonusPointData) {
+        this.updateServerScore(name);
+      }
+    }
 
-    console.log(window.innerWidth);
+    if (
+      this.props.settingsData.roomSettings.debuffsActive &&
+      this.props.clientData.userName === this.props.roomData.roomLeader
+    ) {
+      console.log("Emmiting ready for debuffs");
+      this.state.socket.readyForDebuffs(this.props.roomData.roundCount);
+    }
+
+    this.bonusTimer = null;
+    this.nextBonusDelay = 750;
+
+    this.sortList = this.sortList.bind(this);
+    this.updateUIScore = this.updateUIScore.bind(this);
+    this.updateServerScore = this.updateServerScore.bind(this);
+    this.getFontSize = this.getFontSize.bind(this);
+    this.handleSelection = this.handleSelection.bind(this);
+    this.bonusPointCompletion = this.bonusPointCompletion.bind(this);
   }
 
   componentDidMount() {
     let currentIndex = 0;
 
-    const myInterval = setInterval(() => {
-      if (
-        currentIndex ===
-        this.props.roomData.scoreData.bonusPointData.length - 1
-      ) {
-        clearInterval(myInterval);
-      }
+    if (this.props.roomData.scoreData.bonusPointData) {
+      this.bonusTimer = setInterval(() => {
+        if (
+          currentIndex ===
+          this.props.roomData.scoreData.bonusPointData.length - 1
+        ) {
+          clearInterval(this.bonusTimer);
+          this.bonusPointCompletion();
+        }
 
-      let currentBonuses = this.state.bonusesAdded;
-      currentBonuses.push(
-        this.props.roomData.scoreData.bonusPointData[currentIndex]
-      );
-      this.updateScore(
-        this.props.roomData.scoreData.bonusPointData[currentIndex]
-      );
-      this.setState({ bonusesAdded: currentBonuses });
-      currentIndex++;
-    }, 1000);
+        let currentBonuses = this.state.bonusesAdded;
+        currentBonuses.push(
+          this.props.roomData.scoreData.bonusPointData[currentIndex]
+        );
+        this.updateUIScore(
+          this.props.roomData.scoreData.bonusPointData[currentIndex]
+        );
+        this.setState({ bonusesAdded: currentBonuses });
+        currentIndex++;
+      }, this.nextBonusDelay);
+    } else {
+      this.bonusPointCompletion();
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.bonusTimer);
   }
 
   render() {
     // Generate UI componenets
     const listItems = this.sortedList.map((item, index) => (
-      <li key={item.name} className={this.getClassName(index)}>
+      <li
+        key={item.name}
+        className={this.getClassName(index, item.name)}
+        id={item.name}
+        onClick={this.handleSelection}
+      >
         <span className="leaderboard-name">
           <h2 className="intermission-constant">{item.name}</h2>
         </span>
@@ -74,7 +109,14 @@ class Leaderboard extends Component {
       </li>
     ));
 
-    return <ul id="intermission-leaderboard">{listItems}</ul>;
+    return (
+      <ul
+        id="intermission-leaderboard"
+        style={{ top: window.innerHeight * 0.1 }}
+      >
+        {listItems}
+      </ul>
+    );
   }
 
   sortList() {
@@ -83,17 +125,31 @@ class Leaderboard extends Component {
     });
   }
 
-  getClassName(index) {
+  getClassName(index, name) {
+    let className = "";
     switch (index) {
       case 0:
-        return "pos-1";
+        className += "pos-1";
+        break;
       case 1:
-        return "pos-2";
+        className += "pos-2";
+        break;
       case 2:
-        return "pos-3";
+        className += "pos-3";
+        break;
       default:
-        return null;
+        break;
     }
+
+    if (this.state.selectAvailable && name !== this.props.clientData.userName) {
+      className += " item-selectable";
+    }
+
+    if (this.state.currentSelection === name) {
+      className += " item-selected";
+    }
+
+    return className;
   }
 
   bonusPointCount(name) {
@@ -105,6 +161,16 @@ class Leaderboard extends Component {
       }
     }
     return count;
+  }
+
+  bonusPointCompletion() {
+    setTimeout(() => {
+      if (this.props.clientData.debuffSelectionAvailable) {
+        this.setState({ selectAvailable: true });
+      }
+
+      this.props.onBonusComplete();
+    }, this.nextBonusDelay);
   }
 
   getFontSize(phase) {
@@ -127,22 +193,39 @@ class Leaderboard extends Component {
         return "75%";
       }
 
-      return "200%";
+      return "100%";
     }
   }
 
-  updateScore(name) {
+  updateUIScore(name) {
     for (let i = 0; i < this.sortedList.length; i++) {
       if (this.sortedList[i].name === name) {
         this.sortedList[i].score++;
-
-        if (this.props.clientData.userName === name) {
-          this.props.clientData.score++;
-          this.props.onScoreUpdate(false);
-        }
       }
     }
     this.sortedList = this.sortList();
+  }
+
+  updateServerScore(name) {
+    if (this.props.clientData.userName === name) {
+      this.props.clientData.score++;
+      this.props.onScoreUpdate(false);
+    }
+  }
+
+  handleSelection(e) {
+    this.props.onDebuffSelection(e.currentTarget.id);
+    if (
+      this.state.selectAvailable &&
+      e.currentTarget.id !== this.props.clientData.userName
+    ) {
+      console.log("Selected!", e.currentTarget.id);
+      if (this.state.currentSelection === e.currentTarget.id) {
+        this.setState({ currentSelection: null });
+      } else {
+        this.setState({ currentSelection: e.currentTarget.id });
+      }
+    }
   }
 }
 

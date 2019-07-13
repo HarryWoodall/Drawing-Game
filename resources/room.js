@@ -5,7 +5,9 @@ module.exports = class Sockets {
     this.users = [];
     this.expectedMembers = 0;
     this.scoreWeights = [];
-    this.noOfRounds = 2; // Sync with SettingsData.js on client
+    this.noOfRounds = 1; // Sync with SettingsData.js on client
+    this.debuffSelectors = [];
+    this.usersChosenForDebuff = [];
   }
 
   addUser(user) {
@@ -105,6 +107,21 @@ module.exports = class Sockets {
     }
   }
 
+  getLeaderboardData() {
+    let leaderboard = [];
+    for (let user of this.users) {
+      const data = {
+        name: user.name,
+        score: user.score
+      };
+      leaderboard.push(data);
+    }
+
+    return leaderboard.sort((a, b) => {
+      return a.score < b.score;
+    });
+  }
+
   hasGivenFeedback() {
     for (let user of this.users) {
       if (!user.givenFeedback) {
@@ -116,6 +133,25 @@ module.exports = class Sockets {
       user.givenFeedback = false;
       user.myDrawing = null;
     }
+    return true;
+  }
+
+  hasSelectedUsersForDebuff() {
+    for (let user of this.debuffSelectors) {
+      if (user == null) {
+        continue;
+      }
+      if (this.getUserByName(user).SelectedUserForDebuff) {
+        return false;
+      }
+    }
+
+    for (let user of this.users) {
+      user.SelectedUserForDebuff = false;
+    }
+
+    this.debuffSelectors = [];
+
     return true;
   }
 

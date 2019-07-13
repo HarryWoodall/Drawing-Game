@@ -2,3 +2,34 @@
   height: 100vh;
   background-color: #dd490f;
 }
+
+.intermission-header {
+  position: absolute;
+  width: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  margin: 0;
+  color: white;
+}
+
+.intermission-debuff-hint {
+  position: absolute;
+  color: white;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin: 0px;
+  width: 80%;
+  font-size: 120%;
+  text-align: center;
+  animation: hintAnim 0.5s alternate infinite;
+}
+
+@keyframes hintAnim {
+  to {
+    color: rgba(255, 255, 255, 1);
+  }
+  from {
+    color: rgba(255, 255, 255, 0.2);
+  }
+}

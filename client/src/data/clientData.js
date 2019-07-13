@@ -8,6 +8,8 @@ class ClientData {
     this.selfDrawing = null;
     this.peerDrawing = null;
     this.guess = null;
+    this.debuffSelectionAvailable = false;
+    this.currentMods = [];
   }
 
   getSuggestion() {
@@ -33,6 +35,8 @@ class ClientData {
   roundReset() {
     this.reset();
     this.scoreWeightData = [];
+    this.debuffSelectionAvailable = false;
+    this.currentMods = []; // Possible Error
   }
 }
 

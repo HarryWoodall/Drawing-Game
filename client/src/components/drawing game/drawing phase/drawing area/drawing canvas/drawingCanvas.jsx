@@ -19,6 +19,7 @@ class DrawingCanvas extends Component {
           sketch={Canvas}
           isComplete={this.props.isComplete}
           getDrawing={this.handleDrawingEnd}
+          mods={this.props.clientData.currentMods}
         />
       </div>
     );

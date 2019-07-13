@@ -11,7 +11,7 @@ class Game extends Component {
       socket: new Socket(this.props.socket),
       game: "DRAWING_GAME",
       roundEnd: false,
-      roundCount: 0
+      gameCount: 0
     };
 
     this.handleGameCompletion = this.handleGameCompletion.bind(this);
@@ -43,7 +43,7 @@ class Game extends Component {
               settingsData={this.props.settingsData}
               onGameCompletion={this.handleGameCompletion}
               onScoreUpdate={this.handleScoreUpdate}
-              maxRound={this.props.settingsData.roomSettings.roundCount}
+              maxRound={this.props.settingsData.roomSettings.gamesInRound}
             />
           );
           break;
@@ -60,19 +60,20 @@ class Game extends Component {
 
   handleGameCompletion() {
     if (
-      this.state.roundCount >=
-      this.props.settingsData.roomSettings.roundCount - 1
+      this.state.gameCount >=
+      this.props.settingsData.roomSettings.gamesInRound - 1
     ) {
-      this.setState({ roundEnd: true, roundCount: 0 });
+      this.props.roomData.roundCount++;
+      this.setState({ roundEnd: true, gameCount: 0 }); // ROUND OVER#
     } else {
-      this.setState({ roundCount: this.state.roundCount + 1 });
+      this.setState({ gameCount: this.state.gameCount + 1 });
     }
   }
 
-  handleScoreUpdate(isClient) {
+  handleScoreUpdate(isClient, bonusAmmount) {
     const data = {
       score: this.props.clientData.score,
-      currentGame: this.state.roundCount
+      currentGame: this.state.gameCount
     };
 
     if (isClient) {

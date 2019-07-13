@@ -12,7 +12,10 @@ class Intermission extends Component {
     this.state = {
       socket: new Socket(this.props.socket),
       isReady: false,
-      hasRecievedScoreData: false
+      hasRecievedScoreData: false, //CHANGE THIS BACK TO FALSE FOR PROD
+      bonusComplete: false,
+      debuffSelectionAvailable: false,
+      currentSelection: null
     };
 
     if (this.props.roomData.roomLeader === this.props.clientData.userName) {
@@ -26,7 +29,18 @@ class Intermission extends Component {
       this.setState({ hasRecievedScoreData: true });
     });
 
+    this.state.socket.debuffSelectionActive(data => {
+      console.log("Debuff data", data);
+      for (let name of data) {
+        if (this.props.clientData.userName === name) {
+          this.props.clientData.debuffSelectionAvailable = true;
+        }
+      }
+    });
+
     this.handleReadyToggle = this.handleReadyToggle.bind(this);
+    this.handleBonusCompletion = this.handleBonusCompletion.bind(this);
+    this.handleDebuffSelection = this.handleDebuffSelection.bind(this);
   }
 
   render() {
@@ -39,17 +53,39 @@ class Intermission extends Component {
             location="Intermission"
           />
         ) : null}
+        <h1
+          className="intermission-header"
+          style={{ top: window.innerHeight * 0.075 }}
+        >
+          Round Complete
+        </h1>
         {this.state.hasRecievedScoreData ? (
           <LeaderBoard
+            socket={this.props.socket}
             roomData={this.props.roomData}
             clientData={this.props.clientData}
+            settingsData={this.props.settingsData}
             onScoreUpdate={this.props.onScoreUpdate}
+            onBonusComplete={this.handleBonusCompletion}
+            debuffSelectionAvailable={this.debuffSelectionAvailable}
+            onDebuffSelection={this.handleDebuffSelection}
           />
         ) : null}
-        <ReadyButton
-          onReady={this.handleReadyToggle}
-          socket={this.props.socket}
-        />
+        {this.state.bonusComplete &&
+        this.props.clientData.debuffSelectionAvailable ? (
+          <h2
+            className="intermission-debuff-hint"
+            style={{ top: window.innerHeight * 0.7 }}
+          >
+            Please select a player to debuff
+          </h2>
+        ) : null}
+        {this.state.bonusComplete ? (
+          <ReadyButton
+            onReady={this.handleReadyToggle}
+            socket={this.props.socket}
+          />
+        ) : null}
         {this.state.isReady ? (
           <Overlay socket={this.props.socket} roomData={this.props.roomData} />
         ) : null}
@@ -58,12 +94,35 @@ class Intermission extends Component {
   }
 
   componentWillUnmount() {
+    if (this.props.clientData.debuffSelectionAvailable) {
+      console.log("Current Selection", this.state.currentSelection);
+
+      this.state.socket.selectUserForDebuff(this.state.currentSelection);
+    }
+
     this.setState({ hasRecievedScoreData: false });
+  }
+
+  handleBonusCompletion() {
+    this.setState({ bonusComplete: true });
+  }
+
+  handleDebuffSelection(name) {
+    if (
+      this.props.clientData.debuffSelectionAvailable &&
+      name !== this.props.clientData.userName
+    ) {
+      console.log("Selected!", name);
+      if (this.state.currentSelection === name) {
+        this.setState({ currentSelection: null });
+      } else {
+        this.setState({ currentSelection: name });
+      }
+    }
   }
 
   handleReadyToggle(isReady) {
     console.log("is Ready", isReady);
-
     this.setState({ isReady: isReady });
   }
 }

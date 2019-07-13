@@ -1,25 +1,35 @@
+import InvisibleInk from "./mods/invisibleInk";
+import Mirror from "./mods/mirror";
+import Offset from "./mods/offset";
+
 export default function sketch(sketch) {
-  let x;
-  let y;
+  let x = window.innerWidth * 0.8;
+  let y = window.innerHeight * 0.7;
   let isDrawing = false;
   let isEnabled = true;
   let previousX = -1;
   let previousY = -1;
   let handleDrawingEnd;
+  let strokeColor = 0;
+  let backgroundColor = 255;
+
+  let currentMods = [];
+  let invisibleInk = new InvisibleInk(sketch, strokeColor, backgroundColor);
+  let mirror = new Mirror(sketch, x, y);
+  let offSet = new Offset(sketch);
 
   let line = [];
   let drawing = [];
 
   sketch.setup = function() {
-    x = window.innerWidth * 0.8;
-    y = window.innerHeight * 0.7;
-    sketch.background(255);
+    sketch.background(backgroundColor);
     sketch.createCanvas(x, y);
     sketch.strokeWeight(4);
   };
 
   sketch.myCustomRedrawAccordingToNewPropsHandler = function(props) {
     handleDrawingEnd = props.getDrawing;
+    currentMods = props.mods;
     if (props.isComplete) {
       getDrawing(props.suggestion);
     }
@@ -53,18 +63,22 @@ export default function sketch(sketch) {
 
   function draw() {
     if (isDrawing && isEnabled) {
-      addPoint(sketch.mouseX, sketch.mouseY);
-      sketch.line(previousX, previousY, sketch.mouseX, sketch.mouseY);
-      previousX = sketch.mouseX;
-      previousY = sketch.mouseY;
+      const ords = modOrds(sketch.mouseX, sketch.mouseY);
+
+      addPoint(ords.x, ords.y);
+      sketch.line(previousX, previousY, ords.x, ords.y);
+      previousX = ords.x;
+      previousY = ords.y;
     }
   }
 
   function setUpDraw() {
-    addPoint(sketch.mouseX, sketch.mouseY);
+    enableMods();
+    const ords = modOrds(sketch.mouseX, sketch.mouseY);
+    addPoint(ords.x, ords.y);
     isDrawing = true;
-    previousX = sketch.mouseX;
-    previousY = sketch.mouseY;
+    previousX = ords.x;
+    previousY = ords.y;
   }
 
   function addPoint(xOrd, yOrd) {
@@ -92,19 +106,53 @@ export default function sketch(sketch) {
     handleDrawingEnd(dimentions, drawing);
   }
 
-  // function drawSketch(data) {
-  //   let prevX = -1;
-  //   let prevY = -1;
-  //   for (let line of data) {
-  //     for (let point of line) {
-  //       if (prevX !== -1 && prevY !== -1) {
-  //         sketch.line(prevX, prevY, point.x, point.y);
-  //       }
-  //       prevX = point.x;
-  //       prevY = point.y;
-  //     }
-  //     prevX = -1;
-  //     prevY = -1;
-  //   }
-  // }
+  function enableMods() {
+    if (currentMods) {
+      for (let mod of currentMods) {
+        switch (mod) {
+          case "INVISIBLE_INK":
+            invisibleInk.setMod();
+            break;
+          case "OFFSET":
+            offSet.getNewOffSet();
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  function modOrds(xOrd, yOrd) {
+    let x = xOrd;
+    let y = yOrd;
+    if (currentMods.length) {
+      for (let mod of currentMods) {
+        switch (mod) {
+          case "MIRROR-H":
+            x = mirror.mod(x, y, "HORIZONTAL").x;
+            y = mirror.mod(x, y, "HORIZONTAL").y;
+            break;
+          case "MIRROR-V":
+            x = mirror.mod(x, y, "VERTICAL").x;
+            y = mirror.mod(x, y, "VERTICAL").y;
+            break;
+          case "MIRROR-B":
+            x = mirror.mod(x, y, "BOTH").x;
+            y = mirror.mod(x, y, "BOTH").y;
+            break;
+          case "OFFSET":
+            x = offSet.mod(x, y).x;
+            y = offSet.mod(x, y).y;
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    return {
+      x: x,
+      y: y
+    };
+  }
 }

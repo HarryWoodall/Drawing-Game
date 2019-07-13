@@ -11,5 +11,6 @@ module.exports = class User {
     this.isReady = false;
     this.score = 0;
     this.weightedScoreData = [];
+    this.selectedUserForDebuff = false;
   }
 };

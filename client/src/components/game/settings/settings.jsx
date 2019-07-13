@@ -14,7 +14,8 @@ class Settings extends Component {
       drawTime: props.settingsData.roomSettings.drawTime,
       countdownTime: props.settingsData.roomSettings.countdownTime,
       gameCompleteTime: props.settingsData.roomSettings.gameCompleteTime,
-      gamesInRound: props.settingsData.roomSettings.roundCount
+      gamesInRound: props.settingsData.roomSettings.gamesInRound,
+      debuffsActive: props.settingsData.roomSettings.debuffsActive
     };
 
     this.handleToggle = this.handleToggle.bind(this);
@@ -24,6 +25,7 @@ class Settings extends Component {
       this
     );
     this.handleGamesInRoundSlider = this.handleGamesInRoundSlider.bind(this);
+    this.handleDebuffsActiveToggle = this.handleDebuffsActiveToggle.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -124,6 +126,16 @@ class Settings extends Component {
               />
             </div>
           </div>
+          <div className="settings-input-container">
+            <h2>Debuffs active</h2>
+            <div className="settings-input-wrapper">
+              <input
+                onChange={this.handleDebuffsActiveToggle}
+                type="checkbox"
+                checked={this.state.debuffsActive}
+              />
+            </div>
+          </div>
         </div>
         <input
           type="submit"
@@ -172,6 +184,10 @@ class Settings extends Component {
     this.setState({ gamesInRound: e });
   }
 
+  handleDebuffsActiveToggle(e) {
+    this.setState({ debuffsActive: e.currentTarget.checked });
+  }
+
   handleText(e) {
     this.validateInput(e.target.value);
     if (e.target === document.activeElement) {
@@ -196,7 +212,8 @@ class Settings extends Component {
       drawTime: this.state.drawTime,
       countdownTime: this.state.countdownTime,
       gameCompleteTime: this.state.gameCompleteTime,
-      roundCount: this.state.gamesInRound
+      gamesInRound: this.state.gamesInRound,
+      debuffsActive: this.state.debuffsActive
     };
     this.state.socket.roomSettingsChange(settings);
     this.setState({ isShown: !this.state.isShown });

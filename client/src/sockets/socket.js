@@ -61,6 +61,18 @@ class socketAPI {
     this.socket.once("RETURN_ANSWER", onReturnAnswer);
   }
 
+  readyForDebuffs(data) {
+    this.socket.emit("READY_FOR_DEBUFFS", data);
+  }
+
+  selectUserForDebuff(user) {
+    this.socket.emit("SELECT_USER_FOR_DEBUFF", user);
+  }
+
+  debuffSelectionActive(onSelectionActive) {
+    this.socket.once("DEBUFF_SELECTION_ACTIVE", onSelectionActive);
+  }
+
   requestRoomLeaderboard() {
     this.socket.emit("GET_ROOM_LEADERBOARD");
   }
