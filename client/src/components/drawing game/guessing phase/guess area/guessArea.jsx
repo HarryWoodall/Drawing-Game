@@ -18,17 +18,9 @@ class guessArea extends Component {
   }
 
   componentWillMount() {
-    console.log("Mounting guessArea");
-
     this.setState({ socket: new Socket(this.props.socket) }, () => {
-      console.log("Setting guessArea", this.state);
-
       this.state.socket.returnAnswer(data => {
-        console.log("Returning answer");
-
         if (data.guess === data.answer) {
-          console.log("updating score");
-
           this.props.clientData.score++;
           this.props.onScoreUpdate();
         }
@@ -38,15 +30,11 @@ class guessArea extends Component {
           gotPeerReview: true
         });
       });
-      // console.log("destroying socket", this.state.socket);
-      // this.state.socket.destroySocket();
     });
   }
 
   render() {
     if (this.state.hasAnsweredQuestion) {
-      console.log("Guess area being rendered");
-
       return (
         <OutputResult
           gotPeerReview={this.state.gotPeerReview}

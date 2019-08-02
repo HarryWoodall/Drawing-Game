@@ -27,7 +27,6 @@ class Leaderboard extends Component {
       this.props.settingsData.roomSettings.debuffsActive &&
       this.props.clientData.userName === this.props.roomData.roomLeader
     ) {
-      console.log("Emmiting ready for debuffs");
       this.state.socket.readyForDebuffs(this.props.roomData.roundCount);
     }
 
@@ -49,7 +48,8 @@ class Leaderboard extends Component {
       this.bonusTimer = setInterval(() => {
         if (
           currentIndex ===
-          this.props.roomData.scoreData.bonusPointData.length - 1
+            this.props.roomData.scoreData.bonusPointData.length - 1 ||
+          this.props.roomData.scoreData.bonusPointData.length === 0
         ) {
           clearInterval(this.bonusTimer);
           this.bonusPointCompletion();
@@ -219,7 +219,6 @@ class Leaderboard extends Component {
       this.state.selectAvailable &&
       e.currentTarget.id !== this.props.clientData.userName
     ) {
-      console.log("Selected!", e.currentTarget.id);
       if (this.state.currentSelection === e.currentTarget.id) {
         this.setState({ currentSelection: null });
       } else {

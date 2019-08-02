@@ -5,7 +5,7 @@ module.exports = class Sockets {
     this.users = [];
     this.expectedMembers = 0;
     this.scoreWeights = [];
-    this.noOfRounds = 1; // Sync with SettingsData.js on client
+    this.noOfRounds = 1;
     this.debuffSelectors = [];
     this.usersChosenForDebuff = [];
   }
@@ -137,21 +137,11 @@ module.exports = class Sockets {
   }
 
   hasSelectedUsersForDebuff() {
-    for (let user of this.debuffSelectors) {
-      if (user == null) {
-        continue;
-      }
-      if (this.getUserByName(user).SelectedUserForDebuff) {
-        return false;
-      }
-    }
-
-    for (let user of this.users) {
-      user.SelectedUserForDebuff = false;
+    if (this.usersChosenForDebuff.length !== this.debuffSelectors.length) {
+      return false;
     }
 
     this.debuffSelectors = [];
-
     return true;
   }
 
@@ -180,5 +170,36 @@ module.exports = class Sockets {
       }
     }
     return users;
+  }
+
+  applyDebuff(userName, selector) {
+    const mods = [
+      "INVISIBLE_INK",
+      "OFFSET",
+      "MIRROR-H",
+      "MIRROR-V",
+      "MIRROR-B"
+    ];
+    const userForDebuff = this.getUserByName(userName);
+    const selectorUser = this.getUserByName(selector);
+
+    function addDebuff(min, max) {
+      return {
+        name: userName,
+        debuff: mods[Math.floor(Math.random() * (max + 1 - min)) + min]
+      };
+    }
+
+    console.log("score difference", userForDebuff.score - selectorUser.score);
+
+    if (userForDebuff.score - selectorUser.score <= 8) {
+      this.usersChosenForDebuff.push(addDebuff(0, 1));
+    } else if (userForDebuff.score - selectorUser.score > 8) {
+      this.usersChosenForDebuff.push(addDebuff(0, 3));
+    } else if (userForDebuff.score - selectorUser.score > 16) {
+      this.usersChosenForDebuff.push(addDebuff(1, 4));
+    } else {
+      this.usersChosenForDebuff.push(addDebuff(2, 4));
+    }
   }
 };

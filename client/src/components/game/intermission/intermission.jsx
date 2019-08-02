@@ -23,14 +23,14 @@ class Intermission extends Component {
     }
 
     this.state.socket.roomLeaderboard(data => {
-      console.log(data);
       this.props.roomData.scoreData = data;
 
       this.setState({ hasRecievedScoreData: true });
     });
 
     this.state.socket.debuffSelectionActive(data => {
-      console.log("Debuff data", data);
+      console.log("Person available for debuff selection", data);
+
       for (let name of data) {
         if (this.props.clientData.userName === name) {
           this.props.clientData.debuffSelectionAvailable = true;
@@ -95,8 +95,6 @@ class Intermission extends Component {
 
   componentWillUnmount() {
     if (this.props.clientData.debuffSelectionAvailable) {
-      console.log("Current Selection", this.state.currentSelection);
-
       this.state.socket.selectUserForDebuff(this.state.currentSelection);
     }
 
@@ -112,7 +110,6 @@ class Intermission extends Component {
       this.props.clientData.debuffSelectionAvailable &&
       name !== this.props.clientData.userName
     ) {
-      console.log("Selected!", name);
       if (this.state.currentSelection === name) {
         this.setState({ currentSelection: null });
       } else {
@@ -122,7 +119,6 @@ class Intermission extends Component {
   }
 
   handleReadyToggle(isReady) {
-    console.log("is Ready", isReady);
     this.setState({ isReady: isReady });
   }
 }

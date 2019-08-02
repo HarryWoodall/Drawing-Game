@@ -63,7 +63,6 @@ class DrawingGame01A extends Component {
     });
 
     this.props.socket.on("RETURN_ANSWER", data => {
-      console.log("Is correct?", data);
       this.setState({
         peer: data.owner,
         peerGuess: data.guess,
@@ -76,7 +75,6 @@ class DrawingGame01A extends Component {
     });
 
     this.props.socket.on("GAME_COMPLETE", data => {
-      console.log("game end timer stated");
       this.setState({
         gameComplete: true
       });

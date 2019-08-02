@@ -12,29 +12,14 @@ class DrawingGame extends Component {
       socket: new Socket(this.props.socket)
     };
     this.handleDrawingCompletion = this.handleDrawingCompletion.bind(this);
-    console.log(
-      "Settings",
-      this.props.settingsData.roomSettings.gameCompleteTime
-    );
 
     this.state.socket.gameCompletion(() => {
-      console.log("GAME_COMPLETE");
-      console.log(
-        "Round count: ",
-        this.state.round,
-        "Max Round",
-        this.props.maxRound
-      );
       setTimeout(() => {
         if (this.state.round < this.props.maxRound - 1) {
           this.props.onGameCompletion();
-          console.log("Game being reset");
-
           this.props.clientData.reset();
           this.setState({ phase: "DRAWING", round: this.state.round + 1 });
         } else {
-          console.log("Match over");
-
           this.setState({ round: 0 }, () => {
             this.props.onGameCompletion();
             this.props.clientData.roundReset();

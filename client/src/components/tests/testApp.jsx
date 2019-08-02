@@ -11,6 +11,7 @@ import ViewingCanvas from "../drawing game/guessing phase/viewing canvas/viewing
 import InputGuess from "../drawing game/guessing phase/guess area/input guess/inputGuess";
 import OutputResult from "../drawing game/guessing phase/guess area/output result/outputResult";
 import PeerReview from "../drawing game/guessing phase/guess area/peer review/peerReview";
+import DebuffOverlay from "../drawing game/drawing phase/debuff overlay/debuffOverlay";
 
 import TextInput from "../landing/text input/textInput";
 import ToggleButtons from "../landing/toggle buttons/toggleButtons";
@@ -108,6 +109,8 @@ class testApp extends Component {
           );
         case "PEER_REVIEW":
           return <PeerReview gotResult={true} peerResult={this.peerResult} />;
+        case "DEBUFF_OVERLAY":
+          return <DebuffOverlay debuffName="Offset" />;
         default:
           return <h1>Invalid Test</h1>;
       }

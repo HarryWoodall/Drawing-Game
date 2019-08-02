@@ -20,6 +20,15 @@ class Game extends Component {
     this.state.socket.roomReadyForReset(() => {
       this.setState({ roundEnd: false });
     });
+
+    this.state.socket.applyDebuff(data => {
+      console.log("Debuffs applied to :", data);
+      for (let item of data) {
+        if (item.name === this.props.clientData.userName) {
+          this.props.clientData.currentMods.push(item.debuff);
+        }
+      }
+    });
   }
   render() {
     if (this.state.roundEnd) {
@@ -84,8 +93,6 @@ class Game extends Component {
     } else {
       data.isWeighted = false;
     }
-
-    console.log(this.props.clientData.scoreWeightData);
     this.props.socket.emit("UPDATE_SCORE", data);
   }
 }

@@ -1,0 +1,16 @@
+#debuff-overlay {
+  position: absolute;
+  width: 100%;
+  pointer-events: none;
+}
+
+#debuff-overlay h1 {
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 300%;
+}

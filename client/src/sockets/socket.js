@@ -73,6 +73,10 @@ class socketAPI {
     this.socket.once("DEBUFF_SELECTION_ACTIVE", onSelectionActive);
   }
 
+  applyDebuff(onDebuff) {
+    this.socket.on("APPLY_DEBUFF", onDebuff);
+  }
+
   requestRoomLeaderboard() {
     this.socket.emit("GET_ROOM_LEADERBOARD");
   }
@@ -86,7 +90,6 @@ class socketAPI {
   }
 
   disconnectReadyChange() {
-    console.log("disconnecting ready change");
     this.socket.off("READY_CHANGE");
   }
 

@@ -50,8 +50,8 @@ class App extends Component {
     // return (
     //   <Tests
     //     socket={this.props.socket}
-    //     testSet="INTERMISSION"
-    //     testName="LEADERBOARD"
+    //     testSet="DRAWING_GAME"
+    //     testName="DEBUFF_OVERLAY"
     //   />
     // );
   }

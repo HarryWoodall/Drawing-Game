@@ -36,7 +36,7 @@ class ClientData {
     this.reset();
     this.scoreWeightData = [];
     this.debuffSelectionAvailable = false;
-    this.currentMods = []; // Possible Error
+    // this.currentMods = []; // Possible Error
   }
 }
 

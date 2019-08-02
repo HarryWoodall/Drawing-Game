@@ -159,19 +159,21 @@ module.exports = class Sockets {
         });
 
         socket.on("SELECT_USER_FOR_DEBUFF", userName => {
-          const user = userList.getUser(userId);
+          console.log("User Selected for debuff", userName);
+
           const room = roomList.getRoom(roomName);
+          if (userName !== null) {
+            const user = userList.getUser(userId);
+            room.applyDebuff(userName, user.name);
+          }
 
-          console.log("Recieved " + user.name + "'s selection");
-          console.log(room.debuffSelectors);
-
-          room.usersChosenForDebuff.push(userName);
-          user.selectedUserForDebuff = true;
-
-          if (room.hasSelectedUsersForDebuff()) {
-            console.log(room.usersChosenForDebuff);
-
+          if (
+            room.hasSelectedUsersForDebuff() &&
+            room.usersChosenForDebuff.length
+          ) {
+            console.log("applying Debuffs", room.usersChosenForDebuff);
             io.in(roomName).emit("APPLY_DEBUFF", room.usersChosenForDebuff);
+            room.usersChosenForDebuff = [];
           }
         });
 

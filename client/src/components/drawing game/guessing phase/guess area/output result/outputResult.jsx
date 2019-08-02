@@ -4,8 +4,6 @@ import PeerReview from "../peer review/peerReview";
 
 class OutputResult extends Component {
   render() {
-    console.log("Output result being rendered");
-
     return (
       <React.Fragment>
         <ResultText

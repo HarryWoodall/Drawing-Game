@@ -12,11 +12,16 @@ class Lobby extends Component {
       socket: new Socket(this.props.socket)
     };
     this.state.socket.connect();
-    // this.state.socket.roomUpdate(data => {
-    //   this.props.roomData.roomUsers = data.users;
-    //   this.props.roomData.roomLeader = data.leader;
-    //   this.forceUpdate();
-    // });
+
+    if (props.roomData.roomLeader === this.props.clientData.userName) {
+      fetch("/api/noOfRounds/" + this.props.roomData.roomName)
+        .then(res => res.json())
+        .then(data => {
+          console.log("No of rounds", data);
+          props.settingsData.roomSettings.gamesInRound = data.gamesInRound;
+          this.state.socket.roomSettingsChange(props.settingsData.roomSettings);
+        });
+    }
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }

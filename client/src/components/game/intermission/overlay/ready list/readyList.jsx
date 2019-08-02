@@ -11,7 +11,6 @@ class ReadyList extends Component {
     };
 
     this.state.socket.readyChange(data => {
-      console.log("Ready change data", data);
       this.setState({ readyList: data });
     });
   }

@@ -28,6 +28,13 @@ class Settings extends Component {
     this.handleDebuffsActiveToggle = this.handleDebuffsActiveToggle.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    //Initial update of the settings
+    this.props.socket.once("ROOM_SETTINGS_UPDATE", settings => {
+      this.setState({
+        gamesInRound: props.settingsData.roomSettings.gamesInRound
+      });
+    });
   }
   render() {
     let content = (

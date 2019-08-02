@@ -89,6 +89,15 @@ app.get("/api/users", (req, res) => {
   res.send(userList.users);
 });
 
+app.get("/api/noOfRounds/:roomName", (req, res) => {
+  let data = {};
+  const room = roomList.getRoom(req.params.roomName);
+  if (room) {
+    data["gamesInRound"] = room.noOfRounds;
+  }
+  res.send(data); //TODO need to deal with empty data
+});
+
 app.get("/api/drawing/categories", (req, res) => {
   res.sendFile(__dirname + "/resources/drawingCategories.json");
 });

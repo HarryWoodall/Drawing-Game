@@ -15,7 +15,6 @@ class ResultText extends Component {
   }
 
   render() {
-    console.log("result being rendered");
     if (this.props.clientData.peerDrawing) {
       const output = (
         <h1 className="output-result-text">
