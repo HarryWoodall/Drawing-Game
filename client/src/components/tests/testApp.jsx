@@ -25,6 +25,8 @@ import Intermission from "../game/intermission/intermission";
 
 import Settings from "../game/settings/settings";
 
+import RoomBuffer from "../room buffer/roomBuffer";
+
 import ClientData from "../../data/clientData";
 import RoomData from "../../data/roomData";
 import SettingsData from "../../data/settingsData";
@@ -181,6 +183,13 @@ class testApp extends Component {
               socket={this.props.socket}
             />
           );
+        default:
+          return <h1>Invalid Test</h1>;
+      }
+    } else if (this.props.testSet === "ROOM_BUFFER") {
+      switch (this.props.testName) {
+        case "ROOM_BUFFER":
+          return <RoomBuffer userName={"USERNAME_PLACEHOLDER"} />;
         default:
           return <h1>Invalid Test</h1>;
       }

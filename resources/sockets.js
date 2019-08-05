@@ -24,6 +24,7 @@ module.exports = class Sockets {
 
     io.on("connection", socket => {
       let userId = socket.request.session.id;
+      console.log("socket Id", userId);
 
       if (!userList.checkUserExists(userId)) {
         console.log("no user found, dissconnecting");
@@ -43,21 +44,23 @@ module.exports = class Sockets {
           leader: roomList.getRoom(roomName).getLeader()
         });
 
+        // This will alwasy send but only be recieved at Landing page when user already exitst
+        io.to(roomName).emit("USER_RETURNING", {
+          user: userList.getUser(userId).name
+        });
+
         socket.on("disconnect", data => {
           console.log("user Disconnected");
+          socket.request.session.cookie.maxAge = 600000;
           let user = userList.getUser(userId);
           let room = roomList.getRoom(roomName);
           if (user) {
-            userList.removeUser(userId);
+            // userList.removeUser(userId);
             if (room) {
-              room.removeUser(userId);
+              // room.removeUser(userId);
 
               if (user.isLeader) {
-                if (room.isEmpty()) {
-                  roomList.removeRoom(roomName);
-                } else {
-                  room.setNewLeader();
-                }
+                room.setNewLeader(user.name);
               }
             }
 
@@ -218,6 +221,16 @@ module.exports = class Sockets {
         socket.on("ROOM_SETTINGS_UPDATE", settings => {
           roomList.getRoom(roomName).noOfRounds = settings.gamesInRound;
           io.in(roomName).emit("ROOM_SETTINGS_UPDATE", settings);
+        });
+
+        socket.on("REMOVE_USER", () => {
+          const room = roomList.getRoom(roomName);
+          if (room.isEmpty()) {
+            roomList.removeRoom(roomName);
+          }
+          socket.request.session.destroy(err => {
+            // cannot access session here
+          });
         });
       }
     });

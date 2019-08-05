@@ -1,17 +1,24 @@
 import React, { Component } from "react";
+import Socket from "../../sockets/socket";
 import TextInput from "./text input/textInput";
 import ToggleButtons from "./toggle buttons/toggleButtons";
 import ClientData from "../../data/clientData";
-import "./landingPage.css";
 import RoomData from "../../data/roomData";
+import "./landingPage.css";
 
 class LandingPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      socket: new Socket(this.props.socket),
       newRoom: false,
       errorMessage: null
     };
+
+    this.state.socket.userReturning(user => {
+      console.log("user Returning", user);
+      this.props.onUserReturn(user.user);
+    });
 
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
@@ -42,6 +49,10 @@ class LandingPage extends Component {
         </form>
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    this.state.socket.disconnectUserReturning();
   }
 
   handleTextChange(userName, roomName) {

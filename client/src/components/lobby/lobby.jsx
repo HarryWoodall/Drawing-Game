@@ -22,7 +22,6 @@ class Lobby extends Component {
           this.state.socket.roomSettingsChange(props.settingsData.roomSettings);
         });
     }
-
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 

@@ -3,6 +3,8 @@ class RoomData {
     this.roomName = roomName;
     this.roomLeader = roomLeader;
     this.roomUsers = roomUsers || [];
+    this.activeUsers = [];
+    this.roomBufferUsers = [];
     this.scoreData = {};
     this.roundCount = 0;
     this.roomSettings = {

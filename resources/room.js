@@ -3,7 +3,7 @@ module.exports = class Sockets {
     this.name = name;
     this.leader = null;
     this.users = [];
-    this.expectedMembers = 0;
+    // this.expectedMembers = 0;
     this.scoreWeights = [];
     this.noOfRounds = 1;
     this.debuffSelectors = [];
@@ -100,8 +100,18 @@ module.exports = class Sockets {
     console.log("no leader found");
   }
 
-  setNewLeader() {
-    if (this.users[0]) {
+  setNewLeader(exclude) {
+    if (this.users[0] && exclude) {
+      if (this.users[0].name !== exclude) {
+        this.users[0].isLeader = true;
+        this.leader = this.users[0].name;
+      } else if (users[1]) {
+        this.users[1].isLeader = true;
+        this.leader = this.users[1].name;
+      } else {
+        console.log("Last user has left, cannot set new Leader");
+      }
+    } else if (this.users[0]) {
       this.users[0].isLeader = true;
       this.leader = this.users[0].name;
     }

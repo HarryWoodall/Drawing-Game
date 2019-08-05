@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
 import Tests from "./components/tests/testApp";
-import LobbyRefactored from "./components/lobby/lobby";
-import LandingPageRefactored from "./components/landing/landingPage";
+import Lobby from "./components/lobby/lobby";
+import LandingPage from "./components/landing/landingPage";
 import Game from "./components/game/game";
 import SettingsData from "./data/settingsData";
+import RoomBuffer from "./components/room buffer/roomBuffer";
+import ClientData from "./data/clientData";
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +20,7 @@ class App extends Component {
 
     this.handleLandingSubmit = this.handleLandingSubmit.bind(this);
     this.handleLobbySubmit = this.handleLobbySubmit.bind(this);
+    this.handleUserReturn = this.handleUserReturn.bind(this);
 
     this.props.socket.on("GAME_START", data => {
       this.setState({
@@ -50,8 +53,8 @@ class App extends Component {
     // return (
     //   <Tests
     //     socket={this.props.socket}
-    //     testSet="DRAWING_GAME"
-    //     testName="DEBUFF_OVERLAY"
+    //     testSet="ROOM_BUFFER"
+    //     testName="ROOM_BUFFER"
     //   />
     // );
   }
@@ -60,11 +63,15 @@ class App extends Component {
     switch (this.state.location) {
       case "LANDING":
         return (
-          <LandingPageRefactored handleSubmit={this.handleLandingSubmit} />
+          <LandingPage
+            handleSubmit={this.handleLandingSubmit}
+            socket={this.props.socket}
+            onUserReturn={this.handleUserReturn}
+          />
         );
       case "LOBBY":
         return (
-          <LobbyRefactored
+          <Lobby
             socket={this.props.socket}
             onSubmit={this.handleLobbySubmit}
             roomData={this.state.roomData}
@@ -79,6 +86,13 @@ class App extends Component {
             roomData={this.state.roomData}
             clientData={this.state.clientData}
             settingsData={this.state.settingsData}
+          />
+        );
+      case "ROOM_BUFFER":
+        return (
+          <RoomBuffer
+            userName={this.state.clientData.userName}
+            socket={this.props.socket}
           />
         );
       default:
@@ -97,6 +111,13 @@ class App extends Component {
         this.props.socket.emit("GET_USER");
       }
     );
+  }
+
+  handleUserReturn(userName) {
+    this.setState({
+      clientData: new ClientData(userName),
+      location: "ROOM_BUFFER"
+    });
   }
 
   handleLobbySubmit() {

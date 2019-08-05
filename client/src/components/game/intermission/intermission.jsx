@@ -12,7 +12,7 @@ class Intermission extends Component {
     this.state = {
       socket: new Socket(this.props.socket),
       isReady: false,
-      hasRecievedScoreData: false, //CHANGE THIS BACK TO FALSE FOR PROD
+      hasRecievedScoreData: false,
       bonusComplete: false,
       debuffSelectionAvailable: false,
       currentSelection: null
@@ -72,7 +72,8 @@ class Intermission extends Component {
           />
         ) : null}
         {this.state.bonusComplete &&
-        this.props.clientData.debuffSelectionAvailable ? (
+        this.props.clientData.debuffSelectionAvailable &&
+        this.props.roomData.roomUsers.length > 1 ? (
           <h2
             className="intermission-debuff-hint"
             style={{ top: window.innerHeight * 0.7 }}

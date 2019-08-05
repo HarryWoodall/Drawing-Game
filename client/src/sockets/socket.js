@@ -29,6 +29,19 @@ class socketAPI {
     this.socket.connect();
   }
 
+  userReturning(onReturn) {
+    this.socket.once("USER_RETURNING", onReturn);
+  }
+
+  disconnectUserReturning() {
+    console.log("disconecting user returning");
+    this.socket.off("USER_RETURNING");
+  }
+
+  removeUser() {
+    this.socket.emit("REMOVE_USER");
+  }
+
   roomUpdate(onRoomUpdate) {
     this.socket.on("ROOM_UPDATE", onRoomUpdate);
   }

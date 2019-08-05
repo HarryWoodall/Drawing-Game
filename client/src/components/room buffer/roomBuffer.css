@@ -1,0 +1,25 @@
+#room-buffer {
+  position: absolute;
+  width: 100%;
+}
+
+.room-buffer-header {
+  position: absolute;
+  left: 50%;
+  width: 90%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.room-buffer-submit-hint,
+.room-buffer-main-header {
+  transform: translate(-50%, -100%);
+}
+
+.room-buffer-submit {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
