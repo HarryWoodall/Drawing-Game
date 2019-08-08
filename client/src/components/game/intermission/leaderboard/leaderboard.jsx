@@ -141,12 +141,22 @@ class Leaderboard extends Component {
         break;
     }
 
-    if (this.state.selectAvailable && name !== this.props.clientData.userName) {
+    if (
+      this.state.selectAvailable &&
+      name !== this.props.clientData.userName &&
+      !this.props.roomData.roomBufferUsers.includes(name)
+    ) {
       className += " item-selectable";
     }
 
     if (this.state.currentSelection === name) {
       className += " item-selected";
+    }
+
+    console.log("Room buffered Users", this.props.roomData.roomBufferUsers);
+
+    if (this.props.roomData.roomBufferUsers.includes(name)) {
+      className += " buffered-user";
     }
 
     return className;

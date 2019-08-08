@@ -18,6 +18,7 @@ class Game extends Component {
     this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
 
     this.state.socket.roomReadyForReset(() => {
+      this.props.roomData.roomBufferUsers = [];
       this.setState({ roundEnd: false });
     });
 

@@ -73,7 +73,7 @@ class Intermission extends Component {
         ) : null}
         {this.state.bonusComplete &&
         this.props.clientData.debuffSelectionAvailable &&
-        this.props.roomData.roomUsers.length > 1 ? (
+        this.props.roomData.activeUsers.length > 1 ? (
           <h2
             className="intermission-debuff-hint"
             style={{ top: window.innerHeight * 0.7 }}

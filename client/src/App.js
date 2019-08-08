@@ -7,6 +7,7 @@ import Game from "./components/game/game";
 import SettingsData from "./data/settingsData";
 import RoomBuffer from "./components/room buffer/roomBuffer";
 import ClientData from "./data/clientData";
+import RoomData from "./data/roomData";
 
 class App extends Component {
   constructor(props) {
@@ -21,18 +22,33 @@ class App extends Component {
     this.handleLandingSubmit = this.handleLandingSubmit.bind(this);
     this.handleLobbySubmit = this.handleLobbySubmit.bind(this);
     this.handleUserReturn = this.handleUserReturn.bind(this);
+    this.handleRoomBufferFlush = this.handleRoomBufferFlush.bind(this);
 
     this.props.socket.on("GAME_START", data => {
-      this.setState({
-        location: "GAME"
-      });
+      this.setState(
+        {
+          location: "GAME"
+        },
+        () => {
+          if (
+            this.state.clientData.userName === this.state.roomData.roomLeader
+          ) {
+            this.props.socket.emit("SET_LOCATION", this.state.location);
+          }
+        }
+      );
     });
 
     this.props.socket.on("ROOM_UPDATE", data => {
+      console.log("room Data", data);
+
       if (this.state.roomData !== null) {
-        let roomData = this.state.roomData;
+        const roomData = this.state.roomData;
         roomData.roomUsers = data.users;
+        roomData.activeUsers = data.activeUsers;
+        roomData.roomBufferUsers = data.bufferedUsers;
         roomData.roomLeader = data.leader;
+
         this.setState({ roomData: roomData });
       }
     });
@@ -93,6 +109,8 @@ class App extends Component {
           <RoomBuffer
             userName={this.state.clientData.userName}
             socket={this.props.socket}
+            roomData={this.state.roomData}
+            onBufferFlush={this.handleRoomBufferFlush}
           />
         );
       default:
@@ -108,20 +126,49 @@ class App extends Component {
         location: "LOBBY"
       },
       () => {
-        this.props.socket.emit("GET_USER");
+        // this.props.socket.emit("GET_USER");
+        if (this.state.clientData.userName === this.state.roomData.roomLeader) {
+          this.props.socket.emit("SET_LOCATION", this.state.location);
+        }
       }
     );
   }
 
-  handleUserReturn(userName) {
-    this.setState({
-      clientData: new ClientData(userName),
-      location: "ROOM_BUFFER"
-    });
+  handleUserReturn(data) {
+    console.log("RETURNING USER DATA", data);
+    let currentLocation;
+    const roomData = new RoomData(
+      data.roomName,
+      data.leader,
+      data.roomUsers,
+      data.activeUsers
+    );
+    if (data.location !== "LOBBY") {
+      currentLocation = "ROOM_BUFFER";
+    } else {
+      currentLocation = "LOBBY";
+    }
+    this.setState(
+      {
+        clientData: new ClientData(data.user),
+        location: currentLocation,
+        roomData: roomData
+      },
+      () => {
+        console.log("RETURN STATE", this.state);
+      }
+    );
   }
 
   handleLobbySubmit() {
     this.props.socket.emit("START_GAME_REQ");
+  }
+
+  handleRoomBufferFlush() {
+    console.log(this.state.roomData, "Post flush roomData");
+    this.setState({
+      location: "GAME"
+    });
   }
 }
 

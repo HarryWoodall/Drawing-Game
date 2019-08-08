@@ -97,6 +97,10 @@ li.pos-3 .intermission-constant {
   text-shadow: none;
 }
 
+.buffered-user .intermission-constant {
+  color: gray;
+}
+
 @media (max-width: 700px) {
   #intermission-leaderboard {
     width: 90%;

@@ -2,8 +2,10 @@ module.exports = class Sockets {
   constructor(name) {
     this.name = name;
     this.leader = null;
+    this.location = "LANDING";
     this.users = [];
-    // this.expectedMembers = 0;
+    this.activeUsers = [];
+    this.bufferedUsers = [];
     this.scoreWeights = [];
     this.noOfRounds = 1;
     this.debuffSelectors = [];
@@ -12,13 +14,39 @@ module.exports = class Sockets {
 
   addUser(user) {
     console.log("adding user");
-    this.users.push(user);
+    if (!this.users.includes(user)) {
+      this.users.push(user);
+      this.activeUsers.push(user);
+    }
+
+    if (!this.hasLeader()) {
+      this.setNewLeader();
+    }
 
     if (this.leader === null) {
       this.leader = this.getLeader();
     }
-    if (!this.hasLeader()) {
-      this.setNewLeader();
+  }
+
+  addActiveUser(user) {
+    if (
+      !this.getActiveUserNames().includes(user.name) &&
+      this.getUserNames().includes(user.name)
+    ) {
+      this.activeUsers.push(user);
+    } else {
+      console.log("unable to add active user", user);
+    }
+  }
+
+  addBufferedUser(user) {
+    if (
+      !this.getBufferedUserNames().includes(user.name) &&
+      this.getUserNames().includes(user.name)
+    ) {
+      this.bufferedUsers.push(user);
+    } else {
+      console.log("unable to add buffered user", user);
     }
   }
 
@@ -50,6 +78,42 @@ module.exports = class Sockets {
     }
   }
 
+  getActiveUserNames() {
+    if (this.activeUsers.length > 0) {
+      let userNames = [];
+      for (let user of this.activeUsers) {
+        userNames.push(user.name);
+      }
+      return userNames;
+    } else {
+      console.log("no active users found");
+    }
+  }
+
+  getBufferedUserNames() {
+    const userNames = [];
+    if (this.bufferedUsers.length > 0) {
+      for (let user of this.bufferedUsers) {
+        userNames.push(user.name);
+      }
+    } else {
+      console.log("no buffered users found");
+    }
+    return userNames;
+  }
+
+  getUserIds() {
+    if (this.users.length > 0) {
+      let userIds = [];
+      for (let user of this.users) {
+        userIds.push(user.id);
+      }
+      return userIds;
+    } else {
+      console.log("no users found");
+    }
+  }
+
   hasUser(userId) {
     for (let i = 0; i < this.users.length; i++) {
       if (this.users[i].id == userId) {
@@ -68,18 +132,34 @@ module.exports = class Sockets {
     return false;
   }
 
-  removeUser(userId) {
-    console.log("removing user from room");
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].id === userId) {
-        this.users.splice(i, 1);
-        if (!this.hadLeader) {
-          this.setNewLeader();
-        }
+  removeActiveUser(userId) {
+    for (let i = 0; i < this.activeUsers.length; i++) {
+      if (this.activeUsers[i].id === userId) {
+        this.activeUsers.splice(i, 1);
         return;
       }
     }
-    console.log("user not found");
+  }
+
+  flushBuffer() {
+    console.log("Flushing buffer");
+
+    const bufferedIds = [];
+    for (let user of this.bufferedUsers) {
+      this.addActiveUser(user);
+      bufferedIds.push(user.id);
+    }
+    this.bufferedUsers = [];
+    return bufferedIds;
+  }
+
+  removeUser(userId) {
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].id === userId) {
+        this.users.splice(i, 1);
+        return;
+      }
+    }
   }
 
   hasLeader() {
@@ -101,20 +181,28 @@ module.exports = class Sockets {
   }
 
   setNewLeader(exclude) {
-    if (this.users[0] && exclude) {
-      if (this.users[0].name !== exclude) {
-        this.users[0].isLeader = true;
-        this.leader = this.users[0].name;
-      } else if (users[1]) {
-        this.users[1].isLeader = true;
-        this.leader = this.users[1].name;
+    console.log("Settings new leader");
+    console.log(this.activeUsers);
+
+    for (let user of this.users) {
+      user.isLeader = false;
+    }
+
+    if (this.activeUsers[0] && exclude) {
+      if (this.activeUsers[0].name !== exclude) {
+        this.activeUsers[0].isLeader = true;
+        this.leader = this.activeUsers[0].name;
+      } else if (this.users[1]) {
+        this.activeUsers[1].isLeader = true;
+        this.leader = this.activeUsers[1].name;
       } else {
         console.log("Last user has left, cannot set new Leader");
       }
-    } else if (this.users[0]) {
-      this.users[0].isLeader = true;
-      this.leader = this.users[0].name;
+    } else if (this.activeUsers[0]) {
+      this.activeUsers[0].isLeader = true;
+      this.leader = this.activeUsers[0].name;
     }
+    console.log("new leader: ", this.leader);
   }
 
   getLeaderboardData() {
@@ -133,7 +221,7 @@ module.exports = class Sockets {
   }
 
   hasGivenFeedback() {
-    for (let user of this.users) {
+    for (let user of this.activeUsers) {
       if (!user.givenFeedback) {
         return false;
       }
@@ -160,7 +248,7 @@ module.exports = class Sockets {
   }
 
   isReady() {
-    for (let user of this.users) {
+    for (let user of this.activeUsers) {
       if (!user.isReady) {
         return false;
       }

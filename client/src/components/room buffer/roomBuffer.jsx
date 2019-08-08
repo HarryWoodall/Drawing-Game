@@ -3,11 +3,22 @@ import Socket from "../../sockets/socket";
 import "./roomBuffer.css";
 
 class RoomBuffer extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       socket: new Socket(this.props.socket)
     };
+
+    this.state.socket.roomReadyForReset(data => {
+      console.log("flushing room buffer");
+
+      // Hopefully not obsolete
+      this.props.roomData.roomUsers = data.users;
+      this.props.roomData.activeUsers = data.users;
+      this.props.roomData.roomLeader = data.leader;
+
+      this.props.onBufferFlush();
+    });
   }
   render() {
     return (

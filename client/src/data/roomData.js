@@ -1,9 +1,9 @@
 class RoomData {
-  constructor(roomName, roomLeader, roomUsers) {
+  constructor(roomName, roomLeader, roomUsers, activeUsers) {
     this.roomName = roomName;
     this.roomLeader = roomLeader;
     this.roomUsers = roomUsers || [];
-    this.activeUsers = [];
+    this.activeUsers = activeUsers || [];
     this.roomBufferUsers = [];
     this.scoreData = {};
     this.roundCount = 0;

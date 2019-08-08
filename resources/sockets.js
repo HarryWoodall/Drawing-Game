@@ -24,7 +24,6 @@ module.exports = class Sockets {
 
     io.on("connection", socket => {
       let userId = socket.request.session.id;
-      console.log("socket Id", userId);
 
       if (!userList.checkUserExists(userId)) {
         console.log("no user found, dissconnecting");
@@ -39,36 +38,74 @@ module.exports = class Sockets {
           userList.getUser(userId).name + " Connected to " + roomName
         );
 
+        if (userList.isInactiveUser(userId)) {
+          console.log(userList.inactiveUsers, userId);
+          const room = roomList.getRoom(roomName);
+
+          if (room.location === "LOBBY") {
+            userList.removeInactiveUser(userId);
+            room.addActiveUser(userList.getUser(userId));
+          } else {
+            room.addBufferedUser(userList.getUser(userId));
+          }
+
+          io.to(roomName).emit("USER_RETURNING", {
+            user: userList.getUser(userId).name,
+            location: room.location,
+            roomName: roomName,
+            roomUsers: room.getUserNames(),
+            activeUsers: room.getActiveUserNames(),
+            leader: room.getLeader()
+          });
+        }
+
         io.to(roomName).emit("ROOM_UPDATE", {
           users: roomList.getRoom(roomName).getUserNames(),
+          activeUsers: roomList.getRoom(roomName).getActiveUserNames(),
+          bufferedUsers: roomList.getRoom(roomName).getBufferedUserNames(),
           leader: roomList.getRoom(roomName).getLeader()
-        });
-
-        // This will alwasy send but only be recieved at Landing page when user already exitst
-        io.to(roomName).emit("USER_RETURNING", {
-          user: userList.getUser(userId).name
         });
 
         socket.on("disconnect", data => {
           console.log("user Disconnected");
-          socket.request.session.cookie.maxAge = 600000;
+
           let user = userList.getUser(userId);
           let room = roomList.getRoom(roomName);
-          if (user) {
-            // userList.removeUser(userId);
-            if (room) {
-              // room.removeUser(userId);
 
-              if (user.isLeader) {
-                room.setNewLeader(user.name);
+          if (room) {
+            if (room.activeUsers.length > 1) {
+              const cookieMaxAge = 600000;
+              socket.request.session.cookie.maxAge = cookieMaxAge;
+              userList.addInactiveUser(userId, cookieMaxAge);
+
+              if (user && room) {
+                room.removeActiveUser(userId);
+                console.log("user is leader :", user.isLeader);
+
+                if (user.isLeader) {
+                  room.setNewLeader(user.name);
+                }
+              }
+
+              io.to(roomName).emit("ROOM_UPDATE", {
+                users: room.getUserNames(),
+                activeUsers: room.getActiveUserNames(),
+                leader: room.getLeader()
+              });
+            } else {
+              //Drop the room
+              console.log("Removing Room");
+
+              if (user && room) {
+                userList.removeUsers(room.getUserIds());
+                roomList.removeRoom(roomName);
               }
             }
-
-            io.to(roomName).emit("ROOM_UPDATE", {
-              users: room.getUserNames(),
-              leader: room.getLeader()
-            });
           }
+        });
+
+        socket.on("SET_LOCATION", location => {
+          roomList.getRoom(roomName).location = location;
         });
 
         socket.on("START_GAME_REQ", data => {
@@ -213,7 +250,12 @@ module.exports = class Sockets {
 
           if (isReady) {
             if (room.isReady()) {
-              io.in(roomName).emit("ROOM_READY_FOR_RESET");
+              userList.removeInactiveUsers(room.flushBuffer());
+              io.in(roomName).emit("ROOM_READY_FOR_RESET", {
+                users: room.getUserNames(),
+                activeUsers: room.getActiveUserNames(),
+                leader: room.getLeader()
+              });
             }
           }
         });
@@ -225,6 +267,12 @@ module.exports = class Sockets {
 
         socket.on("REMOVE_USER", () => {
           const room = roomList.getRoom(roomName);
+          const user = userList.getUser(userId);
+
+          room.removeUser(user);
+          room.removeActiveUser(user);
+          userList.removeUser(userId);
+
           if (room.isEmpty()) {
             roomList.removeRoom(roomName);
           }
@@ -239,7 +287,7 @@ module.exports = class Sockets {
   checkForDrawings(roomName) {
     let room = roomList.getRoom(roomName);
 
-    for (let user of room.users) {
+    for (let user of room.activeUsers) {
       if (!user.myDrawing) {
         return false;
       }
@@ -248,7 +296,7 @@ module.exports = class Sockets {
   }
 
   distributeDrawings(roomName) {
-    let users = roomList.getRoom(roomName).users;
+    let users = roomList.getRoom(roomName).activeUsers;
     let usersNotSelected = users.slice();
     let arrays = [];
 
@@ -312,18 +360,22 @@ module.exports = class Sockets {
     }
   }
 
-  //debug
-  getUsers() {
-    let users = [];
+  checkForExpiredUsers() {
+    setInterval(() => {
+      for (let inactiveUser of userList.inActiveUsers) {
+        if (inactiveUser.expireDate <= new Date(Date.now())) {
+          const room = roomList.getRoom(roomName);
+          const user = userList.getUser(userId);
 
-    for (let i = 0; i < 3; i++) {
-      let user = {
-        id: i,
-        myDrawing: i + " drawing"
-      };
-      users.push(user);
-    }
+          room.removeUser(user);
+          room.removeActiveUser(user);
+          userList.removeUser(userId);
 
-    return users;
+          if (room.isEmpty()) {
+            roomList.removeRoom(roomName);
+          }
+        }
+      }
+    }, 60000);
   }
 };

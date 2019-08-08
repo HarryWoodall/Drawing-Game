@@ -8,7 +8,9 @@ class LobbyUserList extends Component {
   }
 
   generateList() {
-    return this.props.roomData.roomUsers.map(item => (
+    console.log(this.props.roomData.activeUsers, "Active users");
+
+    return this.props.roomData.activeUsers.map(item => (
       <li key={item} className={this.applyClass(item)}>
         {this.props.roomData.roomLeader === item ? (
           <Crown className="leaders-crown" height={25} />

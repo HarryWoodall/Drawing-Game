@@ -15,9 +15,9 @@ class LandingPage extends Component {
       errorMessage: null
     };
 
-    this.state.socket.userReturning(user => {
-      console.log("user Returning", user);
-      this.props.onUserReturn(user.user);
+    this.state.socket.userReturning(data => {
+      console.log("user Returning", data.user);
+      this.props.onUserReturn(data);
     });
 
     this.handleTextChange = this.handleTextChange.bind(this);
