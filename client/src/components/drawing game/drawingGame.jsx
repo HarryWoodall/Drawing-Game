@@ -38,6 +38,7 @@ class DrawingGame extends Component {
           drawingCompletion={this.handleDrawingCompletion}
           clientData={this.props.clientData}
           settingsData={this.props.settingsData}
+          errors={this.props.errors}
         />
       );
     } else if (this.state.phase === "GUESSING") {
@@ -46,6 +47,7 @@ class DrawingGame extends Component {
           socket={this.props.socket}
           clientData={this.props.clientData}
           onScoreUpdate={this.props.onScoreUpdate}
+          errors={this.props.errors}
         />
       );
     }

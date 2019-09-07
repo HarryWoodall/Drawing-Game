@@ -26,7 +26,13 @@ class socketAPI {
   }
 
   connect() {
-    this.socket.connect();
+    if (!this.socket.connected) {
+      this.socket.connect();
+    }
+  }
+
+  disconnect() {
+    this.socket.disconnect();
   }
 
   userReturning(onReturn) {

@@ -29,6 +29,7 @@ class DrawingPhase extends Component {
           isComplete={this.state.phase === "COMPLETE"}
           clientData={this.props.clientData}
           settingsData={this.props.settingsData}
+          errors={this.props.errors}
         />
         {this.state.phase === "DRAWING" ? (
           <TimerBar

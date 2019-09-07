@@ -34,8 +34,9 @@ class DrawingCanvas extends Component {
       ownerId: null
     };
 
-    this.props.clientData.selfDrawing = data; // Possible redundant
+    // this.props.clientData.selfDrawing = data; // Possible redundant
     this.props.socket.emit("SEND_DRAWING", data);
+    this.props.errors.drawingSentTimeout();
   }
 }
 

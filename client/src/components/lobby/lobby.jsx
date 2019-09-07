@@ -9,26 +9,22 @@ class Lobby extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      socket: new Socket(this.props.socket)
+      socket: new Socket(this.props.socket),
+      settingsAvaiable: false
     };
     this.state.socket.connect();
+    this.props.settingsData.getSettings(this.props.roomData.roomName, () => {
+      this.setState({ settingsAvaiable: true });
+    });
 
-    if (props.roomData.roomLeader === this.props.clientData.userName) {
-      fetch("/api/noOfRounds/" + this.props.roomData.roomName)
-        .then(res => res.json())
-        .then(data => {
-          console.log("No of rounds", data);
-          props.settingsData.roomSettings.gamesInRound = data.gamesInRound;
-          this.state.socket.roomSettingsChange(props.settingsData.roomSettings);
-        });
-    }
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
     return (
       <div>
-        {this.props.clientData.userName === this.props.roomData.roomLeader ? (
+        {this.props.clientData.userName === this.props.roomData.roomLeader &&
+        this.state.settingsAvaiable ? (
           <Settings
             settingsData={this.props.settingsData}
             socket={this.props.socket}

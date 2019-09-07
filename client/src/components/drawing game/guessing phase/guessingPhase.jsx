@@ -19,6 +19,7 @@ class GuessingPhase extends Component {
 
       this.state.socket.peerDrawing(data => {
         this.props.clientData.peerDrawing = data;
+        this.props.errors.drawingSentTimeout();
         this.forceUpdate();
       });
     });

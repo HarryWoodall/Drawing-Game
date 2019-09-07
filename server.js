@@ -89,13 +89,13 @@ app.get("/api/users", (req, res) => {
   res.send(userList.users);
 });
 
-app.get("/api/noOfRounds/:roomName", (req, res) => {
-  let data = {};
+app.get("/api/settings/:roomName", (req, res) => {
+  let data;
   const room = roomList.getRoom(req.params.roomName);
   if (room) {
-    data["gamesInRound"] = room.noOfRounds;
+    data = room.settings;
   }
-  res.send(data); //TODO need to deal with empty data
+  res.send(data);
 });
 
 app.get("/api/drawing/categories", (req, res) => {
@@ -121,4 +121,8 @@ app.get("/api/drawing/categories/random/:ammount", (req, res) => {
 
     res.send(resCategories);
   });
+});
+
+app.post("/api/errors", (req, res) => {
+  console.log("Error body: ", req.body);
 });

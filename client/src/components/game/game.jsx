@@ -51,6 +51,7 @@ class Game extends Component {
               socket={this.props.socket}
               clientData={this.props.clientData}
               settingsData={this.props.settingsData}
+              errors={this.props.errors}
               onGameCompletion={this.handleGameCompletion}
               onScoreUpdate={this.handleScoreUpdate}
               maxRound={this.props.settingsData.roomSettings.gamesInRound}

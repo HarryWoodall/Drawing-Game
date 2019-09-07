@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Slider, { Range } from "rc-slider";
 import "rc-slider/assets/index.css";
 import Socket from "../../../sockets/socket";
+import SettingsItem from "./settings item/settingsItem";
 import { ReactComponent as SettingsIcon } from "./settings-icon.svg";
 import "./settings.css";
 
@@ -137,10 +138,12 @@ class Settings extends Component {
             <h2>Debuffs active</h2>
             <div className="settings-input-wrapper">
               <input
+                class="checkbox-input"
                 onChange={this.handleDebuffsActiveToggle}
                 type="checkbox"
                 checked={this.state.debuffsActive}
               />
+              <span class="checkbox-input-overlay" />
             </div>
           </div>
         </div>

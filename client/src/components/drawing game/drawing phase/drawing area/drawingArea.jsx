@@ -24,6 +24,7 @@ class DrawingArea extends Component {
           socket={this.props.socket}
           isComplete={this.props.isComplete}
           clientData={this.props.clientData}
+          errors={this.props.errors}
         />
       );
     }

@@ -4,19 +4,26 @@ import Tests from "./components/tests/testApp";
 import Lobby from "./components/lobby/lobby";
 import LandingPage from "./components/landing/landingPage";
 import Game from "./components/game/game";
+import ErrorPage from "./components/error page/errorPage";
 import SettingsData from "./data/settingsData";
 import RoomBuffer from "./components/room buffer/roomBuffer";
 import ClientData from "./data/clientData";
 import RoomData from "./data/roomData";
+import ErrorMessages from "./data/errorMessages";
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.errorMessages = new ErrorMessages(errorMessage => {
+      console.log(errorMessage);
+      this.setState({ location: "ERROR" });
+    });
+
     this.state = {
       location: "LANDING",
       clientData: null,
       roomData: null,
-      settingsData: new SettingsData()
+      settingsData: new SettingsData(this.errorMessages)
     };
 
     this.handleLandingSubmit = this.handleLandingSubmit.bind(this);
@@ -40,8 +47,6 @@ class App extends Component {
     });
 
     this.props.socket.on("ROOM_UPDATE", data => {
-      console.log("room Data", data);
-
       if (this.state.roomData !== null) {
         const roomData = this.state.roomData;
         roomData.roomUsers = data.users;
@@ -54,8 +59,6 @@ class App extends Component {
     });
 
     this.props.socket.on("ROOM_SETTINGS_UPDATE", settings => {
-      console.log("room settings update");
-
       if (this.state.roomData !== null) {
         let settingsData = this.state.settingsData;
         settingsData.roomSettings = settings;
@@ -93,6 +96,7 @@ class App extends Component {
             roomData={this.state.roomData}
             clientData={this.state.clientData}
             settingsData={this.state.settingsData}
+            errors={this.errorMessages}
           />
         );
       case "GAME":
@@ -102,6 +106,7 @@ class App extends Component {
             roomData={this.state.roomData}
             clientData={this.state.clientData}
             settingsData={this.state.settingsData}
+            errors={this.errorMessages}
           />
         );
       case "ROOM_BUFFER":
@@ -111,6 +116,13 @@ class App extends Component {
             socket={this.props.socket}
             roomData={this.state.roomData}
             onBufferFlush={this.handleRoomBufferFlush}
+          />
+        );
+      case "ERROR":
+        return (
+          <ErrorPage
+            socket={this.props.socket}
+            error={this.errorMessages.currentErrorMessage}
           />
         );
       default:
@@ -165,6 +177,7 @@ class App extends Component {
   }
 
   handleRoomBufferFlush() {
+    this.state.settingsData.getSettings();
     console.log(this.state.roomData, "Post flush roomData");
     this.setState({
       location: "GAME"

@@ -6,6 +6,13 @@ module.exports = class Sockets {
     this.users = [];
     this.activeUsers = [];
     this.bufferedUsers = [];
+    this.settings = {
+      drawTime: 4,
+      countdownTime: 0.5,
+      gameCompleteTime: 0.5,
+      gamesInRound: 1,
+      debuffsActive: true
+    };
     this.scoreWeights = [];
     this.noOfRounds = 1;
     this.debuffSelectors = [];

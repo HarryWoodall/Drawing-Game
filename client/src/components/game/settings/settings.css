@@ -123,6 +123,30 @@
   outline: none;
 }
 
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-input-overlay {
+  position: absolute;
+  background-color: lightgray;
+  margin-top: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.checkbox-input-overlay:hover {
+  background-color: gray;
+}
+
+.checkbox-input:checked ~ .checkbox-input-overlay {
+  background-color: #dd490f;
+}
+
 @media (max-width: 600px) {
   #settings-icon {
     width: 40px;
