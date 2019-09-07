@@ -1,12 +1,13 @@
 class ErrorMessages {
-  constructor(onError) {
+  constructor(onError, userName) {
     this.onError = onError;
     this.timeoutDuration = 1000;
+    this.userName = userName || null;
     this.currentErrorMessage = null;
 
     this.sendData = this.sendData.bind(this);
     this.drawingSentTimeout = this.drawingSentTimeout.bind(this);
-    this.unrecievedSettingsData = this.unrecievedSettingsData.bind(this);
+    this.catchFetchError = this.catchFetchError.bind(this);
   }
 
   sendData() {
@@ -15,6 +16,7 @@ class ErrorMessages {
         "content-type": "application/json; charset=UTF-8"
       },
       body: JSON.stringify({
+        user: this.userName,
         errorMessage: this.currentErrorMessage
       }),
       method: "POST"
@@ -29,7 +31,7 @@ class ErrorMessages {
     if (!this.drawingSentTimer) {
       this.drawingSentTimer = setTimeout(() => {
         this.currentErrorMessage = "Failed to return Peer Drawing";
-        this.onError();
+        this.onError(this.currentErrorMessage);
         this.sendData();
       }, this.timeoutDuration);
     } else {
@@ -38,9 +40,9 @@ class ErrorMessages {
     }
   }
 
-  unrecievedSettingsData() {
-    this.currentErrorMessage = "Failed to recieve settings data from server";
-    this.onError();
+  catchFetchError(message) {
+    this.currentErrorMessage = message;
+    this.onError(this.currentErrorMessage);
     this.sendData();
   }
 }

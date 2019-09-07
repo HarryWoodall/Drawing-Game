@@ -53,6 +53,7 @@ class guessArea extends Component {
           peerResult={this.state.peerResult}
           onSelection={this.handleUserSelection}
           onScoreUpdate={this.props.onScoreUpdate}
+          errors={this.props.errors}
         />
       );
     }

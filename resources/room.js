@@ -11,7 +11,7 @@ module.exports = class Sockets {
       countdownTime: 0.5,
       gameCompleteTime: 0.5,
       gamesInRound: 1,
-      debuffsActive: true
+      debuffsActive: false
     };
     this.scoreWeights = [];
     this.noOfRounds = 1;
@@ -294,8 +294,6 @@ module.exports = class Sockets {
         debuff: mods[Math.floor(Math.random() * (max + 1 - min)) + min]
       };
     }
-
-    console.log("score difference", userForDebuff.score - selectorUser.score);
 
     if (userForDebuff.score - selectorUser.score <= 8) {
       this.usersChosenForDebuff.push(addDebuff(0, 1));

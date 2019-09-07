@@ -15,6 +15,11 @@ class SelectionButtons extends Component {
       .then(res => res.json())
       .then(data => {
         this.shuffleValues(data, this.props.clientData.peerDrawing.suggestion);
+      })
+      .catch(error => {
+        this.props.errors.catchFetchError(
+          "Failed to recieve selection data from server"
+        );
       });
 
     this.shuffleValues = this.shuffleValues.bind(this);

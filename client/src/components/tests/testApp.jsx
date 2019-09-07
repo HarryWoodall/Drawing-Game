@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Game from "../game/game";
 import DrawingCanvas from "../drawing game/drawing phase/drawing area/drawing canvas/drawingCanvas";
+import MirrorOverlay from "../drawing game/drawing phase/drawing area/drawing canvas/mod overlays/mirrorOverlay";
 import Countdown from "../drawing game/drawing phase/drawing area/countdown/countdown";
 import DrawingArea from "../drawing game/drawing phase/drawing area/drawingArea";
 import TimerBar from "../drawing game/drawing phase/timer bar/timerBar";
@@ -26,6 +27,8 @@ import Intermission from "../game/intermission/intermission";
 import Settings from "../game/settings/settings";
 
 import RoomBuffer from "../room buffer/roomBuffer";
+
+import ErrorPage from "../error page/errorPage";
 
 import ClientData from "../../data/clientData";
 import RoomData from "../../data/roomData";
@@ -71,7 +74,14 @@ class testApp extends Component {
         case "DRAWING_GAME":
           return <DrawingGame socket={this.props.socket} />;
         case "DRAWING_CANVAS":
-          return <DrawingCanvas socket={this.props.socket} />;
+          return (
+            <DrawingCanvas
+              socket={this.props.socket}
+              clientData={this.clientData}
+            />
+          );
+        case "DRAWING_CANVAS_OVERLAY_MIRROR":
+          return <MirrorOverlay type={"VERTICAL"} />;
         case "VIEWING_CANVAS":
           return <ViewingCanvas socket={this.props.socket} />;
         case "COUNTDOWN":
@@ -190,6 +200,18 @@ class testApp extends Component {
       switch (this.props.testName) {
         case "ROOM_BUFFER":
           return <RoomBuffer userName={"USERNAME_PLACEHOLDER"} />;
+        default:
+          return <h1>Invalid Test</h1>;
+      }
+    } else if (this.props.testSet === "ERROR_PAGE") {
+      switch (this.props.testName) {
+        case "ERROR_PAGE":
+          return (
+            <ErrorPage
+              socket={this.props.socket}
+              error={"Test Error Message"}
+            />
+          );
         default:
           return <h1>Invalid Test</h1>;
       }

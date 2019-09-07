@@ -26,7 +26,7 @@ module.exports = class Sockets {
       let userId = socket.request.session.id;
 
       if (!userList.checkUserExists(userId)) {
-        console.log("no user found, dissconnecting");
+        // console.log("no user found, dissconnecting");
         socket.disconnect();
       } else {
         userList.getUser(userId).socketId = socket.id;
@@ -39,7 +39,6 @@ module.exports = class Sockets {
         );
 
         if (userList.isInactiveUser(userId)) {
-          console.log(userList.inactiveUsers, userId);
           const room = roomList.getRoom(roomName);
 
           if (room.location === "LOBBY") {
@@ -67,8 +66,7 @@ module.exports = class Sockets {
         });
 
         socket.on("disconnect", data => {
-          console.log("user Disconnected");
-
+          console.log(userList.getUserName(userId) + " has disconnected");
           let user = userList.getUser(userId);
           let room = roomList.getRoom(roomName);
 
@@ -80,8 +78,6 @@ module.exports = class Sockets {
 
               if (user && room) {
                 room.removeActiveUser(userId);
-                console.log("user is leader :", user.isLeader);
-
                 if (user.isLeader) {
                   room.setNewLeader(user.name);
                 }
@@ -115,20 +111,16 @@ module.exports = class Sockets {
         socket.on("SEND_DRAWING", data => {
           data.ownerId = userId;
           userList.getUser(userId).myDrawing = data;
-          console.log("Drawing recieved");
           if (this.checkForDrawings(roomName)) {
             this.distributeDrawings(roomName);
             io.in(roomName).emit(
               "DRAWINGS_READY",
               io.sockets.adapter.rooms[roomName].sockets
             );
-            console.log("Drawing ready");
           }
         });
 
         socket.on("REQUEST_PEER_DRAWING", () => {
-          console.log("sending other drawings");
-
           let room = roomList.getRoom(roomName);
           let user = room.getUser(userId);
           socket.emit("PEER_DRAWING", user.otherDrawing);
@@ -162,8 +154,6 @@ module.exports = class Sockets {
           }
           const user = userList.getUser(userId);
           user.score = data.score;
-          console.log("User score: ", user.score);
-
           if (data.isWeighted) {
             let bonusPointData = {
               name: data.name,
@@ -182,7 +172,6 @@ module.exports = class Sockets {
         });
 
         socket.on("READY_FOR_DEBUFFS", roundCount => {
-          console.log("Round count", roundCount);
           const leaderboard = roomList.getRoom(roomName).getLeaderboardData();
 
           if (roundCount !== null) {
@@ -190,7 +179,6 @@ module.exports = class Sockets {
             roomList.getRoom(roomName).debuffSelectors = [
               leaderboard[leaderboard.length - 1].name
             ]; // Type Array
-            console.log("Leaderboard", leaderboard);
 
             io.in(roomName).emit("DEBUFF_SELECTION_ACTIVE", [
               leaderboard[leaderboard.length - 1].name
@@ -199,8 +187,6 @@ module.exports = class Sockets {
         });
 
         socket.on("SELECT_USER_FOR_DEBUFF", userName => {
-          console.log("User Selected for debuff", userName);
-
           const room = roomList.getRoom(roomName);
           if (userName !== null) {
             const user = userList.getUser(userId);
@@ -211,7 +197,6 @@ module.exports = class Sockets {
             room.hasSelectedUsersForDebuff() &&
             room.usersChosenForDebuff.length
           ) {
-            console.log("applying Debuffs", room.usersChosenForDebuff);
             io.in(roomName).emit("APPLY_DEBUFF", room.usersChosenForDebuff);
             room.usersChosenForDebuff = [];
           }

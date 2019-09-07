@@ -32,13 +32,10 @@ app.use(sess);
 app.use(express.static(path.join(__dirname, "client/build")));
 
 app.get("/", (req, res) => {
-  console.log(req);
-
   res.sendFile(path.join(__dirname + "/client/build/public/index.html"));
 });
 
 app.post("/", (req, res) => {
-  console.log(req.body);
   let roomName = req.body.roomName;
   let userName = req.body.userName;
   let data = {};
@@ -124,5 +121,6 @@ app.get("/api/drawing/categories/random/:ammount", (req, res) => {
 });
 
 app.post("/api/errors", (req, res) => {
-  console.log("Error body: ", req.body);
+  data = req.body.user + ": " + req.body.errorMessage;
+  console.log("\x1b[31m", data); // Format this
 });

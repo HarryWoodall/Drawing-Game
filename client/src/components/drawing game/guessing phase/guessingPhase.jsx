@@ -40,6 +40,7 @@ class GuessingPhase extends Component {
           clientData={this.props.clientData}
           socket={this.props.socket}
           onScoreUpdate={this.props.onScoreUpdate}
+          errors={this.props.errors}
         />
       </React.Fragment>
     );

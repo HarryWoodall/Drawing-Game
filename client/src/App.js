@@ -72,8 +72,8 @@ class App extends Component {
     // return (
     //   <Tests
     //     socket={this.props.socket}
-    //     testSet="ROOM_BUFFER"
-    //     testName="ROOM_BUFFER"
+    //     testSet="DRAWING_GAME"
+    //     testName="DRAWING_CANVAS"
     //   />
     // );
   }
@@ -138,7 +138,7 @@ class App extends Component {
         location: "LOBBY"
       },
       () => {
-        // this.props.socket.emit("GET_USER");
+        this.errorMessages.userName = clientData.userName;
         if (this.state.clientData.userName === this.state.roomData.roomLeader) {
           this.props.socket.emit("SET_LOCATION", this.state.location);
         }

@@ -20,6 +20,7 @@ class InputGuess extends Component {
           <SelectionButtons
             clientData={this.props.clientData}
             onSelection={this.handleSelection}
+            errors={this.props.errors}
           />
         ) : null}
       </React.Fragment>

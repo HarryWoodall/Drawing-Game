@@ -1,0 +1,21 @@
+#mirror-overlay-div-container {
+  position: absolute;
+  top: 0px;
+}
+
+#mirror-overlay-vertical {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px black dashed;
+  height: 0px;
+}
+
+#mirror-overlay-horizontal {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border: 2px black dashed;
+  width: 0px;
+}

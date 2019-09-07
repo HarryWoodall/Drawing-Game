@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import P5Wrapper from "../../../../../../node_modules/react-p5-wrapper";
 import Canvas from "../../../../p5Sketches/drawingCanvas";
+import MirrorOverlay from "./mod overlays/mirrorOverlay";
 import "./drawingCanvas.css";
 
 class DrawingCanvas extends Component {
   constructor() {
     super();
     this.handleDrawingEnd = this.handleDrawingEnd.bind(this);
+    this.requiresOverlay = this.requiresOverlay.bind(this);
   }
 
   render() {
@@ -21,6 +23,9 @@ class DrawingCanvas extends Component {
           getDrawing={this.handleDrawingEnd}
           mods={this.props.clientData.currentMods}
         />
+        {this.requiresOverlay() ? (
+          <MirrorOverlay type={this.props.clientData.currentMods[0]} />
+        ) : null}
       </div>
     );
   }
@@ -34,9 +39,15 @@ class DrawingCanvas extends Component {
       ownerId: null
     };
 
-    // this.props.clientData.selfDrawing = data; // Possible redundant
     this.props.socket.emit("SEND_DRAWING", data);
     this.props.errors.drawingSentTimeout();
+  }
+
+  requiresOverlay() {
+    const mirrorArray = ["MIRROR-H", "MIRROR-V", "MIRROR-B"];
+    if (mirrorArray.includes(this.props.clientData.currentMods[0])) {
+      return true;
+    }
   }
 }
 

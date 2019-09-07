@@ -14,14 +14,18 @@ class SettingsData {
           this.roomSettings = data;
           onReceive();
         } else {
-          this.errors.unrecievedSettingsData();
+          this.errors.catchFetchError(
+            "Failed to recieve settings data from server"
+          );
         }
       })
       .catch(error => {
         console.log("Unable to get Settings Data", error);
         console.log(this);
 
-        this.errors.unrecievedSettingsData();
+        this.errors.catchFetchError(
+          "Failed to recieve settings data from server"
+        );
       });
   }
 }
