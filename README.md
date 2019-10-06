@@ -12,8 +12,10 @@ In the command line
 
 ````
 npm install
-cd client npm install
-../npm run dev
+cd client 
+npm install
+cd ../
+npm run dev
 ````
 
 ## Built With
